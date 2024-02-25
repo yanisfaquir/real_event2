@@ -65,7 +65,7 @@ const HomePage = () => {
         </ul>
         <Image
           src="/assets/pictures/homepage-bg-1.png"
-          alt="Um monte de gente"
+          alt="5 pessoas felizes confraternizando e sorrindo bastante"
           layout="fill"
           objectFit="cover"
           className="brightness-50 home-bg-cover"

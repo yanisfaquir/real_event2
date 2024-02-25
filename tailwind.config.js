@@ -15,6 +15,11 @@ module.exports = {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
       },
+      colors: {
+        customBlue: '#4A7D8B',
+        constomBlueLight: '#40616a',
+      },
+      display: ['group-focus'],
     },
   },
   plugins: [],
