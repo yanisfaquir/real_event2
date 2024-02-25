@@ -2,3 +2,93 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+.brightness-50 {
+  filter: brightness(50%);
+}
+
+.desktop-navbar {
+  width: 90vw;
+  @media (max-width: 1260px) {
+    visibility: hidden;
+  }
+}
+
+.desktop-navbar-scrolled {
+  width: 100vw;
+  @media (max-width: 1260px) {
+    visibility: hidden;
+  }
+}
+
+.mobile-navbar {
+  box-shadow: 0px 2px 3px rgba(204, 204, 204, 0.5);
+  @media (min-width: 1260px) {
+    display: none;
+  }
+
+  .sidemenu-expanded,
+  .sidemenu-collapsed {
+    right: 0px;
+    margin: 0px;
+    transition: 300ms ease all;
+    justify-content: flex-start;
+    display: flex;
+    flex-direction: column;
+    top: 54px;
+    width: 200px;
+  }
+
+  .sidemenu-collapsed {
+    right: -400px;
+  }
+}
+
+.middle-home-section {
+  border-radius: 50% 50% 0 0 / 8% 8% 0 0;
+  margin-top: -72px;
+}
+
+.cards-home-section {
+  display: flex;
+  flex-direction: row;
+}
+
+.card-home-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  text-shadow: 1px 1px 2px #4a7d8b, 0 0 1em #aac5cc, 0 0 0.2em #000000;
+}
+
+@media (max-width: 1024px) {
+  .services-card-home-text {
+    margin-top: unset;
+  }
+  .services-card-home {
+    display: flex;
+    flex-direction: column;
+    height: 72vh;
+    justify-content: start;
+  }
+  .cards-home-section {
+    flex-direction: column !important;
+    border-radius: 16% 16% 0 0 / 2% 2% 0 0;
+  }
+  .card-home-item {
+    width: 100%;
+  }
+  .bottom-card-home {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .mobile-navbar {
+    padding: 0;
+  }
+  .text-middle-home {
+    flex-direction: column;
+    font-size: 1.75rem;
+  }
+}

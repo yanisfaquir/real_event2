@@ -1,37 +1,81 @@
 import React from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
-
-
+import GlobalButton from '@/components/globalButton';
+import { MiddleSection } from '@/components/homeMiddleSections/middleSection';
 
 const HomePage = () => {
+  const middleData = [
+    {
+      image: '/assets/pictures/card-sm-1-home-blue.png',
+      title: 'Encontre o serviço que precisas',
+      text: 'Crie um evento e explore o nosso site para encontrar o serviço perfeito para o seu evento.',
+      alt: 'Mulher loira mexendo no celular de frente para um laptop',
+    },
+    {
+      image: '/assets/pictures/card-sm-2-home-blue.png',
+      title: 'Escolha e reserve facilmente',
+      text: 'Após encontrar a combinação perfeita, reserve o serviço.',
+      alt: 'Um homem e uma mulher de chapéu observam algo sobre uma mesa, há quadros coloridos na parede atrás dele',
+    },
+    {
+      image: '/assets/pictures/card-sm-3-home-blue.png',
+      title: 'Faça acontecer',
+      text: 'Desfrute do seu evento dos sonhos  e viva esse momento único.',
+      alt: 'Três mulheres confraternizam sorrindo segurando garrafas de bebida',
+    },
+  ];
+
   return (
-    <div className="text-center">
-      <section className="py-5 bg-white">
-        <div className="text-3xl mb-8">Organize o seu</div>
-        <div className="text-3xl mb-8">evento com a</div>
-        {/* <Image src="LogotipoExtenso.png" alt="RealEvent Logo" width={300} height={90} /> */}
-        <Link href="/services">
-          <div className="mt-4">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md">Começar</button>
-          </div>
-        </Link>
-        <div className="flex justify-center mt-4">
-          <div className="flex-none w-1/4 ml-10">
-            {/* <Image src="/Fotos.png" alt="Fotos" width={400} height={400} /> */}
-          </div>
-        </div>
-      </section>
+    <div className="flex flex-col">
+      <div className="top-0 h-screen max-h-[100vh] z-0 top-section-home">
+        <h1 className="text-white relative flex justify-center top-[24vh] z-10 text-[4rem] font-bold">
+          CONHECE A
+        </h1>
+        <Image
+          src="/assets/pictures/logomarca-white.png"
+          alt="Logomarca Realevent"
+          width={960}
+          height={64}
+          id="logo-navbar-home"
+          className="relative flex align-center mx-auto top-[24vh] z-10"
+        />
 
-      <section className="relative w-full mt-10">
-        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50 z-10"></div>
-        {/* <Image src="/HomePage2.png" alt="Imagem de fundo" layout="responsive" width={1200} height={800} objectFit="cover" className="z-0" /> */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white z-20">
-          <h2 className="text-4xl mb-0">Torne realidade o evento dos seus sonhos.</h2>
-          <p>Para mais informações entre em contacto connosco!</p>
+        <h1 className="text-white relative mx-auto max-w-[850px] top-[24vh] z-10 text-center text-[1.5rem]">
+          Torne realidade o seu evento dos sonhos! Aqui tu encontras tudo aquilo
+          que precisas para realizar qualquer tipo de evento, desde batizados à
+          convívios.
+        </h1>
+        <ul className="text-white relative mx-auto flex justify-center max-w-[400px] top-[32vh] z-10">
+          <li className="mx-2 border-2 rounded-[50px] md:grid-cols-12 lg:grid-cols-6">
+            <GlobalButton
+              size="large"
+              type="custom"
+              path="/start"
+              text="Iniciar"
+            />
+          </li>
+          <li className="mx-2 md:grid-cols-12 lg:grid-cols-6">
+            <GlobalButton
+              size="large"
+              type="secondary"
+              path="/package"
+              text="Pacotes"
+            />
+          </li>
+        </ul>
+        <Image
+          src="/assets/pictures/homepage-bg-1.png"
+          alt="5 pessoas felizes confraternizando e sorrindo bastante"
+          layout="fill"
+          objectFit="cover"
+          className="brightness-50 home-bg-cover"
+        />
+      </div>
+      <div>
+        <div>
+          <MiddleSection data={middleData} />
         </div>
-      </section>
-
+      </div>
     </div>
   );
 };
