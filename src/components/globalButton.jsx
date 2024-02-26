@@ -35,6 +35,12 @@ const GlobalButton = ({
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.code === 'Enter' || event.code === 'Space') {
+      handleClick();
+    }
+  };
+
   return (
     <>
       <Tooltip
@@ -47,6 +53,7 @@ const GlobalButton = ({
       {image ? (
         <button
           onClick={handleClick}
+          onKeyDown={handleKeyDown}
           aria-label={text}
           className="transition duration-300 hover:scale-125 mx-4"
           id={id}
@@ -66,13 +73,14 @@ const GlobalButton = ({
               <button
                 className={buttonStyle}
                 onClick={handleClick}
+                onKeyDown={handleKeyDown}
                 title={text}
               >
                 {text || 'Button'}
               </button>
             </Link>
           ) : (
-            <button className={buttonStyle} onClick={handleClick} title={text}>
+            <button className={buttonStyle} onClick={handleClick} onKeyDown={handleKeyDown} title={text}>
               {text || 'Button'}
             </button>
           )}
