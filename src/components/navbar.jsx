@@ -10,7 +10,7 @@ const Navbar = ({ inView }) => {
   return (
     <div className="">
       <nav
-        className={`desktop-navbar fixed z-10 top-0 left-1/2 transform -translate-x-1/2 mt-5 border-4 border-white rounded-[50px] pb-1 px-[2rem] h-[72px] ${
+        className={`desktop-navbar fixed z-10 top-0 left-1/2 transform -translate-x-1/2 mt-5 border-4 border-white bg-[#4A7D8B] rounded-[50px] pb-1 px-[2rem] h-[72px] ${
           inView
             ? ''
             : 'desktop-navbar-scrolled fixed z-10 w-[100vw] mt-[0px] mx-[0px] px-[0rem] border-none border-bottom-2 border-transparent rounded-none pb-1 px-[2rem] h-[54px] bg-[#4A7D8B]'
