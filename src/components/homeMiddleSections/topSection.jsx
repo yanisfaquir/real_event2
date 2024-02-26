@@ -6,12 +6,12 @@ export const TopMiddleSection = () => {
       <section className="flex flex-col z-9 py-20 px-10 text-[4rem] font-bold text-middle-home">
         <article className="text-black ">
           Em apenas 3{' '}
-          <p className="inline text-white bg-[#4A7D8B] rounded-[50px] px-4 h-fit w-fit">
+          <p className="inline text-white bg-[#4A7D8B] rounded-[50px] px-4 pb-2 h-fit w-fit">
             passos
           </p>{' '}
           tens uma <br />
           organização fácil e rápida do seu{' '}
-          <p className="inline text-white bg-[#4A7D8B] rounded-[50px] px-4 h-fit w-fit">
+          <p className="inline text-white bg-[#4A7D8B] rounded-[50px] px-4 pb-2 h-fit w-fit">
             evento
           </p>
         </article>

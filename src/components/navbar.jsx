@@ -13,7 +13,7 @@ const Navbar = ({ inView }) => {
         className={`desktop-navbar fixed z-10 top-0 left-1/2 transform -translate-x-1/2 mt-5 border-4 border-white rounded-[50px] pb-1 px-[2rem] h-[72px] ${
           inView
             ? ''
-            : 'desktop-navbar-scrolled fixed z-10 w-[100vw] mt-[0px] mx-[0px] px-[0rem] border-none border-bottom-2 border-transparent rounded-none pb-1 px-[2rem] h-[54px] bg-[#AAC5CC]'
+            : 'desktop-navbar-scrolled fixed z-10 w-[100vw] mt-[0px] mx-[0px] px-[0rem] border-none border-bottom-2 border-transparent rounded-none pb-1 px-[2rem] h-[54px] bg-[#4A7D8B]'
         }`}
       >
         <div className="flex justify-between items-center">
@@ -67,7 +67,7 @@ const Navbar = ({ inView }) => {
       </nav>
 
       <nav
-        className={`mobile-navbar fixed z-10 top-0 w-[100vw] top-0 mt-0 mx-0 px-[0rem] border-2 border-transparent rounded-none pb-1 px-[2rem] h-[54px] bg-[#AAC5CC]`}
+        className={`mobile-navbar fixed z-10 top-0 w-[100vw] top-0 mt-0 mx-0 px-[0rem] border-2 border-transparent rounded-none pb-1 px-[2rem] h-[54px] bg-[#4A7D8B]`}
       >
         <ul className="flex justify-between items-center my-1">
           <li className="-me-3 -mt-1">
@@ -110,7 +110,7 @@ const Navbar = ({ inView }) => {
           </li>
         </ul>
         <ul
-          className={`sidemenu flex flex-col h-[100%] items-center fixed transition-all object-cover transition duration-300 z-9 bg-[#AAC5CC] ${
+          className={`sidemenu flex flex-col h-[100%] items-center fixed transition-all object-cover transition duration-300 z-9 bg-[#4A7D8B] ${
             navOpen ? 'sidemenu-expanded' : 'sidemenu-collapsed'
           }`}
         >
