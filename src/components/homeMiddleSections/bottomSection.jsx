@@ -65,9 +65,7 @@ export const BottomMiddleSection = () => {
           <br />
           nunca foi tão
           <br />
-          <p className="text-[10rem] bottom-card-home">
-            Prático
-          </p>
+          <p className="text-[10rem] bottom-card-home">Prático</p>
         </article>
         <img
           src="/assets/pictures/card-bottom-home.png"
