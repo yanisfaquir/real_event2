@@ -1,12 +1,13 @@
 import React from 'react';
 import { CiStar } from "react-icons/ci";
 import { FaChevronDown } from "react-icons/fa";
+import GlobalButton from '@/components/globalButton';
 
 const serviceResults = () => {
   return (
     <div>
     
-    <div style={{margin: '3rem'}}>
+    <div style={{marginTop: '7rem', marginBottom: '2rem', marginLeft: '5rem', marginRight: '5rem'}}>
     <ul class="flex flex-wrap justify-end text-sm font-medium text-center  border-b   dark:border-customBlue dark:text-black-400">
           <li class="me-2">
               <a href="#" aria-current="page" class="inline-block p-4 text-white-600 bg-gray-50 rounded-t-lg active dark:bg-customBlue dark:text-gray-100 border">Catering</a>
@@ -104,9 +105,14 @@ const serviceResults = () => {
           <button class="w-auto h-auto justify-start rounded-full text-xs my-1 mx-0 px-1 py-1 border-2 border-gray">Start Trial</button>
         </div>
         <p class="border-b mx-2 mt-2"></p>
-        <div class="flex items-center justify-start">
-          <p className='font-medium '>200$</p>
-          <button className='bg-customBlue rounded-md font-small my-3 mx-auto px-3 py-3'>Ver mais</button>
+        <div class="flex items-center justify-start mt-6 space-x-10">
+          <p className='font-medium'>200$</p>
+          <GlobalButton
+              size="small"
+              type="primary"
+              path="/login"
+              text="Ver mais"
+            />
         </div>
     </div>
 
@@ -122,9 +128,14 @@ const serviceResults = () => {
           <button class="w-auto h-auto justify-start rounded-full text-xs my-1 mx-0 px-1 py-1 border-2 border-gray">Start Trial</button>
         </div>
         <p class="border-b mx-2 mt-2"></p>
-        <div class="flex items-center justify-start">
+        <div class="flex items-center justify-start mt-6 space-x-10">
           <p className='font-medium '>200$</p>
-          <button className='bg-customBlue rounded-md font-small my-3 mx-auto px-3 py-3'>Ver mais</button>
+          <GlobalButton
+              size="small"
+              type="primary"
+              path="/login"
+              text="Ver mais"
+            />
         </div>
     </div>
 
@@ -140,9 +151,14 @@ const serviceResults = () => {
           <button class="w-auto h-auto justify-start rounded-full text-xs my-1 mx-0 px-1 py-1 border-2 border-gray">Start Trial</button>
         </div>
         <p class="border-b mx-2 mt-2"></p>
-        <div class="flex items-center justify-start">
+        <div class="flex items-center justify-start mt-6 space-x-10">
           <p className='font-medium '>200$</p>
-          <button className='bg-customBlue rounded-md font-small my-3 mx-auto px-3 py-3'>Ver mais</button>
+          <GlobalButton
+              size="small"
+              type="primary"
+              path="/login"
+              text="Ver mais"
+            />
         </div>
     </div>
 
@@ -158,9 +174,14 @@ const serviceResults = () => {
           <button class="w-auto h-auto justify-start rounded-full text-xs my-1 mx-0 px-1 py-1 border-2 border-gray">Start Trial</button>
         </div>
         <p class="border-b mx-2 mt-2"></p>
-        <div class="flex items-center justify-start">
+        <div class="flex items-center justify-start mt-6 space-x-10">
           <p className='font-medium '>200$</p>
-          <button className='bg-customBlue rounded-md font-small my-3 mx-auto px-3 py-3'>Ver mais</button>
+          <GlobalButton
+              size="small"
+              type="primary"
+              path="/login"
+              text="Ver mais"
+            />
         </div>
     </div>
 
@@ -176,9 +197,14 @@ const serviceResults = () => {
           <button class="w-auto h-auto justify-start rounded-full text-xs my-1 mx-0 px-1 py-1 border-2 border-gray">Start Trial</button>
         </div>
         <p class="border-b mx-2 mt-2"></p>
-        <div class="flex items-center justify-start">
+        <div class="flex items-center justify-start mt-6 space-x-10">
           <p className='font-medium '>200$</p>
-          <button className='bg-customBlue rounded-md font-small my-3 mx-auto px-3 py-3'>Ver mais</button>
+          <GlobalButton
+              size="small"
+              type="primary"
+              path="/login"
+              text="Ver mais"
+            />
         </div>
     </div>
 
