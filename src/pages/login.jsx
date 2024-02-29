@@ -8,7 +8,7 @@ const LoginPage = () => {
       <div className="w-1/2 relative">
         <Image
           src="/assets/pictures/card-login.png"
-          alt="Login"
+          alt="duas pessoas no pc"
           layout="fill"
           objectFit="contain"
         />
