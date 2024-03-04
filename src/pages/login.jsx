@@ -73,7 +73,7 @@ const LoginPage = () => {
               <GlobalButton
                 size="small"
                 type="primary"
-                path="/start"
+                path="/"
                 text="Login"
               />
             </div>

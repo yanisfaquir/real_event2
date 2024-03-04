@@ -1,0 +1,82 @@
+import React, { useState } from 'react';
+import GlobalButton from '@/components/globalButton';
+import Image from 'next/image';
+
+const SelecaoRegisto = () => {
+  const [tipoRegisto, setTipoRegisto] = useState('cliente'); // 'cliente' ou 'fornecedor'
+
+  const handleSelectionChange = (event) => {
+    setTipoRegisto(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    // Implemente a lógica para redirecionar o usuário ou realizar a ação adequada
+    console.log(tipoRegisto);
+  };
+
+  return (
+    <div className="min-h-screen flex mt-16 p-20 bg-[url('/assets/pictures/fundo.png')] bg-cover bg-no-repeat my-20 mx-20 rounded-[40px]">
+      <div className="w-1/2 relative">
+        <Image
+          src="/assets/pictures/registo.png"
+          alt="imagem representativa"
+          layout="fill"
+          objectFit="contain"
+        />
+      </div>
+
+      <div className="w-1/2 flex justify-center items-center bg-white rounded-[40px] max-w-md md:max-w-lg ml-10">
+        <div className="w-full max-w-xs">
+          <h1 className="text-center text-4xl font-bold text-gray-700 mb-6">
+            Registo
+          </h1>
+          <p className="text-center mb-4 text-gray-700">Qual tipo de registo deseja realizar?</p>
+          <div className="flex flex-col mb-4 items-center">
+          <div className="shadow appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-5">
+              <label>
+                <input
+                  type="radio"
+                  name="tipoRegisto"
+                  value="cliente"
+                  checked={tipoRegisto === 'cliente'}
+                  onChange={handleSelectionChange}
+                  className="mr-2"
+                />
+                <span className="text-gray-700 text-lg font-bold">Cliente</span>
+              </label>
+            </div>
+            <div className="shadow appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              <label>
+                <input
+                  type="radio"
+                  name="tipoRegisto"
+                  value="fornecedor"
+                  checked={tipoRegisto === 'fornecedor'}
+                  onChange={handleSelectionChange}
+                  className="mr-2"
+                />
+                <span className="text-gray-700 text-lg font-bold">Fornecedor</span>
+              </label>
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <GlobalButton
+              size="small"
+              type="primary"
+              path="/registo"
+              text="Registar"
+            />
+          </div>
+          <div className="text-center mt-4">
+              <span className="text-gray-700">Já tem conta? </span>
+              <a href="/registo" className="">
+                Login
+              </a>
+            </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SelecaoRegisto;
