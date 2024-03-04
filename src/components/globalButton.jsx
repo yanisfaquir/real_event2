@@ -80,7 +80,12 @@ const GlobalButton = ({
               </button>
             </Link>
           ) : (
-            <button className={buttonStyle} onClick={handleClick} onKeyDown={handleKeyDown} title={text}>
+            <button
+              className={buttonStyle}
+              onClick={handleClick}
+              onKeyDown={handleKeyDown}
+              title={text}
+            >
               {text || 'Button'}
             </button>
           )}
