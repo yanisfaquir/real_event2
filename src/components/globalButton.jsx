@@ -57,7 +57,7 @@ const GlobalButton = ({
           aria-label={text}
           className="transition duration-300 hover:scale-125 mx-4"
           id={id}
-          type="button" 
+          type="button"
         >
           {path ? (
             <Link href={path}>
@@ -81,7 +81,13 @@ const GlobalButton = ({
               </button>
             </Link>
           ) : (
-            <button type="button" className={buttonStyle} onClick={handleClick} onKeyDown={handleKeyDown} title={text}>
+            <button
+              type="button"
+              className={buttonStyle}
+              onClick={handleClick}
+              onKeyDown={handleKeyDown}
+              title={text}
+            >
               {text || 'Button'}
             </button>
           )}
