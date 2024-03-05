@@ -44,6 +44,7 @@ export const BottomMiddleSection = () => {
                 id="chevron-right-services"
                 width={100}
                 height={80}
+                alt="chevron-right"
               />
             </Link>
           </div>
@@ -69,14 +70,12 @@ export const BottomMiddleSection = () => {
             Prático
           </p>
         </article>
-        <img
+        <Image
           src="/assets/pictures/card-bottom-home.png"
           alt="Três mulheres deitadas na sobre um pano que está num grama, elas estão sorrindo, sobre o pano também tem um chapéu, um cesto e um rádio"
-          style={{
-            width: '92vw',
-            minHeight: 'max-content',
-            objectFit: 'cover',
-          }}
+          width={100}
+          height={80}
+          layout="responsive"
         />
       </div>
     </div>

@@ -2,7 +2,7 @@ import React from 'react';
 
 export const TopMiddleSection = () => {
   return (
-    <div className="flex flex-col relative align-start bg-white middle-home-section">
+    <div className="flex flex-col relative align-start">
       <section className="flex flex-col z-9 py-20 px-10 text-[4rem] font-bold text-middle-home">
         <article className="text-black ">
           Em apenas 3{' '}

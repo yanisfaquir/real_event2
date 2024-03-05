@@ -1,6 +1,7 @@
 import React from 'react';
 import { TopMiddleSection } from './topSection';
 import { BottomMiddleSection } from './bottomSection';
+import Image from 'next/image';
 
 export const MiddleSection = ({ data }) => {
   return (
@@ -14,11 +15,11 @@ export const MiddleSection = ({ data }) => {
               <p tabIndex={-1} className=" text-[2rem] font-bold max-w-[400px]">
                 {item.title}
               </p>
-              <p tabIndex={-1} className="text-white absolute z-8 top-60 text-[1.3rem] max-w-[360px]">
+              <p tabIndex={-1} className="text-white absolute z-8 top-60 -mt-4 text-[1.3rem] max-w-[320px]">
                 {item.text}
               </p>
             </section>
-            <img src={item.image} alt={item.alt} />
+            <Image src={item.image} alt={item.alt} width={600} height={800} layout="cover" />
           </div>
         ))}
       </div>

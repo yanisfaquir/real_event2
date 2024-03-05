@@ -1,12 +1,14 @@
 import React from 'react';
 import GlobalButton from '@/components/globalButton';
+import Image from 'next/image';
 
 const SupplierRegister = () => {
   return (
     <div className="flex justify-center mt-30">
       <div className="grid grid-cols-2 gap-1 items-center mt-20 mr-10">
         <div className="card-home-item mx-auto relative justify-self-end">
-          <img className='w-80 h-90' src='/assets/pictures/card-sm-1-home-blue.png' />
+          <Image src='/assets/pictures/card-sm-1-home-blue.png' alt="Mulher loira de frente a um computador segurando um smartphone" width={400} height={400} layout="cover" />
+
         </div>
         <div className='mr-1 w-85 justify-self-start'>
           <h1 className='font-bold'>TIPO DE SERVIÇO PRESTADO</h1>
