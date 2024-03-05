@@ -2,8 +2,10 @@ import React from 'react';
 import Image from 'next/image';
 import GlobalButton from '@/components/globalButton';
 import { MiddleSection } from '@/components/homeMiddleSections/middleSection';
+import { useRouter } from 'next/router';
 
 const HomePage = () => {
+  const router = useRouter();
   const middleData = [
     {
       image: '/assets/pictures/card-sm-1-home-blue.png',
@@ -46,14 +48,16 @@ const HomePage = () => {
           convívios.
         </h1>
         <ul className="text-white relative mx-auto flex justify-center max-w-[400px] top-[32vh] z-10">
-          <li className="mx-2 border-2 rounded-[50px] md:grid-cols-12 lg:grid-cols-6">
-            <GlobalButton
-              size="large"
-              type="custom"
-              path="/start"
-              text="Iniciar"
-            />
-          </li>
+          {!router.pathname.includes('/start-event') && (
+            <li className="mx-2 border-2 rounded-[50px] md:grid-cols-12 lg:grid-cols-6">
+              <GlobalButton
+                size="large"
+                type="custom"
+                path="/start-event/begin"
+                text="Iniciar"
+              />
+            </li>
+          )}
           <li className="mx-2 md:grid-cols-12 lg:grid-cols-6">
             <GlobalButton
               size="large"
@@ -67,14 +71,15 @@ const HomePage = () => {
           src="/assets/pictures/homepage-bg-1.png"
           alt="5 pessoas felizes confraternizando e sorrindo bastante"
           layout="fill"
-          objectFit="cover"
-          className="brightness-50 home-bg-cover"
+          className="brightness-50 home-bg-cover object-cover"
         />
       </div>
       <div>
-        <div>
-          <MiddleSection data={middleData} />
-        </div>
+        {router.pathname === '/' && (
+          <div className="bg-white middle-home-section py-8">
+            <MiddleSection data={middleData} />
+          </div>
+        )}
       </div>
     </div>
   );

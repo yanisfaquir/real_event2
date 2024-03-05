@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import GlobalButton from '@/components/globalButton';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const SelecaoRegisto = () => {
   const [tipoRegisto, setTipoRegisto] = useState('cliente'); // 'cliente' ou 'fornecedor'
@@ -69,9 +70,9 @@ const SelecaoRegisto = () => {
           </div>
           <div className="text-center mt-4">
               <span className="text-gray-700">Já tem conta? </span>
-              <a href="/registo" className="">
+              <Link href="/registo" className="">
                 Login
-              </a>
+              </Link>
             </div>
         </div>
       </div>
