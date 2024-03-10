@@ -11,6 +11,8 @@ const eventSlice = createSlice({
     endTime: '',
     sameDay: true,
     startEnd: { start: null, end: null },
+    serviceType: '',
+    eventType: '',
   },
   reducers: {
     setLocation: (state, action) => {
@@ -59,6 +61,12 @@ const eventSlice = createSlice({
     setActionSameDay: (state, action) => {
       state.sameDay = action.payload;
     },
+    setServiceType: (service, action) => {
+      service.location = action.payload;
+    },
+    setEventType: (event, action) => {
+      event.location = action.payload;
+    },
   },
 });
 
@@ -71,6 +79,8 @@ export const {
   setEndActionTime,
   setActionSameDay,
   setStartEnd,
+  setServiceType,
+  setEventType,
 } = eventSlice.actions;
 
 export default eventSlice.reducer;
