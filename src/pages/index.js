@@ -3,6 +3,7 @@ import Image from 'next/image';
 import GlobalButton from '@/components/globalButton';
 import { MiddleSection } from '@/components/homeMiddleSections/middleSection';
 import { useRouter } from 'next/router';
+import { StartEvent } from './startEvent';
 
 const HomePage = () => {
   const router = useRouter();
@@ -29,7 +30,7 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="top-0 h-screen max-h-[100vh] z-0 top-section-home">
+      <div className="top-0 h-[92vh] z-0 top-section-home">
         <h1 className="text-white relative flex justify-center top-[24vh] z-10 text-[4rem] font-bold">
           CONHECE A
         </h1>
@@ -53,7 +54,7 @@ const HomePage = () => {
               <GlobalButton
                 size="large"
                 type="custom"
-                path="/start-event/begin"
+                path="/start-event"
                 text="Iniciar"
               />
             </li>
@@ -71,15 +72,14 @@ const HomePage = () => {
           src="/assets/pictures/homepage-bg-1.png"
           alt="5 pessoas felizes confraternizando e sorrindo bastante"
           layout="fill"
-          className="brightness-50 home-bg-cover object-cover"
+          className="brightness-50 home-bg-cover object-cover "
         />
       </div>
       <div>
-        {router.pathname === '/' && (
-          <div className="bg-white middle-home-section py-8">
-            <MiddleSection data={middleData} />
-          </div>
-        )}
+        <div className="bg-white middle-home-section py-8">
+          {router.pathname === '/' && <MiddleSection data={middleData} />}
+          {router.pathname === '/start-event' && <StartEvent />}
+        </div>
       </div>
     </div>
   );
