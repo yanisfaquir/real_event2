@@ -37,7 +37,7 @@ const SupplierRegister = () => {
         <GlobalButton
           size="small"
           type="primary"
-          path="/"
+          path="/supplierRegister2"
           text="Seguinte"
         />
       </div>
