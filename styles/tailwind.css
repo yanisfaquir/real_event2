@@ -15,6 +15,7 @@
 
 .desktop-navbar-scrolled {
   width: 100vw;
+  box-shadow: 0px 2px 3px rgba(204, 204, 204, 0.5);
   @media (max-width: 1260px) {
     visibility: hidden;
   }
@@ -44,8 +45,8 @@
 }
 
 .middle-home-section {
-  border-radius: 50% 50% 0 0 / 8% 8% 0 0;
-  margin-top: -72px;
+  border-radius: 50% 50% 0 0 / 2% 2% 0 0;
+  position: relative;
 }
 
 .cards-home-section {
@@ -57,8 +58,12 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   padding: 2rem;
-  text-shadow: 1px 1px 2px #4a7d8b, 0 0 1em #aac5cc, 0 0 0.2em #000000;
+  text-shadow:
+    1px 1px 2px #4a7d8b,
+    0 0 1em #aac5cc,
+    0 0 0.2em #000000;
 }
 
 @media (max-width: 1024px) {
@@ -91,4 +96,86 @@
     flex-direction: column;
     font-size: 1.75rem;
   }
+}
+
+@media (max-width: 980px) and (orientation: landscape) {
+  .top-section-home {
+    height: 154vh !important;
+  }
+  .home-bg-cover {
+    position: fixed !important;
+  }
+}
+
+.datePicker {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+  padding-right: 30px;
+  width: 100%;
+}
+
+.date-checkbox {
+  accent-color: #4a7d8b;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+input[type='radio'] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  padding: 4px;
+  outline: 2px solid #dddddd;
+  outline-offset: 2px;
+  cursor: pointer;
+}
+
+input[type='radio']:checked {
+  background-color: #4a7d8b;
+  padding: 0.5rem;
+}
+
+.mic-icon:hover {
+  color: #00BFFF !important;
+  transform: translateY(-50%) scale(0.7);
+  border: 2px solid #00BFFF;
+  border-radius: 50%;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.streaming {
+  animation: pulse 1s infinite;
+  top: 32% !important;
+}
+
+.event-form {
+  transition: transform 0.5s ease-in-out;
+}
+
+.move-out {
+  transform: translateX(-100%);
+}
+
+.move-in {
+  transform: translateX(0);
 }
