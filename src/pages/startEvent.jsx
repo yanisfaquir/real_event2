@@ -73,29 +73,6 @@ export const StartEvent = () => {
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo(0, document.body.scrollHeight);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo(0, document.body.scrollHeight);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setTimeout(() => {
-        window.scrollTo({
-          top: document.body.scrollHeight,
-          behavior: 'smooth',
-        });
-      }, 300);
-    }
-  }, []);
-
-  useEffect(() => {
     if (formRef.current) {
       window.scrollTo({
         top: formRef.current.offsetTop + formRef.current.offsetHeight,
@@ -336,8 +313,9 @@ export const StartEvent = () => {
     setEndDate(null);
     dispatch(setActionSameDay(event.target.checked));
     if (!event.target.checked) {
-      setEndDate(new Date(new Date().setDate(startDate.getDate() + 1)));
-      dispatch(setEndActionDate(new Date(new Date().setDate(startDate.getDate() + 1))));
+      const newEndDate = new Date(new Date().setDate(startDate.getDate() + 1));
+      setEndDate(newEndDate);
+      dispatch(setEndActionDate(newEndDate.toISOString()));
     }
   };
 
@@ -358,7 +336,7 @@ export const StartEvent = () => {
             href="/"
             style={{
               cursor: 'pointer',
-              zIndex: '8',
+              zIndex: '9',
               position: 'absolute',
               top: '2rem',
               left: '2%',
@@ -395,7 +373,7 @@ export const StartEvent = () => {
             height={80}
             style={{
               cursor: 'pointer',
-              zIndex: '18',
+              zIndex: '9',
               position: 'absolute',
               top: '2rem',
               left: '2%',
@@ -495,8 +473,14 @@ export const StartEvent = () => {
                     <DatePicker
                       selected={startDate}
                       onChange={(date) => {
-                        setStartDate(date);
-                        dispatch(setStartActionDate(date.toISOString()));
+                        if (date) {
+                          setStartDate(date);
+                          dispatch(setStartActionDate(date.toISOString()));
+                        } else {
+                          const now = new Date();
+                          setStartDate(now);
+                          dispatch(setStartActionDate(now.toISOString()));
+                        }
                       }}
                       dateFormat="dd 'de' MMMM 'de' yyyy"
                       locale={pt}
