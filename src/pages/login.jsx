@@ -1,11 +1,12 @@
+
 import React from 'react';
 import GlobalButton from '@/components/globalButton';
 import Image from 'next/image';
 
 const LoginPage = () => {
   return (
-    <div className="min-h-screen flex mt-16 p-20 bg-[url('/assets/pictures/fundo.png')] bg-cover bg-no-repeat my-20 mx-20 rounded-[40px]">
-      <div className="w-1/2 relative">
+    <div className="min-h-screen flex flex-col md:flex-row mt-8 md:mt-16 p-6 md:p-20 bg-gradient-custom bg-cover bg-no-repeat mx-4 md:my-20 md:mx-20 rounded-lg md:rounded-[40px]">
+      <div className="w-full md:w-1/2 h-64 md:h-auto relative mb-6 md:mb-0">
         <Image
           src="/assets/pictures/card-login.png"
           alt="duas pessoas no pc"
@@ -14,12 +15,12 @@ const LoginPage = () => {
         />
       </div>
 
-      <div className="w-1/2 flex justify-center items-center bg-white rounded-[40px] max-w-md md:max-w-lg ml-10">
+      <div className="w-full md:w-1/2 flex justify-center items-center bg-white rounded-lg md:rounded-[40px] max-w-md md:max-w-lg mx-auto">
         <div className="w-full max-w-xs">
-          <h1 className="text-center text-4xl font-bold text-gray-700 mb-6">
+          <h1 className="text-center text-3xl md:text-4xl font-bold text-gray-700 mb-4 md:mb-6">
             Login
           </h1>
-          <form className="bg-white px-8 pt-6 pb-8 mb-4">
+          <form className="bg-white px-4 md:px-8 pt-6 pb-8 mb-4">
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -58,29 +59,27 @@ const LoginPage = () => {
                     htmlFor="remember-me"
                     className="ml-2 block text-sm text-gray-900"
                   >
-                    Lembrar-me
+                    Remember me
                   </label>
                 </div>
                 <a
                   className="inline-block align-baseline font-bold text-sm text-customBlue hover:text-customBlueLight-800"
                   href="#"
                 >
-                  Recuperar password
+                  Forgot password?
                 </a>
               </div>
             </div>
             <div className="flex justify-center">
-              <GlobalButton
-                size="small"
-                type="primary"
-                path="/"
-                text="Login"
-              />
+              <GlobalButton size="small" type="primary" path="/" text="Login" />
             </div>
             <div className="text-center mt-4">
-              <span className="text-gray-700">Não tem conta? </span>
-              <a href="/register" className="">
-                Registo
+              <span className="text-gray-700">Don’t have an account? </span>
+              <a
+                href="/register"
+                className="text-customBlue hover:text-customBlueLight-800"
+              >
+                Sign up
               </a>
             </div>
           </form>

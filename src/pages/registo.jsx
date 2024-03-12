@@ -1,10 +1,10 @@
-import React from 'react';
+ import React from 'react';
 import GlobalButton from '@/components/globalButton';
 import Image from 'next/image';
 
 const Registo = () => {
   return (
-    <div className="min-h-screen flex mt-16 p-20 bg-[url('/assets/pictures/fundo.png')] bg-cover bg-no-repeat my-20 mx-20 rounded-[40px]">
+    <div className="min-h-screen flex flex-col md:flex-row mt-8 md:mt-16 p-6 md:p-20 bg-gradient-custom bg-cover bg-no-repeat mx-4 md:my-20 md:mx-20 rounded-lg md:rounded-[40px]">
       <div className="w-1/2 relative">
         <Image
           src="/assets/pictures/registo.png"
@@ -20,7 +20,7 @@ const Registo = () => {
             Registo
           </h1>
           <form className="bg-white px-8 pt-6 pb-8 mb-4">
-          <div className="mb-4">
+            <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="email"
