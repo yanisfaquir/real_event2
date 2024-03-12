@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 const Registo = () => {
   return (
+    <div className='p-9'>
     <div className="min-h-screen flex flex-col md:flex-row mt-8 md:mt-16 p-6 md:p-20 bg-gradient-custom bg-cover bg-no-repeat mx-4 md:my-20 md:mx-20 rounded-lg md:rounded-[40px]">
       <div className="w-1/2 relative">
         <Image
@@ -79,6 +80,7 @@ const Registo = () => {
           </form>
         </div>
       </div>
+    </div>
     </div>
   );
 };

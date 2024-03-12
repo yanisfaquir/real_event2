@@ -15,7 +15,8 @@ const SelecaoRegisto = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row mt-8 md:mt-16 p-6 md:p-20 bg-gradient-custom bg-cover bg-no-repeat mx-4 md:my-20 md:mx-20 rounded-lg md:rounded-[40px]">
+    <div className='p-5'>
+    <div className="min-h-screen flex flex-col md:flex-row mt-8 md:mt-20 p-6 md:p-20 bg-gradient-custom bg-cover bg-no-repeat mx-4 md:my-20 md:mx-20 rounded-lg md:rounded-[40px]">
       <div className="w-1/2 relative">
         <Image
           src="/assets/pictures/registo.png"
@@ -72,11 +73,12 @@ const SelecaoRegisto = () => {
           <div className="text-center mt-4">
             <span className="text-gray-700">Já tem conta? </span>
             <Link href="/login">
-              <p className="">Login</p> 
+              <span className="">Login</span> 
             </Link>
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

@@ -13,6 +13,7 @@ const serviceData = {
 const PageComponent = () => {
   const [activeTab, setActiveTab] = useState('informacoes'); 
   return (
+    <div style={{ paddingTop: '5rem' }}>
     <div style={{ fontFamily: 'Arial, sans-serif' }}>
       <div style={{
         display: 'flex',
@@ -102,6 +103,7 @@ const PageComponent = () => {
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 };
