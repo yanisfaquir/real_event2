@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import GlobalButton from '@/components/globalButton';
 import Image from 'next/image';
+import Link from 'next/link'; // Import the Link component
 
 const SelecaoRegisto = () => {
   const [tipoRegisto, setTipoRegisto] = useState('cliente');
@@ -56,9 +57,7 @@ const SelecaoRegisto = () => {
                   onChange={handleSelectionChange}
                   className="mr-2"
                 />
-                <span className="text-gray-700 text-lg font-bold">
-                  Fornecedor
-                </span>
+                <span className="text-gray-700 text-lg font-bold">Fornecedor</span>
               </label>
             </div>
           </div>
@@ -72,9 +71,9 @@ const SelecaoRegisto = () => {
           </div>
           <div className="text-center mt-4">
             <span className="text-gray-700">Já tem conta? </span>
-            <a href="/registo" className="">
-              Login
-            </a>
+            <Link href="/login">
+              <p className="">Login</p> 
+            </Link>
           </div>
         </div>
       </div>
