@@ -32,13 +32,14 @@ const Navbar = ({ inView }) => {
             key={index}
             className="flex justify-between align-center items-center"
           >
-            {/* <Image
+            <Image
               alt={item.name}
+              src={item.image}
               width={100}
               height={100}
               objectFit="cover"
               className="rounded-[12px] ms-2 me-2 my-2"
-            /> */}
+            />
             <div className="flex flex-col my-4">
               <h2>
                 <strong className="max-w-[120px]">{item.name}</strong>
