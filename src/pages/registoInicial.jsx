@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import GlobalButton from '@/components/globalButton';
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from 'next/link'; // Import the Link component
 
 const SelecaoRegisto = () => {
-  const [tipoRegisto, setTipoRegisto] = useState('cliente'); // 'cliente' ou 'fornecedor'
+  const [tipoRegisto, setTipoRegisto] = useState('cliente');
 
   const handleSelectionChange = (event) => {
     setTipoRegisto(event.target.value);
   };
 
   const handleSubmit = () => {
-    // Implemente a lógica para redirecionar o usuário ou realizar a ação adequada
     console.log(tipoRegisto);
   };
 
   return (
-    <div className="min-h-screen flex mt-16 p-20 bg-[url('/assets/pictures/fundo.png')] bg-cover bg-no-repeat my-20 mx-20 rounded-[40px]">
+    <div className='p-5'>
+    <div className="min-h-screen flex flex-col md:flex-row mt-8 md:mt-20 p-6 md:p-20 bg-gradient-custom bg-cover bg-no-repeat mx-4 md:my-20 md:mx-20 rounded-lg md:rounded-[40px]">
       <div className="w-1/2 relative">
         <Image
           src="/assets/pictures/registo.png"
@@ -31,9 +31,11 @@ const SelecaoRegisto = () => {
           <h1 className="text-center text-4xl font-bold text-gray-700 mb-6">
             Registo
           </h1>
-          <p className="text-center mb-4 text-gray-700">Qual tipo de registo deseja realizar?</p>
+          <p className="text-center mb-4 text-gray-700">
+            Qual tipo de registo deseja realizar?
+          </p>
           <div className="flex flex-col mb-4 items-center">
-          <div className="shadow appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-5">
+            <div className="shadow appearance-none border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-5">
               <label>
                 <input
                   type="radio"
@@ -69,13 +71,14 @@ const SelecaoRegisto = () => {
             />
           </div>
           <div className="text-center mt-4">
-              <span className="text-gray-700">Já tem conta? </span>
-              <Link href="/registo" className="">
-                Login
-              </Link>
-            </div>
+            <span className="text-gray-700">Já tem conta? </span>
+            <Link href="/login">
+              <span className="">Login</span> 
+            </Link>
+          </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
