@@ -177,13 +177,14 @@ const ShoppingCart = () => {
                   <div
                     className={`flex justify-start items-center w-[100%] ${isDesktopOrLaptop ? '' : 'flex-col'}`}
                   >
-                    {/* <Image
+                    <Image
                       alt={item.name}
+                      src={item.image}
                       width={100}
                       height={100}
                       objectFit="cover"
                       className="rounded-[12px] mx-4"
-                    /> */}
+                    />
                     <div
                       className={`flex w-[100%] ${isDesktopOrLaptop ? 'flex-col justify-start items-start' : 'flex-col justify-center items-center'}`}
                     >
@@ -542,13 +543,14 @@ const ShoppingCart = () => {
             confirmLabel="Fechar"
             hasFooter={false}
           >
-            {/* <Image
+            <Image
               alt={itemToRemove.name}
+              src={itemToRemove.image}
               width={200}
               height={200}
               objectFit="cover"
               className="rounded-[12px] mx-auto mt-4"
-            /> */}
+            />
             <p
               className={`font-[.8rem] my-2 mx-auto`}
               style={{

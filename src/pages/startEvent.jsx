@@ -258,7 +258,7 @@ export const StartEvent = () => {
         break;
         case 3:
         dispatch(setActionEventType(selectedEvent));
-        router.push('/');
+        router.push('/servicesResults');
         break;
       default:
         console.error('Seção desconhecida');
@@ -643,13 +643,13 @@ export const StartEvent = () => {
           className={`event-form mt-20 lg:mt-12 event-form-2 ${currentSection.number === 2 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
         >
           <div className="flex flex-col lg:flex-row items-center mt-10">
-            <div className="lg:w-1/2 p-16 hidden lg:block">
+            <div className="lg:w-1/2 p-16 hidden lg:block ms-24">
               <Image
                 src={'/assets/pictures/service-type-img.png'}
                 alt="Rapaz de óculos segurando papéis e apontando para algo"
-                width={100}
+                width={500}
                 height={80}
-                layout="responsive"
+                layout="intrinsic"
               />
             </div>
             <div className="lg:w-1/2 px-16">
@@ -740,14 +740,14 @@ export const StartEvent = () => {
         <section
           className={`event-form event-form-3 ${currentSection.number === 3 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
         >
-          <div className="flex flex-col lg:flex-row-reverse items-center">
-            <div className="lg:w-1/2 p-16 hidden lg:block">
+          <div className="flex flex-col lg:flex-row-reverse items-center mt-10">
+            <div className="lg:w-1/2 p-16 hidden ms-24 lg:block">
               <Image
                 src={'/assets/pictures/event-type-img.png'}
                 alt="Pessoas felizes confraternizando"
-                width={100}
+                width={500}
                 height={80}
-                layout="responsive"
+                layout="intrinsic"
               />
             </div>
             <div className="lg:w-1/2 px-16">
