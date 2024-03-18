@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import GlobalButton from '@/components/globalButton';
 import Image from 'next/image';
+import Link from 'next/link'; 
 import { useRouter } from 'next/router';
-
 
 const Registo = () => {
   const [nome, setNome] = useState('');
@@ -10,7 +10,6 @@ const Registo = () => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,7 +20,6 @@ const Registo = () => {
       setErrorMessage('');
       router.push('/');
       console.log('Registro:', { nome, email, password });
-    
     }
   };
 
@@ -85,7 +83,7 @@ const Registo = () => {
               </div>
               <div className="text-center mt-4">
                 <span className="text-gray-700">Já tem conta? </span>
-                <a href="/login" className="">Login</a>
+                <Link href="/login" className="">Login</Link>
               </div>
             </form>
           </div>
