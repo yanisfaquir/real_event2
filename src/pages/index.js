@@ -75,14 +75,6 @@ const HomePage = () => {
               />
             </li>
           )}
-          <li className="mx-2 md:grid-cols-12 lg:grid-cols-6">
-            <GlobalButton
-              size={isDesktopOrLaptop ? 'large' : 'medium'}
-              type="secondary"
-              path="/package"
-              text="Pacotes"
-            />
-          </li>
         </ul>
         <Image
           src="/assets/pictures/homepage-bg-1.png"

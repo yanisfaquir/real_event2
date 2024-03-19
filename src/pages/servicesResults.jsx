@@ -63,19 +63,19 @@ const serviceResults = () => {
               <div className="absolute hidden group-focus:block top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
                 <ul className="text-left border rounded">
                   <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    Item 1
+                    -15 
                   </li>
                   <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    Item 1
+                    15 - 30
                   </li>
                   <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    Item 1
+                    30 - 45
                   </li>
                   <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    Item 1
+                    45 - 60
                   </li>
                   <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    Item 1
+                    +60
                   </li>
                 </ul>
               </div>
@@ -165,7 +165,7 @@ const serviceResults = () => {
               <GlobalButton
                 size="small"
                 type="primary"
-                path="/login"
+                path="/pageDetails"
                 text="Ver mais"
               />
             </div>
@@ -197,7 +197,7 @@ const serviceResults = () => {
               <GlobalButton
                 size="small"
                 type="primary"
-                path="/login"
+                path="/pageDetails"
                 text="Ver mais"
               />
             </div>
@@ -229,7 +229,7 @@ const serviceResults = () => {
               <GlobalButton
                 size="small"
                 type="primary"
-                path="/login"
+                path="/pageDetails"
                 text="Ver mais"
               />
             </div>
@@ -261,7 +261,7 @@ const serviceResults = () => {
               <GlobalButton
                 size="small"
                 type="primary"
-                path="/login"
+                path="/pageDetails"
                 text="Ver mais"
               />
             </div>
@@ -293,7 +293,7 @@ const serviceResults = () => {
               <GlobalButton
                 size="small"
                 type="primary"
-                path="/login"
+                path="/pageDetails"
                 text="Ver mais"
               />
             </div>

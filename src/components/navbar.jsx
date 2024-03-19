@@ -128,15 +128,10 @@ const Navbar = ({ inView }) => {
             <GlobalButton
               size="medium"
               type="custom"
-              path="/supplier"
+              path="/supplierRegister1"
               text="Fornecedor"
             />
-            <GlobalButton
-              size="medium"
-              type="custom"
-              path="/package"
-              text="Pacotes"
-            />
+
           </section>
 
           <section className="w-1/4 py-2 flex justify-end items-center align-center">
@@ -311,14 +306,6 @@ const Navbar = ({ inView }) => {
               type="custom"
               path="/supplier"
               text="Fornecedor"
-            />
-          </li>
-          <li className="py-4">
-            <GlobalButton
-              size="large"
-              type="custom"
-              path="/package"
-              text="Pacotes"
             />
           </li>
           <li className="py-4">
