@@ -20,7 +20,11 @@ const SupplierRegister = () => {
       setErrorMessage('Por favor, selecione um tipo de serviço.');
     } else {
       setErrorMessage('');
-      router.push('/supplierRegister2');
+      router.push({
+        pathname: '/supplierRegister2',
+        query: { service: selectedService },
+      });
+      // console.log('selll', selectedService);
     }
   };
 

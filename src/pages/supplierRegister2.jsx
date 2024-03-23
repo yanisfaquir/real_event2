@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import GlobalButton from '@/components/globalButton';
 import Image from 'next/image';
 import { FaChevronDown } from 'react-icons/fa';
@@ -17,6 +17,15 @@ const SupplierRegister = () => {
       router.push('/supplierRegister3'); 
     }
   };
+
+  useEffect(() => {
+    const { service } = router.query;
+    if (service) {
+      console.log('Valor do serviço:', service);
+    } else {
+      console.log('Não há valor de serviço');
+    }
+  }, [router.query]);
 
   return (
     <div className="flex justify-center items-center h-screen">
