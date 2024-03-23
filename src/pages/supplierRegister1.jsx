@@ -28,9 +28,9 @@ const SupplierRegister = () => {
     <div className="flex justify-center mt-30">
       <div className="grid grid-cols-2 gap-1 items-center mt-20 mr-10">
         <div className="card-home-item mx-auto relative justify-self-end">
-          <Image src='/assets/pictures/card-sm-1-home-blue.png' alt="Mulher loira de frente a um computador segurando um smartphone" width={400} height={400} layout="cover" />
+          <Image className='mt-10' src='/assets/pictures/card-sm-1-home-blue.png' alt="Mulher loira de frente a um computador segurando um smartphone" width={350} height={350} layout="cover" />
         </div>
-        <div className='mr-1 w-85 justify-self-start'>
+        <div className='mr-1 w-85 mt-10 justify-self-start'>
           <h1 className='font-medium text-3xl mb-2'>TIPO DE SERVIÇO</h1>
           <h1 className='font-medium text-3xl mb-5'> PRESTADO</h1>
           <p>Selecione abaixo qual a categoria do serviço o qual gostaria de anunciar na nossa plataforma.</p>
