@@ -24,17 +24,25 @@ const SupplierRegister = () => {
         pathname: '/supplierRegister2',
         query: { service: selectedService },
       });
-      // console.log('selll', selectedService);
     }
   };
 
   return (
     <div className="flex justify-center mt-30">
-      <div className="grid grid-cols-2 gap-1 items-center mt-20 mr-10">
-        <div className="card-home-item mx-auto relative justify-self-end">
-          <Image className='mt-10' src='/assets/pictures/card-sm-1-home-blue.png' alt="Mulher loira de frente a um computador segurando um smartphone" width={350} height={350} layout="cover" />
+      <div className="grid grid-cols-2 gap-1 items-center mt-20 mr-10 w-full lg:w-3/4 xl:w-1/2">
+        <div className="hidden lg:block col-span-1">
+          <div className="card-home-item mx-auto relative justify-self-end">
+            <Image
+              className='mt-10'
+              src='/assets/pictures/card-sm-1-home-blue.png'
+              alt="Mulher loira de frente a um computador segurando um smartphone"
+              width={400}
+              height={400}
+              layout="intrinsic"
+            />
+          </div>
         </div>
-        <div className='mr-1 w-85 mt-10 justify-self-start'>
+        <div className='col-span-2 lg:col-span-1 w-full lg:w-auto mt-10 ml-4 justify-self-start'>
           <h1 className='font-medium text-3xl mb-2'>TIPO DE SERVIÇO</h1>
           <h1 className='font-medium text-3xl mb-5'> PRESTADO</h1>
           <p>Selecione abaixo qual a categoria do serviço o qual gostaria de anunciar na nossa plataforma.</p>
