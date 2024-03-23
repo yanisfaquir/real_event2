@@ -19,7 +19,7 @@ const MicrophoneIcon = ({ handleSpeechRecognition, isStreaming, id, field, right
         onClick={() => handleSpeechRecognition(field, id)}
         style={{
           cursor: 'pointer',
-          color: isStreaming ? 'red' : '#007BFF',
+          color: isStreaming ? '#990000' : '#007BFF',
           transform: 'translateY(-50%)',
           zIndex: 9,
           transition: 'all 0.2s ease-in-out',

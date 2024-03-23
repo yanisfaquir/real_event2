@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import GlobalButton from '@/components/globalButton';
 import { MiddleSection } from '@/components/homeMiddleSections/middleSection';
@@ -7,6 +7,19 @@ import { StartEvent } from './startEvent';
 
 const HomePage = () => {
   const router = useRouter();
+  const [isDesktopOrLaptop, setIsDesktopOrLaptop] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 1024px)');
+    setIsDesktopOrLaptop(mediaQuery.matches);
+  
+    const handler = (event) => {
+      setIsDesktopOrLaptop(event.matches);
+    };
+  
+    mediaQuery.addEventListener('change', handler);
+    return () => mediaQuery.removeEventListener('change', handler);
+  }, []);
   const middleData = [
     {
       image: '/assets/pictures/card-sm-1-home-blue.png',
@@ -50,23 +63,18 @@ const HomePage = () => {
         </h1>
         <ul className="text-white relative mx-auto flex justify-center max-w-[400px] top-[32vh] z-10">
           {!router.pathname.includes('/start-event') && (
-            <li className="mx-2 border-2 rounded-[50px] md:grid-cols-12 lg:grid-cols-6">
+            <li
+              className="mx-2 rounded-[50px] md:grid-cols-12 lg:grid-cols-6"
+              style={{ boxShadow: 'inset 0 0 0 3px #FFFFFF' }}
+            >
               <GlobalButton
-                size="large"
+                size={isDesktopOrLaptop ? 'large' : 'medium'}
                 type="custom"
                 path="/start-event"
                 text="Iniciar"
               />
             </li>
           )}
-          <li className="mx-2 md:grid-cols-12 lg:grid-cols-6">
-            <GlobalButton
-              size="large"
-              type="secondary"
-              path="/package"
-              text="Pacotes"
-            />
-          </li>
         </ul>
         <Image
           src="/assets/pictures/homepage-bg-1.png"

@@ -11,96 +11,67 @@ const serviceData = {
 };
 
 const PageComponent = () => {
-  const [activeTab, setActiveTab] = useState('informacoes'); 
+  const [activeTab, setActiveTab] = useState('informacoes');
+
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif' }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        margin: '1rem',
-      }}>
-        <div style={{ flex: 1 }}>
-          <Image
-            src={serviceData.imagem}
-            alt={serviceData.nome}
-            width={500} 
-            height={300} 
-            layout="responsive"
-          />
-        </div>
-        <div style={{ flex: 1, paddingLeft: '1rem' }}>
-          <h2>{serviceData.nome}</h2>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <span style={{ fontSize: '1.5rem', marginRight: '0.5rem', color:'#4A7D8B'}}>{'★'.repeat(Math.round(serviceData.avaliacao))}</span>
-            <span>{serviceData.avaliacao} Excelente</span>
-            <span style={{ marginLeft: '0.5rem' }}>· Reviews ({serviceData.totalReviews})</span>
+    <div className="pt-10 px-5">
+      <div className="max-w-6xl mx-auto mt-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+          <div className="md:col-span-1">
+            <Image
+              src={serviceData.imagem}
+              alt={serviceData.nome}
+              width={400}  // Ajuste para um tamanho maior
+              height={250} // Mantém a proporção da imagem
+              layout="responsive"
+            />
           </div>
-          <div style={{ margin: '0.5rem 0' }}>
-            <span>{serviceData.localizacao}</span>
-          </div>
-          <p>{serviceData.descricao}</p>
-          <div style={{ display: 'flex', marginTop: '1rem' }}>
-            <button style={{
-              padding: '0.5rem 1rem',
-              marginRight: '0.5rem',
-              border: 'none',
-              backgroundColor: '#4A7D8B',
-              color: '#fff',
-              cursor: 'pointer',
-            }}>
-              Adicionar ao pedido
-            </button>
-            <button style={{
-              padding: '0.5rem 1rem',
-              border: '1px solid #4A7D8B',
-              backgroundColor: '#fff',
-              color: '#4A7D8B',
-              cursor: 'pointer',
-            }}>
-              Contacto
-            </button>
+          <div className="md:col-span-2">
+            <h2 className="text-2xl font-semibold">{serviceData.nome}</h2>
+            <div className="flex items-center my-2">
+              <span style={{ color: '#4A7D8B' }} className="text-xl mr-2 text-teal-500">{ '★'.repeat(Math.round(serviceData.avaliacao)) }</span>
+              <span className="font-semibold">{serviceData.avaliacao} Excelente</span>
+              <span className="ml-2">· Reviews ({serviceData.totalReviews})</span>
+            </div>
+            <p className="text-gray-600">{serviceData.localizacao}</p>
+            <p className="my-2">{serviceData.descricao}</p>
+            <div className="flex flex-wrap gap-2 mt-4">
+              <button  style={{ backgroundColor: '#4A7D8B' }} className="py-2 px-4 text-white rounded shadow hover:bg-teal-600 transition-colors">
+                Adicionar ao pedido
+              </button>
+              <button   style={{ borderColor: '#4A7D8B', color: '#4A7D8B' }}
+ className="py-2 px-4 border bg-white rounded shadow hover:bg-teal-50 transition-colors">
+                Contacto
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-      <div style={{
-        backgroundColor: '#f0f0f0',
-        display: 'flex',
-        justifyContent: 'center',
-        padding: '0.5rem 0',
-      }}>
-        <button style={{
-          padding: '0.5rem 1rem',
-          border: 'none',
-          color: '#4A7D8B',
-          backgroundColor: activeTab === 'informacoes' ? '#fff' : 'transparent',
-          cursor: 'pointer',
-        }} onClick={() => setActiveTab('informacoes')}>
-          INFORMAÇÕES
-        </button>
-        <button style={{
-          padding: '0.5rem 1rem',
-          border: 'none',
-          color: '#4A7D8B',
-          backgroundColor: activeTab === 'feedback' ? '#fff' : 'transparent',
-          cursor: 'pointer',
-        }} onClick={() => setActiveTab('feedback')}>
-          FEEDBACK
-        </button>
-      </div>
-      <div>
-        {activeTab === 'informacoes' && (
-          <div style={{ padding: '1rem' }}>
-            {/* Conteúdo de informações */}
-            <p>Descrição detalhada do serviço...</p>
-          </div>
-        )}
-        {activeTab === 'feedback' && (
-          <div style={{ padding: '1rem' }}>
-            {/* Conteúdo de feedback */}
-            <p>Feedback dos clientes...</p>
-          </div>
-        )}
+        <div className="mt-10 bg-gray-100 flex justify-center py-2 rounded"> {/* Nova div com margem superior grande */}
+          <button style={{ color: '#4A7D8B' }}
+            className={`py-2 px-4 ${activeTab === 'informacoes' ? 'bg-white' : 'text-teal-500'} rounded cursor-pointer`}
+            onClick={() => setActiveTab('informacoes')}
+          >
+            INFORMAÇÕES
+          </button>
+          <button style={{ color: '#4A7D8B' }}
+            className={`py-2 px-4 ${activeTab === 'feedback' ? 'bg-white' : 'text-teal-500'} rounded cursor-pointer`}
+            onClick={() => setActiveTab('feedback')}
+          >
+            FEEDBACK
+          </button>
+        </div>
+        <div className="p-4 bg-white rounded shadow mt-2">
+          {activeTab === 'informacoes' && (
+            <div>
+              <p>Descrição detalhada do serviço...</p>
+            </div>
+          )}
+          {activeTab === 'feedback' && (
+            <div>
+              <p>Feedback dos clientes...</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -73,29 +73,6 @@ export const StartEvent = () => {
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo(0, document.body.scrollHeight);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo(0, document.body.scrollHeight);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setTimeout(() => {
-        window.scrollTo({
-          top: document.body.scrollHeight,
-          behavior: 'smooth',
-        });
-      }, 300);
-    }
-  }, []);
-
-  useEffect(() => {
     if (formRef.current) {
       window.scrollTo({
         top: formRef.current.offsetTop + formRef.current.offsetHeight,
@@ -281,7 +258,7 @@ export const StartEvent = () => {
         break;
         case 3:
         dispatch(setActionEventType(selectedEvent));
-        router.push('/');
+        router.push('/servicesResults');
         break;
       default:
         console.error('Seção desconhecida');
@@ -336,8 +313,9 @@ export const StartEvent = () => {
     setEndDate(null);
     dispatch(setActionSameDay(event.target.checked));
     if (!event.target.checked) {
-      setEndDate(new Date(new Date().setDate(startDate.getDate() + 1)));
-      dispatch(setEndActionDate(new Date(new Date().setDate(startDate.getDate() + 1))));
+      const newEndDate = new Date(new Date().setDate(startDate.getDate() + 1));
+      setEndDate(newEndDate);
+      dispatch(setEndActionDate(newEndDate.toISOString()));
     }
   };
 
@@ -358,7 +336,7 @@ export const StartEvent = () => {
             href="/"
             style={{
               cursor: 'pointer',
-              zIndex: '8',
+              zIndex: '9',
               position: 'absolute',
               top: '2rem',
               left: '2%',
@@ -395,7 +373,7 @@ export const StartEvent = () => {
             height={80}
             style={{
               cursor: 'pointer',
-              zIndex: '18',
+              zIndex: '9',
               position: 'absolute',
               top: '2rem',
               left: '2%',
@@ -495,8 +473,14 @@ export const StartEvent = () => {
                     <DatePicker
                       selected={startDate}
                       onChange={(date) => {
-                        setStartDate(date);
-                        dispatch(setStartActionDate(date.toISOString()));
+                        if (date) {
+                          setStartDate(date);
+                          dispatch(setStartActionDate(date.toISOString()));
+                        } else {
+                          const now = new Date();
+                          setStartDate(now);
+                          dispatch(setStartActionDate(now.toISOString()));
+                        }
                       }}
                       dateFormat="dd 'de' MMMM 'de' yyyy"
                       locale={pt}
@@ -659,13 +643,13 @@ export const StartEvent = () => {
           className={`event-form mt-20 lg:mt-12 event-form-2 ${currentSection.number === 2 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
         >
           <div className="flex flex-col lg:flex-row items-center mt-10">
-            <div className="lg:w-1/2 p-16 hidden lg:block">
+            <div className="lg:w-1/2 p-16 hidden lg:block ms-24">
               <Image
                 src={'/assets/pictures/service-type-img.png'}
                 alt="Rapaz de óculos segurando papéis e apontando para algo"
-                width={100}
+                width={500}
                 height={80}
-                layout="responsive"
+                layout="intrinsic"
               />
             </div>
             <div className="lg:w-1/2 px-16">
@@ -756,14 +740,14 @@ export const StartEvent = () => {
         <section
           className={`event-form event-form-3 ${currentSection.number === 3 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
         >
-          <div className="flex flex-col lg:flex-row-reverse items-center">
-            <div className="lg:w-1/2 p-16 hidden lg:block">
+          <div className="flex flex-col lg:flex-row-reverse items-center mt-10">
+            <div className="lg:w-1/2 p-16 hidden ms-24 lg:block">
               <Image
                 src={'/assets/pictures/event-type-img.png'}
                 alt="Pessoas felizes confraternizando"
-                width={100}
+                width={500}
                 height={80}
-                layout="responsive"
+                layout="intrinsic"
               />
             </div>
             <div className="lg:w-1/2 px-16">
