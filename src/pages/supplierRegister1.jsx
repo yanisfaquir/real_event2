@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import GlobalButton from '@/components/globalButton';
+import { useSelector, useDispatch } from 'react-redux';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { setSelectedService, setErrorMessage } from '../redux/reducers/supplierReducer1'; 
 
 const SupplierRegister = () => {
-  const [selectedService, setSelectedService] = useState(null);
+  // const [selectedService, setSelectedService] = useState(null);
+  const selectedService = useSelector((state) => state.supplier1.selectedService);
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const services = ['Catering', 'Merchandising', 'Stands', 'Brindes'];
 
   const handleServiceChange = (event) => {
-    setSelectedService(event.target.value);
+    // setSelectedService(event.target.value);
+    dispatch(setSelectedService(event.target.value));
     setErrorMessage(''); 
   };
 
