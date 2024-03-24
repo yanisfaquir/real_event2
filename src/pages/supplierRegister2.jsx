@@ -366,7 +366,7 @@ const SupplierRegister = () => {
       )}  
 
 
-{service === 'Brindes' && (
+        {service === 'Brindes' && (
             
             <div className="flex flex-wrap justify-between ">
             <div className="w-full md:w-1/2">
