@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import GlobalButton from '@/components/globalButton';
 import { FaChevronDown } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 
 const SupplierRegister = () => {
+    
   const [serviceName, setServiceName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isOpenLocalidade, setIsOpenLocalidade] = useState(false);
@@ -16,6 +18,8 @@ const SupplierRegister = () => {
   const [selectedLocalidade, setSelectedLocalidade] = useState('');
   const [selectedTipoComida, setSelectedTipoComida] = useState('');
   const [selectedPreco, setSelectedPreco] = useState('');
+
+  const router = useRouter();
 
   const handleToggleDropdownLocalidade = () => {
     setIsOpenLocalidade(!isOpenLocalidade);
@@ -49,7 +53,7 @@ const SupplierRegister = () => {
       setErrorMessage('Por favor, preencha todos os campos');
     } else {
       setErrorMessage('');
-      // router.push('/supplierRegister3'); 
+      router.push('/supplierRegister3'); 
     }
   };
 
@@ -60,6 +64,7 @@ const SupplierRegister = () => {
         <p className='text-base mb-8'>Queremos saber mais sobre o teu serviço de forma a conseguirmos partilhar com os nossos utilizadores.</p>
         <div className="flex flex-wrap justify-between ">
           <div className="w-full md:w-1/2">
+            <div className='mr-10 mb-5'>
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nome">Nome do local/serviço</label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -69,9 +74,10 @@ const SupplierRegister = () => {
               value={serviceName}
               onChange={(e) => setServiceName(e.target.value)}
             />
+            </div>
           </div>
 
-          <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2">
             <label className="block text-gray-700 text-sm font-bold" htmlFor="localidade">Localidade</label>
             <div className="relative flex justify-left items-left pt-2">
               <button
@@ -97,9 +103,10 @@ const SupplierRegister = () => {
                 </div>
               )}
             </div>
-          </div>
+        </div>
 
           <div className="w-full md:w-1/2">
+          <div className='mr-10 mb-5'>
             <label className="block text-gray-700 text-sm font-bold" htmlFor="Tipo de Comida">Tipo de Comida</label>
             <div className="relative flex justify-left items-left pt-2">
               <button
@@ -124,6 +131,7 @@ const SupplierRegister = () => {
                   </ul>
                 </div>
               )}
+            </div>
             </div>
           </div>
 
