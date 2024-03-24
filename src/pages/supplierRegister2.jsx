@@ -12,6 +12,10 @@ const SupplierRegister = () => {
   const localidadeCatering = ['Aveiro', 'Lisboa', 'Porto', 'Braga'];
   const tipoComida = ['Italiana', 'Portuguesa', 'Mexicana', 'Tailandesa'];
   const precoCatering = ['100€ - 500€', '500€ - 1000€', '1000€ - 5000€', 'Mais de 5000€ '];
+  
+  const [selectedLocalidade, setSelectedLocalidade] = useState('');
+  const [selectedTipoComida, setSelectedTipoComida] = useState('');
+  const [selectedPreco, setSelectedPreco] = useState('');
 
   const handleToggleDropdownLocalidade = () => {
     setIsOpenLocalidade(!isOpenLocalidade);
@@ -22,6 +26,21 @@ const SupplierRegister = () => {
   };
 
   const handleToggleDropdownPreco = () => {
+    setIsOpenPreco(!isOpenPreco);
+  };
+
+  const handleSelectLocalidade = (value) => {
+    setSelectedLocalidade(value);
+    handleToggleDropdownLocalidade();
+  };
+
+  const handleSelectTipoComida = (value) => {
+    setSelectedTipoComida(value);
+    setIsOpenTipoComida(!isOpenTipoComida);
+  };
+
+  const handleSelectPreco = (value) => {
+    setSelectedPreco(value);
     setIsOpenPreco(!isOpenPreco);
   };
 
@@ -59,7 +78,7 @@ const SupplierRegister = () => {
                 className="relative flex justify-between items-center bg-white border focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group w-full"
                 onClick={handleToggleDropdownLocalidade}
               >
-                <p className="px-4 text-gray-400">Localidade</p>
+                <p className="px-4 text-gray-400">{selectedLocalidade || 'Localidade'}</p>
                 <div className="flex items-center">
                   <div className="bg-customBlue p-2 hover:bg-gray-100 rounded-r">
                     <FaChevronDown />
@@ -70,7 +89,7 @@ const SupplierRegister = () => {
                 <div className="absolute z-50 top-full left-0 w-full bg-white shadow-md mt-1 rounded">
                   <ul className="text-left border rounded">
                     {localidadeCatering.map((localidadeItem, index) => (
-                      <li key={index} className="px-4 py-1 hover:bg-gray-100 border-b">
+                      <li key={index} className="px-4 py-1 hover:bg-gray-100 border-b" onClick={() => handleSelectLocalidade(localidadeItem)}>
                         {localidadeItem}
                       </li>
                     ))}
@@ -87,7 +106,7 @@ const SupplierRegister = () => {
                 className="relative flex justify-between items-center bg-white border focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group w-full"
                 onClick={handleToggleDropdownTipoComida}
               >
-                <p className="px-4 text-gray-400">Tipo de Comida</p>
+                <p className="px-4 text-gray-400">{selectedTipoComida || 'Tipo de Comida'}</p>
                 <div className="flex items-center">
                   <div className="bg-customBlue p-2 hover:bg-gray-100 rounded-r">
                     <FaChevronDown />
@@ -98,7 +117,7 @@ const SupplierRegister = () => {
                 <div className="absolute z-50 top-full left-0 w-full bg-white shadow-md mt-1 rounded">
                   <ul className="text-left border rounded">
                     {tipoComida.map((tipoComidaItem, index) => (
-                      <li key={index} className="px-4 py-1 hover:bg-gray-100 border-b">
+                      <li key={index} className="px-4 py-1 hover:bg-gray-100 border-b" onClick={() => handleSelectTipoComida(tipoComidaItem)}>
                         {tipoComidaItem}
                       </li>
                     ))}
@@ -115,7 +134,7 @@ const SupplierRegister = () => {
                 className="relative flex justify-between items-center bg-white border focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group w-full"
                 onClick={handleToggleDropdownPreco}
               >
-                <p className="px-4 text-gray-400">Preço</p>
+                <p className="px-4 text-gray-400">{selectedPreco || 'Preço'}</p>
                 <div className="flex items-center">
                   <div className="bg-customBlue p-2 hover:bg-gray-100 rounded-r">
                     <FaChevronDown />
@@ -125,11 +144,11 @@ const SupplierRegister = () => {
               {isOpenPreco && (
                 <div className="absolute z-50 top-full left-0 w-full bg-white shadow-md mt-1 rounded">
                   <ul className="text-left border rounded">
-                    {precoCatering.map((precoItem, index) => (
-                      <li key={index} className="px-4 py-1 hover:bg-gray-100 border-b">
-                        {precoItem}
-                      </li>
-                    ))}
+                  {precoCatering.map((precoItem, index) => (
+                    <li key={index} className="px-4 py-1 hover:bg-gray-100 border-b" onClick={() => handleSelectPreco(precoItem)}>
+                      {precoItem}
+                    </li>
+                  ))}
                   </ul>
                 </div>
               )}
