@@ -90,18 +90,25 @@ const serviceResults = () => {
             <button className="relative flex justify-center items-center bg-white bordar focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group"
               onClick={() => setOpenNPessoas(!openNPessoas)}
             >
-              <p className="px-4">Nº Pessoas</p>
+              <p className="px-4">{selectedNPessoas || 'Nº Pessoas'}</p>
               <span className="bg-customBlue  border-l p-2 hover:bg-gray-100">
                 <FaChevronDown />
               </span>
               {openNPessoas && (
                 <div className="absolute hidden group-focus:block top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
                   <ul className="text-left border rounded">
-                    {nPessoas.map((nPessoasItem, index) => (
-                      <li key={index} className="px-4 py-1 hover:bg-gray-100 border-b">
-                        {nPessoasItem}
-                      </li>
-                    ))}
+                  {nPessoas.map((nPessoasItem, index) => (
+                  <li
+                    key={index}
+                    className="px-4 py-1 hover:bg-gray-100 border-b cursor-pointer"
+                    onClick={() => {
+                      setSelectedNPessoas(nPessoasItem);
+                      setOpenNPessoas(false);
+                    }}
+                  >
+                    {nPessoasItem}
+                  </li>
+                ))}
                   </ul>
                 </div>
               )}
@@ -112,7 +119,7 @@ const serviceResults = () => {
           <button className="relative flex justify-center items-center bg-white bordar focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group"
           onClick={() => setOpenTipoEspaco(!openTipoEspaco)}
           >
-              <p className="px-4">Tipo de espaço</p>
+             <p className="px-4">{selectedTipoEspaco || 'Tipo de espaço'}</p>
               <span className="bg-customBlue  border-l p-2 hover:bg-gray-100">
                 <FaChevronDown />
               </span>
@@ -141,10 +148,13 @@ const serviceResults = () => {
           <button className="relative flex justify-center items-center bg-white bordar focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group"
           onClick={() => setOpenPreco(!openPreco)}
           >
-              <p className="px-4">Preço</p>
+              <p className="px-4">{selectedPreco || 'Preço'}</p>
               <span className="bg-customBlue  border-l p-2 hover:bg-gray-100">
                 <FaChevronDown />
               </span>
+              {openPreco && (
+            <div className="absolute top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
+              <ul className="text-left border rounded">
               {openPreco && (
             <div className="absolute top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
               <ul className="text-left border rounded">
@@ -160,6 +170,9 @@ const serviceResults = () => {
                     {precoItem}
                   </li>
                 ))}
+              </ul>
+            </div>
+          )}
               </ul>
             </div>
           )}
