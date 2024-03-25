@@ -16,8 +16,7 @@ const UseServiceResults = () => {
 
   const [openPreco, setOpenPreco] = useState(false);
   const [selectedPreco, setSelectedPreco] = useState('');
-  const [activeTab, setActiveTab] = useState('catering'); 
-
+  
 
   // const serviceType = useSelector((state) => state.event.serviceType);
   // console.log(serviceType);
@@ -71,7 +70,8 @@ const UseServiceResults = () => {
     ]
   };
   
-  
+  const [activeTab, setActiveTab] = useState(servico[0]);
+
   
   return (
     <div>
@@ -83,7 +83,7 @@ const UseServiceResults = () => {
                 <a
                   href="#"
                   className={`inline-block p-4 text-white-600 bg-gray-50 rounded-t-lg ${
-                    activeTab === servicoItem ? 'active dark:bg-customBlue dark:text-gray-100 border' : ''
+                    servicoItem === activeTab ? 'active dark:bg-customBlue dark:text-gray-100 border' : ''
                   }`}
                   onClick={() => setActiveTab(servicoItem)}
                 >
