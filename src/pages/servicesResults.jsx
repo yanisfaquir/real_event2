@@ -4,6 +4,8 @@ import { CiStar } from 'react-icons/ci';
 import { FaChevronDown } from 'react-icons/fa';
 import GlobalButton from '@/components/globalButton';
 import Image from 'next/image';
+import { useSelector, useDispatch } from 'react-redux';
+import { setActionServiceType } from '@/redux/actions/eventActions';
 
 const UseServiceResults = () => {
   const [openNPessoas, setOpenNPessoas] = useState(false);
@@ -14,8 +16,14 @@ const UseServiceResults = () => {
 
   const [openPreco, setOpenPreco] = useState(false);
   const [selectedPreco, setSelectedPreco] = useState('');
+  const [activeTab, setActiveTab] = useState('catering'); 
 
-  const servico = ['catering', 'decoracao', 'local', 'bar'];
+
+  // const serviceType = useSelector((state) => state.event.serviceType);
+  // console.log(serviceType);
+
+
+  const servico = ['catering', 'local', 'bar'];
   const nPessoas = ['15 - 30', '30 - 45', '45 - 60', '+60'];
   const tipoEspaco = ['Quinta', 'Hotel', 'Restaurante', 'Praia', 'Campo'];
   const preco = ['100 - 200', '200 - 300', '300 - 400', '400 - 500', '+500'];
@@ -69,19 +77,21 @@ const UseServiceResults = () => {
     <div>
       <div
         style={{marginTop: '7rem', marginBottom: '2rem', marginLeft: '5rem', marginRight: '5rem'}}>
-        <ul class="flex flex-wrap justify-end text-sm font-medium text-center  border-b   dark:border-customBlue dark:text-black-400">
-          {servico.map((servicoItem, index) => (
-            <li key={index} class="me-2">
-              <a
-                href="#"
-                aria-current="page"
-                class="inline-block p-4 text-white-600 bg-gray-50 rounded-t-lg active dark:bg-customBlue dark:text-gray-100 border"
-              >
-                {servicoItem}
-              </a>
-            </li>
-          ))}
-        </ul>
+          <ul className="flex flex-wrap justify-end text-sm font-medium text-center border-b dark:border-customBlue dark:text-black-400">
+            {servico.map((servicoItem, index) => (
+              <li key={index} className="me-2">
+                <a
+                  href="#"
+                  className={`inline-block p-4 text-white-600 bg-gray-50 rounded-t-lg ${
+                    activeTab === servicoItem ? 'active dark:bg-customBlue dark:text-gray-100 border' : ''
+                  }`}
+                  onClick={() => setActiveTab(servicoItem)}
+                >
+                  {servicoItem}
+                </a>
+              </li>
+            ))}
+          </ul>
       </div>
 
       <div className="w-full px-4 bg-white">
@@ -181,7 +191,8 @@ const UseServiceResults = () => {
         </div>
 
         <div className="max-w-[1200px] max-h-[1200px] mx-auto grid md:grid-cols-4 gap-8">
-          {servicoQuinta.quinta1.map((quintaItem, index) => (
+        {activeTab === 'catering' &&
+          servicoQuinta.quinta1.map((quintaItem, index) => (
             <div key={index} className="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300">
               {quintaItem.img}
               <p className="py-2 font-medium">{quintaItem.nome}</p>
@@ -207,6 +218,36 @@ const UseServiceResults = () => {
               </div>
             </div>
           ))}
+
+
+      {activeTab === 'bar' &&
+          servicoQuinta.quinta1.map((quintaItem, index) => (
+            <div key={index} className="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300">
+              {quintaItem.img}
+              <p className="py-2 font-medium">{quintaItem.nome}</p>
+              <p className="py-2 text-sm">{quintaItem.local}</p>
+              <div className="flex items-center justify-start">
+                <CiStar className="mr-4" />
+                <p className="text-sm mr-4">{quintaItem.classificacao}</p>
+              </div>
+              <div className="flex items-center justify-start">
+                <button className="w-auto h-auto justify-start rounded-full text-xs my-1 mx-0 px-1 py-1 border-2 border-gray">
+                  Start Trial
+                </button>
+              </div>
+              <p className="border-b mx-2 mt-2"></p>
+              <div className="flex items-center justify-start mt-6 space-x-10">
+                <p className="font-medium">{quintaItem.preco}</p>
+                <GlobalButton
+                  size="small"
+                  type="primary"
+                  path="/pageDetails"
+                  text="Ver mais"
+                />
+              </div>
+            </div>
+          ))}
+          
         </div>
 
       </div>
