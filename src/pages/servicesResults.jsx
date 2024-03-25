@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { CiStar } from 'react-icons/ci';
 import { FaChevronDown } from 'react-icons/fa';
 import GlobalButton from '@/components/globalButton';
@@ -17,6 +18,7 @@ const serviceResults = () => {
         width={400}
         height={400}
         layout="cover"
+        key="quinta1-1"
       />,
         nome: 'Quinta da Atela',
         local: 'São João da Madeira, Aveiro',
@@ -29,6 +31,7 @@ const serviceResults = () => {
         width={400}
         height={400}
         layout="cover"
+        key="quinta1-2"
       />, 
         nome: 'Quinta da Atela 2',
         local: 'São João da Madeira, Aveiro 2',
@@ -41,6 +44,7 @@ const serviceResults = () => {
         width={400}
         height={400}
         layout="cover"
+        key="quinta1-3"
       />, 
         nome: 'Quinta da Atela',
         local: 'São João da Madeira, Aveiro',
@@ -51,13 +55,14 @@ const serviceResults = () => {
   };
   
   
+  
   return (
     <div>
       <div
         style={{marginTop: '7rem', marginBottom: '2rem', marginLeft: '5rem', marginRight: '5rem'}}>
         <ul class="flex flex-wrap justify-end text-sm font-medium text-center  border-b   dark:border-customBlue dark:text-black-400">
           {servico.map((servicoItem, index) => (
-            <li class="me-2">
+            <li key={index} class="me-2">
               <a
                 href="#"
                 aria-current="page"
@@ -81,7 +86,7 @@ const serviceResults = () => {
               <div className="absolute hidden group-focus:block top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
                 <ul className="text-left border rounded">
                   {nPessoas.map((nPessoasItem, index) => (
-                    <li className="px-4 py-1 hover:bg-gray-100 border-b">
+                    <li key={index} className="px-4 py-1 hover:bg-gray-100 border-b">
                       {nPessoasItem}
                     </li>
                   ))}
@@ -99,7 +104,7 @@ const serviceResults = () => {
               <div className="absolute hidden group-focus:block top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
                 <ul className="text-left border rounded">
                   {tipoEspaco.map((tipoEspacoItem, index) => (
-                    <li className="px-4 py-1 hover:bg-gray-100 border-b">
+                    <li key={index} className="px-4 py-1 hover:bg-gray-100 border-b">
                       {tipoEspacoItem}
                     </li>
                   ))}
@@ -117,7 +122,7 @@ const serviceResults = () => {
               <div className="absolute hidden group-focus:block top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
                 <ul className="text-left border rounded">
                   {preco.map((precoItem, index) => (
-                    <li className="px-4 py-1 hover:bg-gray-100 border-b">
+                    <li key={index} className="px-4 py-1 hover:bg-gray-100 border-b">
                       {precoItem}
                     </li>
                   ))}
@@ -128,33 +133,33 @@ const serviceResults = () => {
         </div>
 
         <div className="max-w-[1200px] max-h-[1200px] mx-auto grid md:grid-cols-4 gap-8">
-  {servicoQuinta.quinta1.map((quintaItem, index) => (
-    <div key={index} className="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300">
-      {quintaItem.img}
-      <p className="py-2 font-medium">{quintaItem.nome}</p>
-      <p className="py-2 text-sm">{quintaItem.local}</p>
-      <div className="flex items-center justify-start">
-        <CiStar className="mr-4" />
-        <p className="text-sm mr-4">{quintaItem.classificacao}</p>
-      </div>
-      <div className="flex items-center justify-start">
-        <button className="w-auto h-auto justify-start rounded-full text-xs my-1 mx-0 px-1 py-1 border-2 border-gray">
-          Start Trial
-        </button>
-      </div>
-      <p className="border-b mx-2 mt-2"></p>
-      <div className="flex items-center justify-start mt-6 space-x-10">
-        <p className="font-medium">{quintaItem.preco}</p>
-        <GlobalButton
-          size="small"
-          type="primary"
-          path="/pageDetails"
-          text="Ver mais"
-        />
-      </div>
-    </div>
-  ))}
-</div>
+          {servicoQuinta.quinta1.map((quintaItem, index) => (
+            <div key={index} className="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300">
+              {quintaItem.img}
+              <p className="py-2 font-medium">{quintaItem.nome}</p>
+              <p className="py-2 text-sm">{quintaItem.local}</p>
+              <div className="flex items-center justify-start">
+                <CiStar className="mr-4" />
+                <p className="text-sm mr-4">{quintaItem.classificacao}</p>
+              </div>
+              <div className="flex items-center justify-start">
+                <button className="w-auto h-auto justify-start rounded-full text-xs my-1 mx-0 px-1 py-1 border-2 border-gray">
+                  Start Trial
+                </button>
+              </div>
+              <p className="border-b mx-2 mt-2"></p>
+              <div className="flex items-center justify-start mt-6 space-x-10">
+                <p className="font-medium">{quintaItem.preco}</p>
+                <GlobalButton
+                  size="small"
+                  type="primary"
+                  path="/pageDetails"
+                  text="Ver mais"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
 
       </div>
     </div>
