@@ -5,7 +5,7 @@ import { FaChevronDown } from 'react-icons/fa';
 import GlobalButton from '@/components/globalButton';
 import Image from 'next/image';
 
-const serviceResults = () => {
+const UseServiceResults = () => {
   const [openNPessoas, setOpenNPessoas] = useState(false);
   const [selectedNPessoas, setSelectedNPessoas] = useState('');
 
@@ -214,4 +214,4 @@ const serviceResults = () => {
   );
 };
 
-export default serviceResults;
+export default UseServiceResults;
