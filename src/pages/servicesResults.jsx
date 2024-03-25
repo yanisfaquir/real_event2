@@ -5,50 +5,68 @@ import GlobalButton from '@/components/globalButton';
 import Image from 'next/image';
 
 const serviceResults = () => {
+  const servico = ['catering', 'decoracao', 'local', 'bar'];
+  const nPessoas = ['15 - 30', '30 - 45', '45 - 60', '+60'];
+  const tipoEspaco = ['Quinta', 'Hotel', 'Restaurante', 'Praia', 'Campo'];
+  const preco = ['100 - 200', '200 - 300', '300 - 400', '400 - 500', '+500'];
+  const servicoQuinta = {
+    quinta1: [
+      { img:<Image
+        src="/assets/pictures/space1.jpg"
+        alt="Imagem da casa"
+        width={400}
+        height={400}
+        layout="cover"
+      />,
+        nome: 'Quinta da Atela',
+        local: 'São João da Madeira, Aveiro',
+        classificacao: '4.9 (50) - Alpiarça',
+        preco: '200$'
+      }, 
+      {img:<Image
+        src="/assets/pictures/space1.jpg"
+        alt="Imagem da casa"
+        width={400}
+        height={400}
+        layout="cover"
+      />, 
+        nome: 'Quinta da Atela 2',
+        local: 'São João da Madeira, Aveiro 2',
+        classificacao: '4.9 (50) - Alpiarça 2',
+        preco: '200$'
+      }, 
+      {img:<Image
+        src="/assets/pictures/space1.jpg"
+        alt="Imagem da casa"
+        width={400}
+        height={400}
+        layout="cover"
+      />, 
+        nome: 'Quinta da Atela',
+        local: 'São João da Madeira, Aveiro',
+        classificacao: '4.9 (50) - Alpiarça',
+        preco: '200$'
+      }
+    ]
+  };
+  
+  
   return (
     <div>
       <div
-        style={{
-          marginTop: '7rem',
-          marginBottom: '2rem',
-          marginLeft: '5rem',
-          marginRight: '5rem',
-        }}
-      >
+        style={{marginTop: '7rem', marginBottom: '2rem', marginLeft: '5rem', marginRight: '5rem'}}>
         <ul class="flex flex-wrap justify-end text-sm font-medium text-center  border-b   dark:border-customBlue dark:text-black-400">
-          <li class="me-2">
-            <a
-              href="#"
-              aria-current="page"
-              class="inline-block p-4 text-white-600 bg-gray-50 rounded-t-lg active dark:bg-customBlue dark:text-gray-100 border"
-            >
-              Catering
-            </a>
-          </li>
-          <li class="me-2">
-            <a
-              href="#"
-              class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-constomBlueLight dark:hover:text-gray-300"
-            >
-              Decoração
-            </a>
-          </li>
-          <li class="me-2">
-            <a
-              href="#"
-              class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-constomBlueLight dark:hover:text-gray-300"
-            >
-              Local
-            </a>
-          </li>
-          <li class="me-2">
-            <a
-              href="#"
-              class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-constomBlueLight dark:hover:text-gray-300"
-            >
-              Bar
-            </a>
-          </li>
+          {servico.map((servicoItem, index) => (
+            <li class="me-2">
+              <a
+                href="#"
+                aria-current="page"
+                class="inline-block p-4 text-white-600 bg-gray-50 rounded-t-lg active dark:bg-customBlue dark:text-gray-100 border"
+              >
+                {servicoItem}
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
 
@@ -62,21 +80,11 @@ const serviceResults = () => {
               </span>
               <div className="absolute hidden group-focus:block top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
                 <ul className="text-left border rounded">
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    -15 
-                  </li>
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    15 - 30
-                  </li>
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    30 - 45
-                  </li>
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    45 - 60
-                  </li>
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    +60
-                  </li>
+                  {nPessoas.map((nPessoasItem, index) => (
+                    <li className="px-4 py-1 hover:bg-gray-100 border-b">
+                      {nPessoasItem}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </button>
@@ -90,21 +98,11 @@ const serviceResults = () => {
               </span>
               <div className="absolute hidden group-focus:block top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
                 <ul className="text-left border rounded">
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    Item 1
-                  </li>
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    Item 1
-                  </li>
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    Item 1
-                  </li>
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    Item 1
-                  </li>
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    Item 1
-                  </li>
+                  {tipoEspaco.map((tipoEspacoItem, index) => (
+                    <li className="px-4 py-1 hover:bg-gray-100 border-b">
+                      {tipoEspacoItem}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </button>
@@ -118,21 +116,11 @@ const serviceResults = () => {
               </span>
               <div className="absolute hidden group-focus:block top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
                 <ul className="text-left border rounded">
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    Item 1
-                  </li>
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    Item 1
-                  </li>
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    Item 1
-                  </li>
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    Item 1
-                  </li>
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    Item 1
-                  </li>
+                  {preco.map((precoItem, index) => (
+                    <li className="px-4 py-1 hover:bg-gray-100 border-b">
+                      {precoItem}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </button>
@@ -140,165 +128,34 @@ const serviceResults = () => {
         </div>
 
         <div className="max-w-[1200px] max-h-[1200px] mx-auto grid md:grid-cols-4 gap-8">
-          <div class="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300">
-            <Image
-              src="/assets/pictures/space1.jpg"
-              alt="Imagem da casa"
-              width={400}
-              height={400}
-              layout="cover"
-            />
-            <p class="py-2 font-medium">Quinta da Atela</p>
-            <p class="py-2 text-sm">São João da Madeira, Aveiro</p>
-            <div class="flex items-center justify-start">
-              <CiStar class="mr-4" />
-              <p class="text-sm mr-4">4.9 (50) - Alpiarça</p>
-            </div>
-            <div className="flex items-center justify-start">
-              <button class="w-auto h-auto justify-start rounded-full text-xs my-1 mx-0 px-1 py-1 border-2 border-gray">
-                Start Trial
-              </button>
-            </div>
-            <p class="border-b mx-2 mt-2"></p>
-            <div class="flex items-center justify-start mt-6 space-x-10">
-              <p className="font-medium">200$</p>
-              <GlobalButton
-                size="small"
-                type="primary"
-                path="/pageDetails"
-                text="Ver mais"
-              />
-            </div>
-          </div>
+  {servicoQuinta.quinta1.map((quintaItem, index) => (
+    <div key={index} className="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300">
+      {quintaItem.img}
+      <p className="py-2 font-medium">{quintaItem.nome}</p>
+      <p className="py-2 text-sm">{quintaItem.local}</p>
+      <div className="flex items-center justify-start">
+        <CiStar className="mr-4" />
+        <p className="text-sm mr-4">{quintaItem.classificacao}</p>
+      </div>
+      <div className="flex items-center justify-start">
+        <button className="w-auto h-auto justify-start rounded-full text-xs my-1 mx-0 px-1 py-1 border-2 border-gray">
+          Start Trial
+        </button>
+      </div>
+      <p className="border-b mx-2 mt-2"></p>
+      <div className="flex items-center justify-start mt-6 space-x-10">
+        <p className="font-medium">{quintaItem.preco}</p>
+        <GlobalButton
+          size="small"
+          type="primary"
+          path="/pageDetails"
+          text="Ver mais"
+        />
+      </div>
+    </div>
+  ))}
+</div>
 
-          <div class="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300">
-            <Image
-              src="/assets/pictures/space1.jpg"
-              alt="Imagem da casa"
-              width={400}
-              height={400}
-              layout="cover"
-            />
-
-            <p class="py-2 font-medium">Quinta da Atela</p>
-            <p class="py-2 text-sm">São João da Madeira, Aveiro</p>
-            <div class="flex items-center justify-start">
-              <CiStar class="mr-4" />
-              <p class="text-sm mr-4">4.9 (50) - Alpiarça</p>
-            </div>
-            <div className="flex items-center justify-start">
-              <button class="w-auto h-auto justify-start rounded-full text-xs my-1 mx-0 px-1 py-1 border-2 border-gray">
-                Start Trial
-              </button>
-            </div>
-            <p class="border-b mx-2 mt-2"></p>
-            <div class="flex items-center justify-start mt-6 space-x-10">
-              <p className="font-medium ">200$</p>
-              <GlobalButton
-                size="small"
-                type="primary"
-                path="/pageDetails"
-                text="Ver mais"
-              />
-            </div>
-          </div>
-
-          <div class="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300">
-            <Image
-              src="/assets/pictures/space1.jpg"
-              alt="Imagem da casa"
-              width={400}
-              height={400}
-              layout="cover"
-            />
-
-            <p class="py-2 font-medium">Quinta da Atela</p>
-            <p class="py-2 text-sm">São João da Madeira, Aveiro</p>
-            <div class="flex items-center justify-start">
-              <CiStar class="mr-4" />
-              <p class="text-sm mr-4">4.9 (50) - Alpiarça</p>
-            </div>
-            <div className="flex items-center justify-start">
-              <button class="w-auto h-auto justify-start rounded-full text-xs my-1 mx-0 px-1 py-1 border-2 border-gray">
-                Start Trial
-              </button>
-            </div>
-            <p class="border-b mx-2 mt-2"></p>
-            <div class="flex items-center justify-start mt-6 space-x-10">
-              <p className="font-medium ">200$</p>
-              <GlobalButton
-                size="small"
-                type="primary"
-                path="/pageDetails"
-                text="Ver mais"
-              />
-            </div>
-          </div>
-
-          <div class="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300">
-            <Image
-              src="/assets/pictures/space1.jpg"
-              alt="Imagem da casa"
-              width={400}
-              height={400}
-              layout="cover"
-            />
-
-            <p class="py-2 font-medium">Quinta da Atela</p>
-            <p class="py-2 text-sm">São João da Madeira, Aveiro</p>
-            <div class="flex items-center justify-start">
-              <CiStar class="mr-4" />
-              <p class="text-sm mr-4">4.9 (50) - Alpiarça</p>
-            </div>
-            <div className="flex items-center justify-start">
-              <button class="w-auto h-auto justify-start rounded-full text-xs my-1 mx-0 px-1 py-1 border-2 border-gray">
-                Start Trial
-              </button>
-            </div>
-            <p class="border-b mx-2 mt-2"></p>
-            <div class="flex items-center justify-start mt-6 space-x-10">
-              <p className="font-medium ">200$</p>
-              <GlobalButton
-                size="small"
-                type="primary"
-                path="/pageDetails"
-                text="Ver mais"
-              />
-            </div>
-          </div>
-
-          <div class="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300">
-            <Image
-              src="/assets/pictures/space1.jpg"
-              alt="Imagem da casa"
-              width={400}
-              height={400}
-              layout="cover"
-            />
-
-            <p class="py-2 font-medium">Quinta da Atela</p>
-            <p class="py-2 text-sm">São João da Madeira, Aveiro</p>
-            <div class="flex items-center justify-start">
-              <CiStar class="mr-4" />
-              <p class="text-sm mr-4">4.9 (50) - Alpiarça</p>
-            </div>
-            <div className="flex items-center justify-start">
-              <button class="w-auto h-auto justify-start rounded-full text-xs my-1 mx-0 px-1 py-1 border-2 border-gray">
-                Start Trial
-              </button>
-            </div>
-            <p class="border-b mx-2 mt-2"></p>
-            <div class="flex items-center justify-start mt-6 space-x-10">
-              <p className="font-medium ">200$</p>
-              <GlobalButton
-                size="small"
-                type="primary"
-                path="/pageDetails"
-                text="Ver mais"
-              />
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
