@@ -6,6 +6,15 @@ import GlobalButton from '@/components/globalButton';
 import Image from 'next/image';
 
 const serviceResults = () => {
+  const [openNPessoas, setOpenNPessoas] = useState(false);
+  const [selectedNPessoas, setSelectedNPessoas] = useState('');
+
+  const [openTipoEspaco, setOpenTipoEspaco] = useState(false);
+  const [selectedTipoEspaco, setSelectedTipoEspaco] = useState('');
+
+  const [openPreco, setOpenPreco] = useState(false);
+  const [selectedPreco, setSelectedPreco] = useState('');
+
   const servico = ['catering', 'decoracao', 'local', 'bar'];
   const nPessoas = ['15 - 30', '30 - 45', '45 - 60', '+60'];
   const tipoEspaco = ['Quinta', 'Hotel', 'Restaurante', 'Praia', 'Campo'];
@@ -78,56 +87,82 @@ const serviceResults = () => {
       <div className="w-full px-4 bg-white">
         <div className="flex items-center justify-start">
           <div className="relative flex justify-left items-left pt-0 ml-20 ">
-            <button className="relative flex justify-center items-center bg-white bordar focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group">
+            <button className="relative flex justify-center items-center bg-white bordar focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group"
+              onClick={() => setOpenNPessoas(!openNPessoas)}
+            >
               <p className="px-4">Nº Pessoas</p>
               <span className="bg-customBlue  border-l p-2 hover:bg-gray-100">
                 <FaChevronDown />
               </span>
-              <div className="absolute hidden group-focus:block top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
-                <ul className="text-left border rounded">
-                  {nPessoas.map((nPessoasItem, index) => (
-                    <li key={index} className="px-4 py-1 hover:bg-gray-100 border-b">
-                      {nPessoasItem}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {openNPessoas && (
+                <div className="absolute hidden group-focus:block top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
+                  <ul className="text-left border rounded">
+                    {nPessoas.map((nPessoasItem, index) => (
+                      <li key={index} className="px-4 py-1 hover:bg-gray-100 border-b">
+                        {nPessoasItem}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </button>
           </div>
 
           <div className="relative flex justify-left items-left pt-0 ml-10 ">
-            <button className="relative flex justify-center items-center bg-white bordar focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group">
+          <button className="relative flex justify-center items-center bg-white bordar focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group"
+          onClick={() => setOpenTipoEspaco(!openTipoEspaco)}
+          >
               <p className="px-4">Tipo de espaço</p>
               <span className="bg-customBlue  border-l p-2 hover:bg-gray-100">
                 <FaChevronDown />
               </span>
-              <div className="absolute hidden group-focus:block top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
-                <ul className="text-left border rounded">
-                  {tipoEspaco.map((tipoEspacoItem, index) => (
-                    <li key={index} className="px-4 py-1 hover:bg-gray-100 border-b">
-                      {tipoEspacoItem}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {openTipoEspaco && (
+            <div className="absolute top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
+              <ul className="text-left border rounded">
+                {tipoEspaco.map((tipoEspacoItem, index) => (
+                  <li
+                    key={index}
+                    className="px-4 py-1 hover:bg-gray-100 border-b cursor-pointer"
+                    onClick={() => {
+                      setSelectedTipoEspaco(tipoEspacoItem);
+                      setOpenTipoEspaco(false);
+                    }}
+                  >
+                    {tipoEspacoItem}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
             </button>
           </div>
 
           <div className="relative flex justify-left items-left pt-0 ml-10 ">
-            <button className="relative flex justify-center items-center bg-white bordar focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group">
+          <button className="relative flex justify-center items-center bg-white bordar focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group"
+          onClick={() => setOpenPreco(!openPreco)}
+          >
               <p className="px-4">Preço</p>
               <span className="bg-customBlue  border-l p-2 hover:bg-gray-100">
                 <FaChevronDown />
               </span>
-              <div className="absolute hidden group-focus:block top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
-                <ul className="text-left border rounded">
-                  {preco.map((precoItem, index) => (
-                    <li key={index} className="px-4 py-1 hover:bg-gray-100 border-b">
-                      {precoItem}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {openPreco && (
+            <div className="absolute top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
+              <ul className="text-left border rounded">
+                {preco.map((precoItem, index) => (
+                  <li
+                    key={index}
+                    className="px-4 py-1 hover:bg-gray-100 border-b cursor-pointer"
+                    onClick={() => {
+                      setSelectedPreco(precoItem);
+                      setOpenPreco(false);
+                    }}
+                  >
+                    {precoItem}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
             </button>
           </div>
         </div>
