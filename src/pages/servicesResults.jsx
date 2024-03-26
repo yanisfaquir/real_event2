@@ -17,15 +17,20 @@ const UseServiceResults = () => {
   const [openPreco, setOpenPreco] = useState(false);
   const [selectedPreco, setSelectedPreco] = useState('');
   
+  const [filtroPreco, setFiltroPreco] = useState('');
+  const [filtroTipoEspaco, setFiltroTipoEspaco] = useState('');
+
 
   const serviceType = useSelector((state) => {state.event.serviceType; console.log(state.event.serviceType) });
-  // console.log(serviceType);
+  console.log('serviiii', serviceType);
+
 
 
   const servico = ['catering', 'local', 'bar'];
   const nPessoas = ['15 - 30', '30 - 45', '45 - 60', '+60'];
   const tipoEspaco = ['Quinta', 'Hotel', 'Restaurante', 'Praia', 'Campo'];
-  const preco = ['100 - 200', '200 - 300', '300 - 400', '400 - 500', '+500'];
+  const preco = ['200$', '400$', '600$', '800$', '1000$'];
+
   const servicoQuinta = {
     quinta1: [
       { img:<Image
@@ -37,9 +42,10 @@ const UseServiceResults = () => {
         key="quinta1-1"
       />,
         nome: 'Quinta da Atela',
-        local: 'São João da Madeira, Aveiro',
+        local: 'Aveiro',
         classificacao: '4.9 (50) - Alpiarça',
-        preco: '200$'
+        preco: '200$', 
+        tipoEspaco: 'Quinta'
       }, 
       {img:<Image
         src="/assets/pictures/space1.jpg"
@@ -50,9 +56,10 @@ const UseServiceResults = () => {
         key="quinta1-2"
       />, 
         nome: 'Quinta da Atela 2',
-        local: 'São João da Madeira, Aveiro 2',
+        local: 'Aveiro',
         classificacao: '4.9 (50) - Alpiarça 2',
-        preco: '200$'
+        preco: '200$', 
+        tipoEspaco: 'Hotel'
       }, 
       {img:<Image
         src="/assets/pictures/space1.jpg"
@@ -63,14 +70,22 @@ const UseServiceResults = () => {
         key="quinta1-3"
       />, 
         nome: 'Quinta da Atela',
-        local: 'São João da Madeira, Aveiro',
+        local: 'Porto',
         classificacao: '4.9 (50) - Alpiarça',
-        preco: '200$'
+        preco: '200$', 
+        tipoEspaco: 'Restaurante'
       }
     ]
   };
   
-  const [activeTab, setActiveTab] = useState(servico[0]);
+    const [activeTab, setActiveTab] = useState(servico[0]);
+    
+    const filteredQuintaItems = servicoQuinta.quinta1.filter((quintaItem) => {
+      const matchPreco = filtroPreco === '' || quintaItem.preco === filtroPreco;
+      const matchTipoEspaco = filtroTipoEspaco === '' || quintaItem.tipoEspaco === filtroTipoEspaco;
+      return matchPreco && matchTipoEspaco;
+    });
+
 
   
   return (
@@ -93,7 +108,6 @@ const UseServiceResults = () => {
             ))}
           </ul>
       </div>
-
       <div className="w-full px-4 bg-white">
         <div className="flex items-center justify-start">
           <div className="relative flex justify-left items-left pt-0 ml-20 ">
@@ -126,77 +140,79 @@ const UseServiceResults = () => {
           </div>
 
           <div className="relative flex justify-left items-left pt-0 ml-10 ">
-          <button className="relative flex justify-center items-center bg-white bordar focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group"
-          onClick={() => setOpenTipoEspaco(!openTipoEspaco)}
-          >
-             <p className="px-4">{selectedTipoEspaco || 'Tipo de espaço'}</p>
-              <span className="bg-customBlue  border-l p-2 hover:bg-gray-100">
+          <button
+              className="relative flex justify-center items-center bg-white border focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group"
+              onClick={() => setOpenTipoEspaco(!openTipoEspaco)}
+            >
+              <p className="px-4">{selectedTipoEspaco || 'Tipo de espaço'}</p>
+              <span className="bg-customBlue border-l p-2 hover:bg-gray-100">
                 <FaChevronDown />
               </span>
               {openTipoEspaco && (
-            <div className="absolute top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
-              <ul className="text-left border rounded">
-                {tipoEspaco.map((tipoEspacoItem, index) => (
-                  <li
-                    key={index}
-                    className="px-4 py-1 hover:bg-gray-100 border-b cursor-pointer"
-                    onClick={() => {
-                      setSelectedTipoEspaco(tipoEspacoItem);
-                      setOpenTipoEspaco(false);
-                    }}
-                  >
-                    {tipoEspacoItem}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+                <div className="absolute top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
+                  <ul className="text-left border rounded">
+                    {tipoEspaco.map((tipoEspacoItem, index) => (
+                      <li
+                        key={index}
+                        className="px-4 py-1 hover:bg-gray-100 border-b cursor-pointer"
+                        onClick={() => {
+                          setSelectedTipoEspaco(tipoEspacoItem);
+                          setFiltroTipoEspaco(tipoEspacoItem); // Define o filtro de tipo de espaço aqui
+                          setOpenTipoEspaco(false);
+                        }}
+                      >
+                        {tipoEspacoItem}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </button>
+
           </div>
 
           <div className="relative flex justify-left items-left pt-0 ml-10 ">
-          <button className="relative flex justify-center items-center bg-white bordar focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group"
-          onClick={() => setOpenPreco(!openPreco)}
-          >
+          <button
+              className="relative flex justify-center items-center bg-white border focus:outline-none shadow text-gray-600 rounded focus:ring ring-gray-200 group"
+              onClick={() => setOpenPreco(!openPreco)}
+            >
               <p className="px-4">{selectedPreco || 'Preço'}</p>
-              <span className="bg-customBlue  border-l p-2 hover:bg-gray-100">
+              <span className="bg-customBlue border-l p-2 hover:bg-gray-100">
                 <FaChevronDown />
               </span>
               {openPreco && (
-            <div className="absolute top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
-              <ul className="text-left border rounded">
-              {openPreco && (
-            <div className="absolute top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
-              <ul className="text-left border rounded">
-                {preco.map((precoItem, index) => (
-                  <li
-                    key={index}
-                    className="px-4 py-1 hover:bg-gray-100 border-b cursor-pointer"
-                    onClick={() => {
-                      setSelectedPreco(precoItem);
-                      setOpenPreco(false);
-                    }}
-                  >
-                    {precoItem}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-              </ul>
-            </div>
-          )}
+                <div className="absolute top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
+                  <ul className="text-left border rounded">
+                    {preco.map((precoItem, index) => (
+                      <li
+                        key={index}
+                        className="px-4 py-1 hover:bg-gray-100 border-b cursor-pointer"
+                        onClick={() => {
+                          setSelectedPreco(precoItem);
+                          setFiltroPreco(precoItem); // Define o filtro de preço aqui
+                          setOpenPreco(false);
+                        }}
+                      >
+                        {precoItem}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </button>
           </div>
         </div>
 
+
+        
+
         <div className="max-w-[1200px] max-h-[1200px] mx-auto grid md:grid-cols-4 gap-8">
         {activeTab === 'catering' &&
-          servicoQuinta.quinta1.map((quintaItem, index) => (
+          filteredQuintaItems.map((quintaItem, index) => (
             <div key={index} className="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300">
               {quintaItem.img}
               <p className="py-2 font-medium">{quintaItem.nome}</p>
-              <p className="py-2 text-sm">{quintaItem.local}</p>
+              <p className="py-2 text-sm">{quintaItem.local} - {quintaItem.tipoEspaco} </p>
               <div className="flex items-center justify-start">
                 <CiStar className="mr-4" />
                 <p className="text-sm mr-4">{quintaItem.classificacao}</p>
