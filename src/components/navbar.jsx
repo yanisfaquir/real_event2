@@ -110,7 +110,7 @@ const Navbar = ({ inView }) => {
           <section className="w-1/4 py-2">
             <div className="-mt-2">
               <GlobalButton
-                image="/assets/icons/logo-white.png"
+                image="/assets/icons/realevent-icon.png"
                 path="/"
                 text={`Ir à Página inicial`}
                 id="logo-navbar"
