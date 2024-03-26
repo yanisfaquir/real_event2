@@ -18,7 +18,7 @@ const UseServiceResults = () => {
   const [selectedPreco, setSelectedPreco] = useState('');
   
 
-  // const serviceType = useSelector((state) => state.event.serviceType);
+  const serviceType = useSelector((state) => {state.event.serviceType; console.log(state.event.serviceType) });
   // console.log(serviceType);
 
 

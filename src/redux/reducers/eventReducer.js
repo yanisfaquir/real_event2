@@ -61,11 +61,11 @@ const eventSlice = createSlice({
     setActionSameDay: (state, action) => {
       state.sameDay = action.payload;
     },
-    setServiceType: (service, action) => {
-      service.location = action.payload;
+    setServiceType: (state, action) => {
+      state.serviceType = action.payload;
     },
-    setEventType: (event, action) => {
-      event.location = action.payload;
+    setEventType: (state, action) => {
+      state.eventType = action.payload;
     },
   },
 });
