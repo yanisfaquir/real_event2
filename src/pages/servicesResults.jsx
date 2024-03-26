@@ -28,8 +28,8 @@ const UseServiceResults = () => {
 
   const servico = ['catering', 'local', 'bar'];
   const nPessoas = ['15 - 30', '30 - 45', '45 - 60', '+60'];
-  const tipoEspaco = ['Quinta', 'Hotel', 'Restaurante', 'Praia', 'Campo'];
-  const preco = ['200$', '400$', '600$', '800$', '1000$'];
+  const tipoEspaco = ['Todos','Quinta', 'Hotel', 'Restaurante', 'Praia', 'Campo'];
+  const preco = ['Todos','200$', '400$', '600$', '800$', '1000$'];
 
   const servicoQuinta = {
     quinta1: [
@@ -44,7 +44,7 @@ const UseServiceResults = () => {
         nome: 'Quinta da Atela',
         local: 'Aveiro',
         classificacao: '4.9 (50) - Alpiarça',
-        preco: '200$', 
+        preco: '400$', 
         tipoEspaco: 'Quinta'
       }, 
       {img:<Image
@@ -183,19 +183,19 @@ const UseServiceResults = () => {
               {openPreco && (
                 <div className="absolute top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
                   <ul className="text-left border rounded">
-                    {preco.map((precoItem, index) => (
-                      <li
-                        key={index}
-                        className="px-4 py-1 hover:bg-gray-100 border-b cursor-pointer"
-                        onClick={() => {
-                          setSelectedPreco(precoItem);
-                          setFiltroPreco(precoItem); // Define o filtro de preço aqui
-                          setOpenPreco(false);
-                        }}
-                      >
-                        {precoItem}
-                      </li>
-                    ))}
+                  {preco.map((precoItem, index) => (
+                    <li
+                      key={index}
+                      className="px-4 py-1 hover:bg-gray-100 border-b cursor-pointer"
+                      onClick={() => {
+                        setSelectedPreco(precoItem);
+                        setFiltroPreco(precoItem === 'Todos' ? '' : precoItem); 
+                        setOpenPreco(false);
+                      }}
+                    >
+                      {precoItem}
+                    </li>
+                  ))}
                   </ul>
                 </div>
               )}
