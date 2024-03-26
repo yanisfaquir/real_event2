@@ -157,7 +157,7 @@ const UseServiceResults = () => {
                         className="px-4 py-1 hover:bg-gray-100 border-b cursor-pointer"
                         onClick={() => {
                           setSelectedTipoEspaco(tipoEspacoItem);
-                          setFiltroTipoEspaco(tipoEspacoItem); // Define o filtro de tipo de espaço aqui
+                          setFiltroTipoEspaco(tipoEspacoItem === 'Todos' ? '' : tipoEspacoItem);
                           setOpenTipoEspaco(false);
                         }}
                       >
@@ -206,7 +206,7 @@ const UseServiceResults = () => {
 
         
 
-        <div className="max-w-[1200px] max-h-[1200px] mx-auto grid md:grid-cols-4 gap-8">
+        <div className="max-w-[1200px] max-h-[1200px] mx-auto grid md:grid-cols-4 gap-8 ml-20">
         {activeTab === 'catering' &&
           filteredQuintaItems.map((quintaItem, index) => (
             <div key={index} className="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300">
