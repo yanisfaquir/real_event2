@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import GlobalButton from './globalButton';
 import Link from 'next/link';
 import { Tooltip } from 'react-tooltip';
@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { setCurrentCartSection } from '@/redux/reducers/cartReducer';
 import { Popover } from 'evergreen-ui';
+import { AccessibilityContext } from '../contexts/acessibility';
 
 const Navbar = ({ inView }) => {
   const dispatch = useDispatch();
@@ -18,15 +19,50 @@ const Navbar = ({ inView }) => {
   const extraItemsCount = Math.max(0, cartItems.length - 2);
   const [visibleMobile, setVisibleMobile] = useState(false);
 
+  const {
+    isCustomFont,
+    toggleFont,
+    toggleTextAlignment,
+    getNextAlignment,
+    getCurrentAlignmentTranslation,
+    iconClicked,
+    increaseFontSize,
+    decreaseFontSize,
+    increaseLineSpacing,
+    increaseTextSpacing,
+  } = useContext(AccessibilityContext);
+
   const handleCartMobileClick = () => {
     if (router.pathname !== '/shopping-cart') {
       setVisibleMobile((prevState) => !prevState);
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (navOpen && !event.target.closest('.sidemenu')) {
+        setNavOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [navOpen]);
+
+  useEffect(() => {
+    if (visibleDesktop || visibleMobile) {
+      const popoverElement = document.querySelector('.cart-popover');
+      if (popoverElement) {
+        popoverElement.setAttribute('tabindex', '0');
+      }
+    }
+  }, [visibleDesktop, visibleMobile]);
+
   const cartPopoverContent =
     router.pathname !== '/shopping-cart' ? (
-      <div className="p-2">
+      <div className="p-2 cart-popover">
         {cartItems.slice(0, 2).map((item, index) => (
           <div
             key={index}
@@ -65,29 +101,11 @@ const Navbar = ({ inView }) => {
                 text={'Ver mais'}
                 size="small"
                 type="secondary"
+                width="100%"
                 onClick={() => {
                   dispatch(setCurrentCartSection(1));
                   setVisibleDesktop(false);
                   handleCartMobileClick;
-                  router.push('/shopping-cart');
-                }}
-              />
-            </div>
-          </li>
-          <li
-            className="list-none rounded-[50px] bg-[#4A7D8B] ms-4"
-            style={{ boxShadow: '0 0 0 2px #4A7D8B' }}
-          >
-            <div>
-              <GlobalButton
-                path={
-                  router.pathname === '/shopping-cart' ? '' : '/shopping-cart'
-                }
-                text={'Checkout'}
-                size="small"
-                onClick={() => {
-                  dispatch(setCurrentCartSection(2));
-                  setVisibleDesktop(false);
                   router.push('/shopping-cart');
                 }}
               />
@@ -100,22 +118,84 @@ const Navbar = ({ inView }) => {
   return (
     <div className="">
       <nav
-        className={`desktop-navbar fixed z-10 top-0 left-1/2 transform -translate-x-1/2 mt-5 border-4 border-white bg-[#4A7D8B] rounded-[50px] pb-1 px-[2rem] h-[72px] ${
+        className={`desktop-navbar fixed z-10 top-0 left-1/2 transform -translate-x-1/2 mt-5 border-4 border-white bg-[#4A7D8B] rounded-[50px] pb-2 px-[2rem] h-[76px] ${
           inView
             ? ''
-            : 'desktop-navbar-scrolled fixed z-10 w-[100vw] mt-[0px] mx-[0px] px-[0rem] border-none border-bottom-2 border-transparent rounded-none pb-1 px-[2rem] h-[54px] bg-[#4A7D8B]'
+            : 'desktop-navbar-scrolled fixed z-10 w-[100vw] mt-[0px] mx-[0px] px-[0rem] border-none border-bottom-2 border-transparent rounded-none px-[2rem] h-[72px] bg-[#4A7D8B]'
         }`}
       >
         <div className="flex justify-between items-center">
-          <section className="w-1/4 py-2">
+          <section className="w-1/4 py-2 flex items-center">
             <div className="-mt-2">
-              <GlobalButton
-                image="/assets/icons/logo-white.png"
-                path="/"
-                text={`Ir à Página inicial`}
-                id="logo-navbar"
-              />
+              <li className="list-none relative min-w-[56px]">
+                <GlobalButton
+                  image="/assets/icons/logo-white.png"
+                  path="/"
+                  text={`Ir à Página inicial`}
+                  id="logo-navbar"
+                />
+              </li>
             </div>
+            <li className="list-none relative min-w-[56px]">
+              <GlobalButton
+                image="/assets/icons/serif-icon.svg"
+                text={isCustomFont ? 'Remover serifa' : 'Aplicar serifa'}
+                id={isCustomFont ? 'remove-serif-navbar' : 'apply-serif-navbar'}
+                onClick={toggleFont}
+              />
+            </li>
+            <li className="list-none relative min-w-[56px]">
+              <GlobalButton
+                image="/assets/icons/aligment-icon.svg"
+                text={`Alinhamento: ${getCurrentAlignmentTranslation()}`}
+                id={`aligment-navbar-${getNextAlignment()}`}
+                onClick={toggleTextAlignment}
+              ></GlobalButton>
+              {iconClicked && getCurrentAlignmentTranslation() && (
+                <span className="absolute bottom-0 right-2 text-xs bg-white px-1 rounded-md font-bold">
+                  {getCurrentAlignmentTranslation().charAt(0).toUpperCase()}
+                </span>
+              )}
+            </li>
+            <li className="list-none relative -mt-1 min-w-[56px]">
+              <GlobalButton
+                image="/assets/icons/leading-increase-icon.svg"
+                text={`Aumentar espaçamento entre linhas`}
+                id={`increase-leading-navbar`}
+                onClick={increaseLineSpacing}
+              />
+            </li>
+            <li className="list-none relative mt-2 min-w-[56px]">
+              <GlobalButton
+                image="/assets/icons/decrease-font-icon.svg"
+                text={`Diminuir fonte`}
+                id={`decrease-font-navbar`}
+                onClick={decreaseFontSize}
+              />
+            </li>
+            <li className="list-none relative mt-2 min-w-[56px]">
+              <GlobalButton
+                image="/assets/icons/increase-font-icon.svg"
+                text={`Aumentar fonte`}
+                id={`increase-font-navbar`}
+                onClick={increaseFontSize}
+              />
+            </li>
+            <li className="list-none relative mt-2 min-w-[56px]">
+              <GlobalButton
+                image="/assets/icons/word-spacing-icon.svg"
+                text={`Aumentar espaçamento entre palavras`}
+                id={`increase-leading-text-navbar`}
+                onClick={increaseTextSpacing}
+              />
+            </li>
+            <li className="list-none relative mt-2 min-w-[56px]">
+              <GlobalButton
+                image="/assets/icons/high-contrast-icon.svg"
+                text={`Alterar contraste`}
+                id={`high-contrast-navbar`}
+              />
+            </li>
           </section>
 
           <section className="w-1/2 py-2 flex justify-center items-center">
@@ -135,10 +215,10 @@ const Navbar = ({ inView }) => {
 
           <section className="w-1/4 py-2 flex justify-end items-center align-center">
             <GlobalButton
-              size="medium"
-              type="secondary"
+              image="/assets/icons/user-white.svg"
               path="/login"
               text="Conecte-se"
+              id="user-navbar"
             />
             <div style={{ position: 'relative', width: '24%', height: '44px' }}>
               <div style={{ position: 'absolute', right: 0, top: 6 }}>
@@ -212,7 +292,7 @@ const Navbar = ({ inView }) => {
       </nav>
 
       <nav
-        className={`mobile-navbar fixed z-10 top-0 w-[100vw] top-0 mt-0 mx-0 px-[0rem] border-2 border-transparent rounded-none pb-1 px-[2rem] h-[54px] bg-[#4A7D8B]`}
+        className={`mobile-navbar fixed z-10 top-0 w-[100vw] top-0 mt-0 mx-0 px-[0rem] border-2 border-transparent rounded-none pb-1 px-[2rem] h-[62px] bg-[#4A7D8B]`}
       >
         <ul className="flex justify-between items-center my-1">
           <li className="-me-3 -mt-1">

@@ -225,7 +225,7 @@ const serviceResults = () => {
               <GlobalButton
                 size="small"
                 type="primary"
-                path="/pageDetails"
+                path="/login"
                 text="Ver mais"
               />
             </div>

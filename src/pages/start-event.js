@@ -1,10 +1,10 @@
 import React from 'react';
-import HomePage from '.';
+import { StartEvent } from './startEvent';
 
 const StartEventPage = () => {
   return (
     <div>
-      <HomePage />
+      <StartEvent />
     </div>
   );
 };

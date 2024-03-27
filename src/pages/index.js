@@ -44,7 +44,7 @@ const HomePage = () => {
   return (
     <div className="flex flex-col">
       <div className="top-0 h-[92vh] z-0 top-section-home">
-        <h1 className="text-white relative flex justify-center top-[24vh] z-10 text-[4rem] font-bold">
+        <h1 className="text-white relative mx-auto text-center max-w-[850px] top-[24vh] z-10 text-[4rem] font-bold">
           CONHECE A
         </h1>
         <Image
@@ -56,11 +56,11 @@ const HomePage = () => {
           className="relative flex align-center mx-auto top-[24vh] z-10"
         />
 
-        <h1 className="text-white relative mx-auto max-w-[850px] top-[24vh] z-10 text-center text-[1.5rem]">
+        <h2 className="text-white relative mx-auto max-w-[850px] top-[24vh] z-10 text-center text-[1.5rem]">
           Torne realidade o seu evento dos sonhos! Aqui tu encontras tudo aquilo
           que precisas para realizar qualquer tipo de evento, desde batizados à
           convívios.
-        </h1>
+        </h2>
         <ul className="text-white relative mx-auto flex justify-center max-w-[400px] top-[32vh] z-10">
           {!router.pathname.includes('/start-event') && (
             <li
@@ -86,7 +86,6 @@ const HomePage = () => {
       <div>
         <div className="bg-white middle-home-section py-8">
           {router.pathname === '/' && <MiddleSection data={middleData} />}
-          {router.pathname === '/start-event' && <StartEvent />}
         </div>
       </div>
     </div>
