@@ -55,9 +55,13 @@ export const StartEvent = () => {
 
   useEffect(() => {
     const unixStartTimestamp = Math.floor(new Date().getTime() / 1000);
-    const unixEndTimestamp = Math.floor(new Date().setHours(new Date().getHours() + 1) / 1000);
-    const unixEndTimestampNextDay = Math.floor(new Date().setDate(new Date().getDate() + 1) / 1000);
-  
+    const unixEndTimestamp = Math.floor(
+      new Date().setHours(new Date().getHours() + 1) / 1000
+    );
+    const unixEndTimestampNextDay = Math.floor(
+      new Date().setDate(new Date().getDate() + 1) / 1000
+    );
+
     dispatch(setStartActionDate(unixStartTimestamp));
     dispatch(setStartActionTime(unixStartTimestamp));
     dispatch(setEndActionTime(unixEndTimestamp));
@@ -222,7 +226,7 @@ export const StartEvent = () => {
           );
           return;
         }
-    
+
         const combinedStartDateTime = new Date(
           startDate.getFullYear(),
           startDate.getMonth(),
@@ -230,7 +234,7 @@ export const StartEvent = () => {
           startTime.getHours(),
           startTime.getMinutes()
         );
-    
+
         const combinedEndDateTime = new Date(
           sameDay ? startDate.getFullYear() : endDate.getFullYear(),
           sameDay ? startDate.getMonth() : endDate.getMonth(),
@@ -238,25 +242,29 @@ export const StartEvent = () => {
           endTime.getHours(),
           endTime.getMinutes()
         );
-    
+
         const unixStartTimestamp = Math.floor(
           combinedStartDateTime.getTime() / 1000
         );
-        const unixEndTimestamp = Math.floor(combinedEndDateTime.getTime() / 1000);
-    
+        const unixEndTimestamp = Math.floor(
+          combinedEndDateTime.getTime() / 1000
+        );
+
         dispatch(setStartActionDate(unixStartTimestamp));
         !sameDay ? dispatch(setEndActionDate(unixEndTimestamp)) : '';
         dispatch(setStartActionTime(unixStartTimestamp));
         dispatch(setEndActionTime(unixEndTimestamp));
-        dispatch(setStartEnd({ start: unixStartTimestamp, end: unixEndTimestamp }));
-    
+        dispatch(
+          setStartEnd({ start: unixStartTimestamp, end: unixEndTimestamp })
+        );
+
         dispatch(setLocation(location));
         dispatch(setMapImageUrl(mapImageUrl));
         break;
       case 2:
         dispatch(setActionServiceType(selectedService));
         break;
-        case 3:
+      case 3:
         dispatch(setActionEventType(selectedEvent));
         router.push('/servicesResults');
         break;

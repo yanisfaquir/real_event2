@@ -12,11 +12,11 @@ const HomePage = () => {
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
     setIsDesktopOrLaptop(mediaQuery.matches);
-  
+
     const handler = (event) => {
       setIsDesktopOrLaptop(event.matches);
     };
-  
+
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);

@@ -62,9 +62,7 @@ const serviceResults = () => {
               </span>
               <div className="absolute hidden group-focus:block top-full min-w-full w-max bg-white shadow-md mt-1 rounded">
                 <ul className="text-left border rounded">
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    -15 
-                  </li>
+                  <li className="px-4 py-1 hover:bg-gray-100 border-b">-15</li>
                   <li className="px-4 py-1 hover:bg-gray-100 border-b">
                     15 - 30
                   </li>
@@ -74,9 +72,7 @@ const serviceResults = () => {
                   <li className="px-4 py-1 hover:bg-gray-100 border-b">
                     45 - 60
                   </li>
-                  <li className="px-4 py-1 hover:bg-gray-100 border-b">
-                    +60
-                  </li>
+                  <li className="px-4 py-1 hover:bg-gray-100 border-b">+60</li>
                 </ul>
               </div>
             </button>

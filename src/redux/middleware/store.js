@@ -8,7 +8,6 @@ const store = configureStore({
     event: eventReducer,
     cart: cartReducer,
     supplier1: supplierReducer,
-    
   },
 });
 

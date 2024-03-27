@@ -1,15 +1,20 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setSelectedService, setErrorMessage } from '../reducers/supplierReducer1'; // Importe as actions do reducer
+import {
+  setSelectedService,
+  setErrorMessage,
+} from '../reducers/supplierReducer1'; // Importe as actions do reducer
 
 const SupplierRegister = () => {
-  const selectedService = useSelector((state) => state.supplier.selectedService);
+  const selectedService = useSelector(
+    (state) => state.supplier.selectedService
+  );
   const errorMessage = useSelector((state) => state.supplier.errorMessage);
   const dispatch = useDispatch();
 
   const handleServiceChange = (event) => {
     dispatch(setSelectedService(event.target.value));
-    dispatch(setErrorMessage('')); 
+    dispatch(setErrorMessage(''));
   };
 
   const handleSubmit = () => {
@@ -20,8 +25,6 @@ const SupplierRegister = () => {
       // Lógica para enviar dados ou navegar para a próxima página
     }
   };
-
-
 };
 
 export default SupplierRegister;

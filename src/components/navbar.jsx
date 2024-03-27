@@ -46,7 +46,7 @@ const Navbar = ({ inView }) => {
               </h2>
               <p>Valor: €{item.price}</p>
             </div>
-              <hr />
+            <hr />
           </div>
         ))}
         {extraItemsCount > 0 && (
@@ -131,7 +131,6 @@ const Navbar = ({ inView }) => {
               path="/supplierRegister1"
               text="Fornecedor"
             />
-
           </section>
 
           <section className="w-1/4 py-2 flex justify-end items-center align-center">

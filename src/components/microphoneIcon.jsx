@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { MdMic } from 'react-icons/md';
 import { Tooltip } from 'react-tooltip';
 
-const MicrophoneIcon = ({ handleSpeechRecognition, isStreaming, id, field, right }) => {
+const MicrophoneIcon = ({
+  handleSpeechRecognition,
+  isStreaming,
+  id,
+  field,
+  right,
+}) => {
   const [micId, setMicId] = useState(id);
 
   useEffect(() => {

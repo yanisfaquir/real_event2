@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 
 const serviceData = {
-  nome: "DJ Tomané Tomaça Music",
+  nome: 'DJ Tomané Tomaça Music',
   avaliacao: 4.3,
   totalReviews: 7,
-  localizacao: "Maia, Porto",
-  descricao: "Farei do vosso casamento um dia único e especial. Realizo com mestria as funções de DJ, Animador, Coreógrafo e Wedding Planner. Perfeito para um dia único e memorável.",
-  imagem: "/assets/pictures/servico.png", 
+  localizacao: 'Maia, Porto',
+  descricao:
+    'Farei do vosso casamento um dia único e especial. Realizo com mestria as funções de DJ, Animador, Coreógrafo e Wedding Planner. Perfeito para um dia único e memorável.',
+  imagem: '/assets/pictures/servico.png',
 };
 
 const PageComponent = () => {
@@ -21,7 +22,7 @@ const PageComponent = () => {
             <Image
               src={serviceData.imagem}
               alt={serviceData.nome}
-              width={400}  // Ajuste para um tamanho maior
+              width={400} // Ajuste para um tamanho maior
               height={250} // Mantém a proporção da imagem
               layout="responsive"
             />
@@ -29,31 +30,49 @@ const PageComponent = () => {
           <div className="md:col-span-2">
             <h2 className="text-2xl font-semibold">{serviceData.nome}</h2>
             <div className="flex items-center my-2">
-              <span style={{ color: '#4A7D8B' }} className="text-xl mr-2 text-teal-500">{ '★'.repeat(Math.round(serviceData.avaliacao)) }</span>
-              <span className="font-semibold">{serviceData.avaliacao} Excelente</span>
-              <span className="ml-2">· Reviews ({serviceData.totalReviews})</span>
+              <span
+                style={{ color: '#4A7D8B' }}
+                className="text-xl mr-2 text-teal-500"
+              >
+                {'★'.repeat(Math.round(serviceData.avaliacao))}
+              </span>
+              <span className="font-semibold">
+                {serviceData.avaliacao} Excelente
+              </span>
+              <span className="ml-2">
+                · Reviews ({serviceData.totalReviews})
+              </span>
             </div>
             <p className="text-gray-600">{serviceData.localizacao}</p>
             <p className="my-2">{serviceData.descricao}</p>
             <div className="flex flex-wrap gap-2 mt-4">
-              <button  style={{ backgroundColor: '#4A7D8B' }} className="py-2 px-4 text-white rounded shadow hover:bg-teal-600 transition-colors">
+              <button
+                style={{ backgroundColor: '#4A7D8B' }}
+                className="py-2 px-4 text-white rounded shadow hover:bg-teal-600 transition-colors"
+              >
                 Adicionar ao pedido
               </button>
-              <button   style={{ borderColor: '#4A7D8B', color: '#4A7D8B' }}
- className="py-2 px-4 border bg-white rounded shadow hover:bg-teal-50 transition-colors">
+              <button
+                style={{ borderColor: '#4A7D8B', color: '#4A7D8B' }}
+                className="py-2 px-4 border bg-white rounded shadow hover:bg-teal-50 transition-colors"
+              >
                 Contacto
               </button>
             </div>
           </div>
         </div>
-        <div className="mt-10 bg-gray-100 flex justify-center py-2 rounded"> {/* Nova div com margem superior grande */}
-          <button style={{ color: '#4A7D8B' }}
+        <div className="mt-10 bg-gray-100 flex justify-center py-2 rounded">
+          {' '}
+          {/* Nova div com margem superior grande */}
+          <button
+            style={{ color: '#4A7D8B' }}
             className={`py-2 px-4 ${activeTab === 'informacoes' ? 'bg-white' : 'text-teal-500'} rounded cursor-pointer`}
             onClick={() => setActiveTab('informacoes')}
           >
             INFORMAÇÕES
           </button>
-          <button style={{ color: '#4A7D8B' }}
+          <button
+            style={{ color: '#4A7D8B' }}
             className={`py-2 px-4 ${activeTab === 'feedback' ? 'bg-white' : 'text-teal-500'} rounded cursor-pointer`}
             onClick={() => setActiveTab('feedback')}
           >

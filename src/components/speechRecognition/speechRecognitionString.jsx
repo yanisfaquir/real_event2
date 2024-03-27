@@ -4,9 +4,9 @@ import { MdMic } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
 
 const SpeechRecognitionString = ({ action }) => {
- const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
- const handleSpeechRecognition = () => {
+  const handleSpeechRecognition = () => {
     try {
       const recognition = new window.webkitSpeechRecognition();
       recognition.lang = 'pt-PT';
@@ -22,13 +22,13 @@ const SpeechRecognitionString = ({ action }) => {
     } catch (error) {
       console.error('Erro ao iniciar o reconhecimento de fala:', error);
     }
- };
+  };
 
- return (
+  return (
     <button onClick={handleSpeechRecognition}>
       <MdMic style={{ cursor: 'pointer' }} />
     </button>
- );
+  );
 };
 
 export default SpeechRecognitionString;

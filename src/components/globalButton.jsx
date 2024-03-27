@@ -12,7 +12,7 @@ const GlobalButton = ({
   customElements,
   image,
   id,
-  width
+  width,
 }) => {
   const buttonSizes = {
     small: 'py-1 px-2 text-[1.25rem] min-w-32',

@@ -25,7 +25,9 @@ const SpeechRecognitionDate = ({ field, action, state }) => {
             locale: pt,
           }
         );
-        const dateValue = isNaN(parsedDate.getTime()) ? null : parsedDate.toISOString();
+        const dateValue = isNaN(parsedDate.getTime())
+          ? null
+          : parsedDate.toISOString();
         state(dateValue);
         dispatch(action(dateValue));
       };
