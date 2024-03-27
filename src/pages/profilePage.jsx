@@ -59,7 +59,7 @@ const Profile = () => {
 
   return (
     <div className="px-4 py-8">
-      <div className="bg-white p-6 rounded-lg shadow-md border-2 border-[#4A7D8B] max-w-4xl mx-auto my-10 space-y-6">
+      <div className="bg-white p-8 rounded-lg shadow-md border-2 border-[#4A7D8B] max-w-4xl mx-auto mt-20 mb-10 space-y-6" style={{ padding: '2rem 4rem' }}>
         <div className="flex justify-between items-center">
           <img
             src={serviceProviderProfile.profilePictureUrl}
@@ -97,7 +97,7 @@ const Profile = () => {
 
       {isEditing && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-8 rounded-lg space-y-4">
+          <div className="bg-white p-8 rounded-lg space-y-4" style={{ width: 'auto', padding: '2rem' }}>
             <h2 className="font-bold text-lg">Editar Perfil</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
@@ -166,8 +166,8 @@ const Profile = () => {
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="px-4 py-2 rounded bg-gray-200"
-                >
+                  className="px-4 py-2 rounded bg-gray-200
+                  ">
                   Cancelar
                 </button>
                 <button
