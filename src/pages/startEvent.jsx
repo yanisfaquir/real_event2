@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import DatePicker from 'react-datepicker';
 import pt from 'date-fns/locale/pt';
 import 'react-datepicker/dist/react-datepicker.css';
-import { parse } from 'date-fns';
+import { parse, isBefore, endOfDay } from 'date-fns';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   setLocation,
@@ -22,26 +22,29 @@ import Link from 'next/link';
 import Image from 'next/image';
 import MicrophoneIcon from '@/components/microphoneIcon';
 import { useRouter } from 'next/router';
+import { v4 as uuidv4 } from 'uuid';
 
 export const StartEvent = () => {
+  const formId = uuidv4();
   const dispatch = useDispatch();
   const router = useRouter();
   const location = useSelector((state) => state.event.location);
   const mapImageUrl = useSelector((state) => state.event.mapImageUrl);
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(
-    new Date(new Date().setHours(new Date().getHours() + 1))
-  );
+  const [startDate, setStartDate] = useState(null);
+
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
   const [sameDay, setSameDay] = useState(true);
-  const [endDate, setEndDate] = useState(
-    sameDay ? null : new Date(new Date().setDate(new Date().getDate() + 1))
-  );
+  const [endDate, setEndDate] = useState(null);
 
   const [localidadeTouched, setLocationTouched] = useState(false);
+  const [startDateTouched, setStartDateTouched] = useState(false);
+  const [endDateTouched, setEndDateTouched] = useState(false);
+  const [startTimeTouched, setStartTimeTouched] = useState(false);
+  const [endTimeTouched, setEndTimeTouched] = useState(false);
   const [coordenadas, setCoordenadas] = useState({});
-  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({});
   const [locationEvent, setEventLocation] = useState('');
   const [altLocation, setAltLocation] = useState('');
   const [isStreaming, setIsStreaming] = useState({});
@@ -49,15 +52,19 @@ export const StartEvent = () => {
     number: 1,
     text: 'Ir à Página Inicial',
   });
-  const [selectedService, setSelectedService] = useState('');
+  const [selectedService, setSelectedService] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState('');
   const formRef = useRef(null);
 
   useEffect(() => {
     const unixStartTimestamp = Math.floor(new Date().getTime() / 1000);
-    const unixEndTimestamp = Math.floor(new Date().setHours(new Date().getHours() + 1) / 1000);
-    const unixEndTimestampNextDay = Math.floor(new Date().setDate(new Date().getDate() + 1) / 1000);
-  
+    const unixEndTimestamp = Math.floor(
+      new Date().setHours(new Date().getHours() + 1) / 1000
+    );
+    const unixEndTimestampNextDay = Math.floor(
+      new Date().setDate(new Date().getDate() + 1) / 1000
+    );
+
     dispatch(setStartActionDate(unixStartTimestamp));
     dispatch(setStartActionTime(unixStartTimestamp));
     dispatch(setEndActionTime(unixEndTimestamp));
@@ -69,7 +76,17 @@ export const StartEvent = () => {
   };
 
   const handleServiceChange = (event) => {
-    setSelectedService(event.target.value);
+    const value = event.target.value;
+
+    if (event.target.checked) {
+      // Se a caixa de seleção estiver marcada, adicione o valor ao array de serviços selecionados
+      setSelectedService((prevServices) => [...prevServices, value]);
+    } else {
+      // Se a caixa de seleção não estiver marcada, remova o valor do array de serviços selecionados
+      setSelectedService((prevServices) =>
+        prevServices.filter((service) => service !== value)
+      );
+    }
   };
 
   useEffect(() => {
@@ -80,6 +97,29 @@ export const StartEvent = () => {
       });
     }
   }, [currentSection]);
+
+  const districtLocations = {
+    'Aveiro, Aveiro': 'Aveiro, Aveiro',
+    'Beja, Beja': 'Beja, Beja',
+    'Braga, Braga': 'Braga, Braga',
+    'Bragança, Bragança': 'Bragança, Bragança',
+    'Castelo Branco, Castelo Branco': 'Castelo Branco, Castelo Branco',
+    'Coimbra, Coimbra': 'Coimbra, Coimbra',
+    'Estarreja, Estarreja': 'Estarreja, Estarreja',
+    'Faro, Faro': 'Faro, Faro',
+    'Guarda, Guarda': 'Guarda, Guarda',
+    'Leiria, Leiria': 'Leiria, Leiria',
+    'Lisboa, Lisboa': 'Lisboa, Lisboa',
+    'Porto, Porto': 'Porto, Porto',
+    'São João da Madeira, São João da Madeira':
+      'São João da Madeira, São João da Madeira',
+    'São Roque, São Roque': 'São Roque, São Roque',
+    'Setubal, Setubal': 'Setubal, Setubal',
+    'Viana do Castelo, Viana do Castelo': 'Viana do Castelo, Viana do Castelo',
+    'Vila Real, Vila Real': 'Vila Real, Vila Real',
+    'Viseu, Viseu': 'Viseu, Viseu',
+  };
+  // pode ter mais de um serviço selecionado
 
   const handleLocationSearch = async () => {
     dispatch(setLocation(locationEvent));
@@ -99,10 +139,19 @@ export const StartEvent = () => {
         );
         setError(null);
       } else {
-        setError('Localidade não encontrada');
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          localizacao: 'Localidade não encontrada',
+        }));
+
+        dispatch(setMapImageUrl(null));
+        dispatch(setLocation(null));
       }
     } catch (error) {
-      setError('Erro ao buscar coordenadas linha 60');
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        coordenadas: 'Erro ao buscar coordenadas',
+      }));
     }
   };
 
@@ -222,7 +271,7 @@ export const StartEvent = () => {
           );
           return;
         }
-    
+
         const combinedStartDateTime = new Date(
           startDate.getFullYear(),
           startDate.getMonth(),
@@ -230,7 +279,7 @@ export const StartEvent = () => {
           startTime.getHours(),
           startTime.getMinutes()
         );
-    
+
         const combinedEndDateTime = new Date(
           sameDay ? startDate.getFullYear() : endDate.getFullYear(),
           sameDay ? startDate.getMonth() : endDate.getMonth(),
@@ -238,25 +287,29 @@ export const StartEvent = () => {
           endTime.getHours(),
           endTime.getMinutes()
         );
-    
+
         const unixStartTimestamp = Math.floor(
           combinedStartDateTime.getTime() / 1000
         );
-        const unixEndTimestamp = Math.floor(combinedEndDateTime.getTime() / 1000);
-    
+        const unixEndTimestamp = Math.floor(
+          combinedEndDateTime.getTime() / 1000
+        );
+
         dispatch(setStartActionDate(unixStartTimestamp));
         !sameDay ? dispatch(setEndActionDate(unixEndTimestamp)) : '';
         dispatch(setStartActionTime(unixStartTimestamp));
         dispatch(setEndActionTime(unixEndTimestamp));
-        dispatch(setStartEnd({ start: unixStartTimestamp, end: unixEndTimestamp }));
-    
+        dispatch(
+          setStartEnd({ start: unixStartTimestamp, end: unixEndTimestamp })
+        );
+
         dispatch(setLocation(location));
         dispatch(setMapImageUrl(mapImageUrl));
         break;
       case 2:
         dispatch(setActionServiceType(selectedService));
         break;
-        case 3:
+      case 3:
         dispatch(setActionEventType(selectedEvent));
         router.push('/servicesResults');
         break;
@@ -312,25 +365,161 @@ export const StartEvent = () => {
     setSameDay(event.target.checked);
     setEndDate(null);
     dispatch(setActionSameDay(event.target.checked));
-    if (!event.target.checked) {
+    if (!event.target.checked && startDate) {
       const newEndDate = new Date(new Date().setDate(startDate.getDate() + 1));
       setEndDate(newEndDate);
-      dispatch(setEndActionDate(newEndDate.toISOString()));
+      //dispatch(setEndActionDate(newEndDate.toISOString()));
     }
   };
 
-  const isFormValid = location !== '' && error == null;
+  const handleDateChange = (date, field) => {
+    if (field === 'startDate') {
+      setStartDate(date);
+      if (isBefore(date, endOfDay(new Date()))) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: 'A datas não podem ser hoje ou anterior ao dia atual',
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: null,
+        }));
+      }
+      if (startDate && date && date < startDate) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: 'A data de fim deve ser após a data de início',
+        }));
+      }
+    } else if (field === 'endDate') {
+      setEndDate(date);
+      if (isBefore(date, endOfDay(new Date()))) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: 'A datas não podem ser hoje ou anterior ao dia atual',
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: null,
+        }));
+      }
+
+      if (startDate && date && date < startDate) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: 'A data de fim deve ser após a data de início',
+        }));
+      }
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    const allowedKeys = [
+      'Tab',
+      'Alt',
+      'Backspace',
+      'Delete',
+      'Enter',
+      'ArrowUp',
+      'ArrowDown',
+      'ArrowLeft',
+      'ArrowRight',
+    ];
+    const key = event.key;
+
+    if (!/[0-9/]/.test(key) && !allowedKeys.includes(key)) {
+      event.preventDefault();
+    }
+  };
+
+  const handleTimeChange = (time, field) => {
+    if (field === 'startTime') {
+      setStartTime(time);
+      if (endTime && time?.getTime() >= endTime?.getTime() - 60 * 60 * 1000) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]:
+            'O horário de início deve ser pelo menos uma hora antes do horário de fim',
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: null,
+        }));
+      }
+    } else if (field === 'endTime') {
+      setEndTime(time);
+      if (
+        startTime &&
+        time?.getTime() <= startTime?.getTime() + 60 * 60 * 1000
+      ) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]:
+            'O horário de fim deve ser pelo menos uma hora após o horário de início',
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          startTime: null,
+        }));
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          endTime: null,
+        }));
+      }
+    }
+  };
+
+  const [isButtonDisabled, setButtonDisabled] = useState(true);
+
+  useEffect(() => {
+    const isValid = () => {
+      switch (currentSection.number) {
+        case 1:
+          return (
+            altLocation &&
+            startDate &&
+            startTime &&
+            (sameDay || endDate) &&
+            endTime
+          );
+        case 2:
+          return selectedService && selectedService.length > 0;
+        case 3:
+          return selectedEvent && selectedEvent.length > 0;
+        default:
+          return false;
+      }
+    };
+
+    setButtonDisabled(!isValid());
+  }, [
+    locationEvent,
+    startDate,
+    startTime,
+    sameDay,
+    endDate,
+    endTime,
+    selectedService,
+    selectedEvent,
+    currentSection.number,
+  ]);
 
   return (
-    <div>
-      <div className="-mb-20 p-4 relative">
-        <Tooltip
-          anchorSelect={`#chevron-left-home-${currentSection.number}`}
-          place="top"
-          style={{ fontSize: '1.2em' }}
-        >
-          {`${currentSection.text}`}
-        </Tooltip>
+    <div className="w-[90vw] mx-auto mt-20">
+      <div className="-mb-20 row p-4 relative">
+        <div className="lg:block hidden">
+          <Tooltip
+            anchorSelect={`#chevron-left-home-${currentSection.number}`}
+            place="right"
+            style={{ fontSize: '1.2em' }}
+          >
+            {`${currentSection.text}`}
+          </Tooltip>
+        </div>
         {currentSection.number === 1 ? (
           <Link
             href="/"
@@ -339,7 +528,7 @@ export const StartEvent = () => {
               zIndex: '9',
               position: 'absolute',
               top: '2rem',
-              left: '2%',
+              left: '1%',
             }}
           >
             <Image
@@ -348,7 +537,7 @@ export const StartEvent = () => {
               text={`${currentSection.text}`}
               id={`chevron-left-home-${currentSection.number}`}
               alt="chevron-left"
-              width={100}
+              width={80}
               height={80}
             />
           </Link>
@@ -369,14 +558,14 @@ export const StartEvent = () => {
             text={currentSection.text}
             id={`chevron-left-home-${currentSection.number}`}
             alt="chevron-left"
-            width={100}
+            width={80}
             height={80}
             style={{
               cursor: 'pointer',
               zIndex: '9',
               position: 'absolute',
               top: '2rem',
-              left: '2%',
+              left: '1%',
             }}
           />
         )}
@@ -386,10 +575,10 @@ export const StartEvent = () => {
         <section
           className={`event-form mt-20 lg:mt-16 event-form-1 ${currentSection.number === 1 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
         >
-          <p className="flex flex-col text-start pt-20 px-10 text-[4rem] font-bold text-middle-home">
+          <p className="flex flex-col text-start pt-20 px-5 text-[4rem] font-bold text-middle-home">
             Informações do Evento
           </p>
-          <p className="text-black relative max-w-[90vw] text-start mb-4 px-10 text-[1.2rem]">
+          <p className="text-black relative max-w-[90vw] px-5 text-start mb-4 text-[1.2rem]">
             Queremos saber mais sobre o teu serviço de forma a conseguirmos
             partilhar com os nossos utilizadores.
           </p>
@@ -405,9 +594,29 @@ export const StartEvent = () => {
                     <input
                       type="text"
                       value={locationEvent}
-                      onChange={(e) => setEventLocation(e.target.value)}
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        value = value.replace(/\s+/g, ' ');
+                        value = value.replace(/^\s+/, '');
+                        if (value == '') {
+                          setLocationTouched(true);
+                        } else {
+                          setErrors((prevErrors) => ({
+                            ...prevErrors,
+                            localizacao: null,
+                          }));
+                        }
+                        setEventLocation(value);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handleLocationSearch();
+                        }
+                      }}
                       placeholder="Digite aqui"
-                      onFocus={() => setLocationTouched(false)}
+                      onFocus={() => {
+                        if (locationEvent) setLocationTouched(false);
+                      }}
                       onBlur={() => setLocationTouched(true)}
                       required
                       style={{
@@ -436,8 +645,9 @@ export const StartEvent = () => {
                   </div>
                 </label>
                 <p
+                  aria-live="polite"
                   className={
-                    !locationEvent && localidadeTouched
+                    !locationEvent && localidadeTouched && !errors?.localizacao
                       ? 'visible'
                       : 'invisible'
                   }
@@ -445,11 +655,21 @@ export const StartEvent = () => {
                 >
                   Campo obrigatório
                 </p>
-                <div className="flex flex-col justify-center items-center text-[1.2rem]">
-                  {error?.includes('localização') ? (
-                    <div>{error}</div>
-                  ) : mapImageUrl ? (
-                    <div>
+                <div className="flex flex-col justify-center items-center">
+                  {errors?.localizacao ? (
+                    <p
+                      aria-live="polite"
+                      style={{
+                        color: 'red',
+                        marginTop: '-24px',
+                        marginLeft: '-72px',
+                      }}
+                      className="max-w-[320px]"
+                    >
+                      {errors.localizacao}
+                    </p>
+                  ) : mapImageUrl && altLocation ? (
+                    <div alt={`Mapa mostrando ao centro ${altLocation}`}>
                       <div className="max-w-[400px] text-center">
                         {altLocation}{' '}
                       </div>
@@ -458,7 +678,7 @@ export const StartEvent = () => {
                         height="120"
                         src={mapImageUrl}
                         style={{ border: 0 }}
-                        alt={`Mapa mostrando ao centro ${altLocation}`}
+                        tabIndex={-1}
                       ></iframe>
                     </div>
                   ) : null}
@@ -472,19 +692,18 @@ export const StartEvent = () => {
                   <div className="flex row relative">
                     <DatePicker
                       selected={startDate}
-                      onChange={(date) => {
-                        if (date) {
-                          setStartDate(date);
-                          dispatch(setStartActionDate(date.toISOString()));
-                        } else {
-                          const now = new Date();
-                          setStartDate(now);
-                          dispatch(setStartActionDate(now.toISOString()));
+                      onChange={(date) => handleDateChange(date, 'startDate')}
+                      onKeyDown={handleKeyDown}
+                      onFocus={() => {
+                        if (startDate) {
+                          setStartDateTouched(false);
                         }
                       }}
-                      dateFormat="dd 'de' MMMM 'de' yyyy"
+                      onBlur={() => {
+                        setStartDateTouched(true);
+                      }}
+                      dateFormat="dd/MM/yyyy"
                       locale={pt}
-                      minDate={startDate ? new Date() : null}
                       required
                       className="datePicker"
                       placeholderText="Digite aqui"
@@ -498,11 +717,28 @@ export const StartEvent = () => {
                   </div>
                 </label>
                 <p
-                  className={!startDate ? 'visible' : 'invisible'}
+                  className={
+                    !startDate && startDateTouched && !errors?.startDate
+                      ? 'visible'
+                      : 'invisible'
+                  }
                   style={{ color: 'red', marginTop: '5px' }}
+                  aria-live="polite"
                 >
                   Campo obrigatório
                 </p>
+                {errors?.startDate && (
+                  <p
+                    aria-live="polite"
+                    style={{
+                      color: 'red',
+                      marginTop: '-24px',
+                    }}
+                    className="max-w-[320px]"
+                  >
+                    {errors?.startDate}
+                  </p>
+                )}
               </div>
 
               {!sameDay && (
@@ -518,15 +754,16 @@ export const StartEvent = () => {
                     <div className="flex row relative">
                       <DatePicker
                         selected={endDate}
-                        onChange={handleEndDateChange}
-                        minDate={
-                          endDate && !sameDay
-                            ? new Date(
-                                new Date().setDate(startDate.getDate() + 1)
-                              )
-                            : ''
-                        }
-                        dateFormat="dd 'de' MMMM 'de' yyyy"
+                        onChange={(date) => handleDateChange(date, 'endDate')}
+                        onFocus={() => {
+                          if (endDate) {
+                            setEndDateTouched(false);
+                          }
+                        }}
+                        onBlur={() => {
+                          setEndDateTouched(true);
+                        }}
+                        dateFormat="dd/MM/yyyy"
                         locale={pt}
                         required
                         className="datePicker"
@@ -543,9 +780,22 @@ export const StartEvent = () => {
                   <p
                     className={!endDate && !sameDay ? 'visible' : 'invisible'}
                     style={{ color: 'red', marginTop: '5px' }}
+                    aria-live="polite"
                   >
                     Campo obrigatório
                   </p>
+                  {errors?.endDate && (
+                    <p
+                      aria-live="polite"
+                      style={{
+                        color: 'red',
+                        marginTop: '-24px',
+                      }}
+                      className="max-w-[320px]"
+                    >
+                      {errors?.endDate}
+                    </p>
+                  )}
                 </div>
               )}
               <label
@@ -567,7 +817,7 @@ export const StartEvent = () => {
                   <div className="flex row relative">
                     <DatePicker
                       selected={startTime}
-                      onChange={handleStartTimeChange}
+                      onChange={(time) => handleTimeChange(time, 'startTime')}
                       showTimeSelect
                       showTimeSelectOnly
                       timeIntervals={1}
@@ -576,6 +826,12 @@ export const StartEvent = () => {
                       timeFormat="HH:mm"
                       className="datePicker"
                       placeholderText="Digite aqui"
+                      onFocus={() => {
+                        if (startTime) {
+                          setStartTimeTouched(false);
+                        }
+                      }}
+                      onBlur={() => setStartTimeTouched(true)}
                     />
                     <MicrophoneIcon
                       handleSpeechRecognition={handleSpeechRecognition}
@@ -586,11 +842,28 @@ export const StartEvent = () => {
                   </div>
                 </label>
                 <p
-                  className={!startTime ? 'visible' : 'invisible'}
+                  className={
+                    !startTime && !errors?.startTime && startTimeTouched
+                      ? 'visible'
+                      : 'invisible'
+                  }
                   style={{ color: 'red', marginTop: '5px' }}
+                  aria-live="polite"
                 >
                   Campo obrigatório
                 </p>
+                {errors?.startTime && (
+                  <p
+                    aria-live="polite"
+                    style={{
+                      color: 'red',
+                      marginTop: '-24px',
+                    }}
+                    className="max-w-[320px]"
+                  >
+                    {errors?.startTime}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col justify-center mx-auto align-center py-4 -mt-1">
@@ -599,7 +872,7 @@ export const StartEvent = () => {
                   <div className="flex row relative">
                     <DatePicker
                       selected={endTime}
-                      onChange={handleEndTimeChange}
+                      onChange={(time) => handleTimeChange(time, 'endTime')}
                       showTimeSelect
                       showTimeSelectOnly
                       timeIntervals={1}
@@ -608,6 +881,12 @@ export const StartEvent = () => {
                       timeFormat="HH:mm"
                       className="datePicker"
                       placeholderText="Digite aqui"
+                      onFocus={() => {
+                        if (endTime) {
+                          setEndTimeTouched(false);
+                        }
+                      }}
+                      onBlur={() => setEndTimeTouched(true)}
                       minTime={
                         startTime
                           ? new Date(
@@ -629,11 +908,28 @@ export const StartEvent = () => {
                   </div>
                 </label>
                 <p
-                  className={!endTime ? 'visible' : 'invisible'}
+                  className={
+                    !endTime && !errors?.endTime && endTimeTouched
+                      ? 'visible'
+                      : 'invisible'
+                  }
                   style={{ color: 'red', marginTop: '5px' }}
+                  aria-live="polite"
                 >
                   Campo obrigatório
                 </p>
+                {errors?.endTime && (
+                  <p
+                    aria-live="polite"
+                    style={{
+                      color: 'red',
+                      marginTop: '-24px',
+                    }}
+                    className="max-w-[320px]"
+                  >
+                    {errors?.endTime}
+                  </p>
+                )}
               </div>
             </div>
           </section>
@@ -642,8 +938,8 @@ export const StartEvent = () => {
         <section
           className={`event-form mt-20 lg:mt-12 event-form-2 ${currentSection.number === 2 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
         >
-          <div className="flex flex-col lg:flex-row items-center mt-10">
-            <div className="lg:w-1/2 p-16 hidden lg:block ms-24">
+          <div className="flex flex-col lg:flex-row items-end align-end mt-10">
+            <div className="lg:w-1/2 px-16 py-8 hidden lg:block ms-24">
               <Image
                 src={'/assets/pictures/service-type-img.png'}
                 alt="Rapaz de óculos segurando papéis e apontando para algo"
@@ -657,8 +953,8 @@ export const StartEvent = () => {
                 Tipos de serviços
               </p>
               <p className="text-black relative max-w-[90vw] text-start mb-8 text-[1.2rem]">
-                Selecione abaixo qual o serviço gostaria de contratar para o seu
-                evento.
+                Selecione abaixo qual dos serviços gostaria de contratar para o
+                seu evento.
               </p>
 
               <ul ref={formRef} className=" text-[1.2rem]">
@@ -671,11 +967,11 @@ export const StartEvent = () => {
                   className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
                 >
                   <input
-                    type="radio"
+                    type="checkbox"
                     value="Catering"
-                    checked={selectedService === 'Catering'}
+                    checked={selectedService.includes('Catering')}
                     onChange={handleServiceChange}
-                    className="mx-2"
+                    className="mx-2 date-checkbox cursor-pointer"
                   />
                   <label>Catering (descrição breve)</label>
                 </li>
@@ -689,11 +985,11 @@ export const StartEvent = () => {
                   className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
                 >
                   <input
-                    type="radio"
+                    type="checkbox"
                     value="Fotografia"
-                    checked={selectedService === 'Fotografia'}
+                    checked={selectedService.includes('Fotografia')}
                     onChange={handleServiceChange}
-                    className="mx-2"
+                    className="mx-2 date-checkbox cursor-pointer"
                   />
                   <label>Fotografia (descrição breve)</label>
                 </li>
@@ -707,11 +1003,11 @@ export const StartEvent = () => {
                   className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
                 >
                   <input
-                    type="radio"
+                    type="checkbox"
                     value="Espaço"
-                    checked={selectedService === 'Espaço'}
+                    checked={selectedService.includes('Espaço')}
                     onChange={handleServiceChange}
-                    className="mx-2"
+                    className="mx-2 date-checkbox cursor-pointer"
                   />
                   <label>Espaço (descrição breve)</label>
                 </li>
@@ -725,11 +1021,11 @@ export const StartEvent = () => {
                   className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
                 >
                   <input
-                    type="radio"
+                    type="checkbox"
                     value="DJ"
-                    checked={selectedService === 'DJ'}
+                    checked={selectedService.includes('DJ')}
                     onChange={handleServiceChange}
-                    className="mx-2"
+                    className="mx-2 date-checkbox cursor-pointer"
                   />
                   <label>DJ e Som (descrição breve)</label>
                 </li>
@@ -740,8 +1036,8 @@ export const StartEvent = () => {
         <section
           className={`event-form event-form-3 ${currentSection.number === 3 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
         >
-          <div className="flex flex-col lg:flex-row-reverse items-center mt-10">
-            <div className="lg:w-1/2 p-16 hidden ms-24 lg:block">
+          <div className="flex flex-col lg:flex-row-reverse items-end align-end mt-10">
+            <div className="lg:w-1/2 px-16 py-8 hidden ms-24 lg:block">
               <Image
                 src={'/assets/pictures/event-type-img.png'}
                 alt="Pessoas felizes confraternizando"
@@ -834,14 +1130,17 @@ export const StartEvent = () => {
           </div>
         </section>
 
-        <div className={`flex justify-center p-8`}>
-          <GlobalButton
-            size="large"
-            type="primary"
-            onClick={handleSubmit}
-            text="SEGUINTE"
-          />
-        </div>
+        {router.pathname === '/start-event' && (
+          <div className={`flex justify-center p-8`}>
+            <GlobalButton
+              size="large"
+              type="primary"
+              onClick={handleSubmit}
+              text="SEGUINTE"
+              disabled={isButtonDisabled}
+            />
+          </div>
+        )}
       </form>
     </div>
   );
