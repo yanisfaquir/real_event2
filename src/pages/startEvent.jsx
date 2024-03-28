@@ -973,7 +973,7 @@ export const StartEvent = () => {
                     onChange={handleServiceChange}
                     className="mx-2 date-checkbox cursor-pointer"
                   />
-                  <label>Catering (descrição breve)</label>
+                  <label>Catering</label>
                 </li>
 
                 <li
@@ -986,12 +986,12 @@ export const StartEvent = () => {
                 >
                   <input
                     type="checkbox"
-                    value="Fotografia"
-                    checked={selectedService.includes('Fotografia')}
+                    value="Mechardising"
+                    checked={selectedService.includes('Mechardising')}
                     onChange={handleServiceChange}
                     className="mx-2 date-checkbox cursor-pointer"
                   />
-                  <label>Fotografia (descrição breve)</label>
+                  <label>Mechardising</label>
                 </li>
 
                 <li
@@ -1009,7 +1009,7 @@ export const StartEvent = () => {
                     onChange={handleServiceChange}
                     className="mx-2 date-checkbox cursor-pointer"
                   />
-                  <label>Espaço (descrição breve)</label>
+                  <label>Espaço</label>
                 </li>
 
                 <li
@@ -1027,7 +1027,7 @@ export const StartEvent = () => {
                     onChange={handleServiceChange}
                     className="mx-2 date-checkbox cursor-pointer"
                   />
-                  <label>DJ e Som (descrição breve)</label>
+                  <label>DJ e Som</label>
                 </li>
               </ul>
             </div>

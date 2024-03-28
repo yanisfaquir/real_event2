@@ -22,7 +22,8 @@ const UseServiceResults = () => {
 
 
   const serviceType = useSelector((state) => state.event.serviceType);
-  console.log('serviiii', serviceType);
+  console.log('typle', serviceType)
+  console.log('serviiii', serviceType[0]);
 
 
 
@@ -78,7 +79,7 @@ const UseServiceResults = () => {
     ]
   };
   
-    const [activeTab, setActiveTab] = useState(servico[0]);
+    const [activeTab, setActiveTab] = useState(serviceType[0]);
     
     const filteredQuintaItems = servicoQuinta.quinta1.filter((quintaItem) => {
       const matchPreco = filtroPreco === '' || quintaItem.preco === filtroPreco;
@@ -90,11 +91,10 @@ const UseServiceResults = () => {
   
   return (
     <div>
-      <h1>{serviceType}</h1>
       <div
         style={{marginTop: '7rem', marginBottom: '2rem', marginLeft: '5rem', marginRight: '5rem'}}>
           <ul className="flex flex-wrap justify-end text-sm font-medium text-center border-b dark:border-customBlue dark:text-black-400">
-            {servico.map((servicoItem, index) => (
+            {serviceType.map((servicoItem, index) => (
               <li key={index} className="me-2">
                 <a
                   href="#"
