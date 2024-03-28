@@ -21,7 +21,7 @@ const UseServiceResults = () => {
   const [filtroTipoEspaco, setFiltroTipoEspaco] = useState('');
 
 
-  const serviceType = useSelector((state) => {state.event.serviceType; console.log(state.event.serviceType) });
+  const serviceType = useSelector((state) => state.event.serviceType);
   console.log('serviiii', serviceType);
 
 
@@ -90,6 +90,7 @@ const UseServiceResults = () => {
   
   return (
     <div>
+      <h1>{serviceType}</h1>
       <div
         style={{marginTop: '7rem', marginBottom: '2rem', marginLeft: '5rem', marginRight: '5rem'}}>
           <ul className="flex flex-wrap justify-end text-sm font-medium text-center border-b dark:border-customBlue dark:text-black-400">

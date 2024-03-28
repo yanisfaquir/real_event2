@@ -10,7 +10,7 @@ export const MiddleSection = ({ data }) => {
       <div className="cards-home-section align-center">
         {data.map((item, index) => (
           <div key={index} className="card-home-item mx-auto relative">
-            <section
+            <h1
               tabIndex={0}
               className="absolute -mt-4 flex justify-start flex-col text-white px-8 top-20 left-50 transform -translate-x-50 z-8 text-[4.4rem] font-bold"
             >
@@ -24,7 +24,7 @@ export const MiddleSection = ({ data }) => {
               >
                 {item.text}
               </p>
-            </section>
+            </h1>
             <Image
               src={item.image}
               alt={item.alt}
