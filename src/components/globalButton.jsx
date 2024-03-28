@@ -12,7 +12,8 @@ const GlobalButton = ({
   customElements,
   image,
   id,
-  width
+  width,
+  disabled = false,
 }) => {
   const buttonSizes = {
     small: 'py-1 px-2 text-[1.25rem] min-w-32',
@@ -28,19 +29,19 @@ const GlobalButton = ({
     custom: 'bg-transparent text-white hover:bg-[#f2EBEB]/[.3]',
   };
 
-  const buttonStyle = `rounded-[50px] focus:outline-none font-bold transition-all object-cover transition duration-300 ${width ? `w-[${width}]` : ''} ${buttonSizes[size]} ${buttonColors[type]}`;
+  const buttonStyle = `rounded-[50px] focus:outline-none font-bold transition-all object-cover transition duration-300 ${width ? `w-[${width}]` : ''} ${buttonSizes[size]} ${buttonColors[type]} ${disabled ? 'filter contrast-50 cursor-not-allowed' : ''}`;
 
   const handleClick = (event) => {
-    if (onClick) {
+    if (!disabled && onClick) {
       onClick(event);
     }
-  };
+ };
 
-  const handleKeyDown = (event) => {
-    if (event.code === 'Enter' || event.code === 'Space') {
+ const handleKeyDown = (event) => {
+    if (!disabled && (event.code === 'Enter' || event.code === 'Space')) {
       handleClick(event);
     }
-  };
+ };
 
   return (
     <>
