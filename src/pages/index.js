@@ -57,9 +57,7 @@ const HomePage = () => {
         />
 
         <h1 className="text-white relative mx-auto max-w-[850px] top-[24vh] z-10 text-center text-[1.5rem]">
-          Torne realidade o seu evento dos sonhos! Aqui tu encontras tudo aquilo
-          que precisas para realizar qualquer tipo de evento, desde batizados à
-          convívios.
+        Torne realidade o evento da sua empresa ! Aqui tu encontras tudo aquilo que precisas para realizar workshops, conferências ou até mesmo um convívios.
         </h1>
         <ul className="text-white relative mx-auto flex justify-center max-w-[400px] top-[32vh] z-10">
           {!router.pathname.includes('/start-event') && (
@@ -77,7 +75,7 @@ const HomePage = () => {
           )}
         </ul>
         <Image
-          src="/assets/pictures/homepage-bg-1.png"
+          src="/assets/pictures/homepage-imagem.png"
           alt="5 pessoas felizes confraternizando e sorrindo bastante"
           layout="fill"
           className="brightness-50 home-bg-cover object-cover "
