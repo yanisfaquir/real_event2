@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-
+import Router from 'next/router';
 export const AccessibilityContext = createContext();
 
 export const AccessibilityProvider = ({ children }) => {

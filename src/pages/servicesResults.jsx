@@ -208,7 +208,7 @@ const UseServiceResults = () => {
         
 
         <div className="max-w-[1200px] max-h-[1200px] mx-auto grid md:grid-cols-4 gap-8 ml-20">
-        {activeTab === 'catering' &&
+        {activeTab === 'Catering' &&
           filteredQuintaItems.map((quintaItem, index) => (
             <div key={index} className="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300">
               {quintaItem.img}
