@@ -129,7 +129,7 @@ const Navbar = ({ inView }) => {
             <div className="-mt-2">
               <li className="list-none relative min-w-[56px]">
                 <GlobalButton
-                  image="/assets/icons/logo-white.png"
+                  image="/assets/icons/logorealevent.png"
                   path="/"
                   text={`Ir à Página inicial`}
                   id="logo-navbar"
