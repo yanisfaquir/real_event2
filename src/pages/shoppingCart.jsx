@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import services from '../components/services.json';
 import MicrophoneIcon from '@/components/microphoneIcon';
 import GlobalButton from '@/components/globalButton';
-import Image from 'next/image';
+import Image from "next/image";
 import { useDispatch, useSelector } from 'react-redux';
 import { Dialog } from 'evergreen-ui';
 import { setCurrentCartSection } from '@/redux/reducers/cartReducer';
@@ -182,9 +182,12 @@ const ShoppingCart = () => {
                       src={item.image}
                       width={100}
                       height={100}
-                      objectFit="cover"
                       className="rounded-[12px] mx-4"
-                    />
+                      style={{
+                        maxWidth: "100%",
+                        height: "auto",
+                        objectFit: "cover"
+                      }} />
                     <div
                       className={`flex w-[100%] ${isDesktopOrLaptop ? 'flex-col justify-start items-start' : 'flex-col justify-center items-center'}`}
                     >
@@ -219,7 +222,11 @@ const ShoppingCart = () => {
                           width={16}
                           className="inline -mt-1"
                           height={16}
-                        />{' '}
+                          style={{
+                            maxWidth: "100%",
+                            height: "auto",
+                            objectFit: "cover"
+                          }} />{' '}
                         <span className="inline font-bold">{item.rating} </span>
                         <span className="inline font-regular">
                           ({item.reviews})
@@ -302,9 +309,12 @@ const ShoppingCart = () => {
               id="pay-multibanco"
               width={100}
               height={100}
-              layout="responsive"
               className="w-full"
-            />
+              sizes="100vw"
+              style={{
+                width: "100%",
+                height: "auto"
+              }} />
           </li>{' '}
           <li
             style={{
@@ -329,9 +339,12 @@ const ShoppingCart = () => {
               id="pay-mbway"
               width={100}
               height={100}
-              layout="responsive"
               className="w-full"
-            />
+              sizes="100vw"
+              style={{
+                width: "100%",
+                height: "auto"
+              }} />
           </li>
           <li
             style={{
@@ -356,9 +369,12 @@ const ShoppingCart = () => {
               id="pay-paypal"
               width={100}
               height={100}
-              layout="responsive"
               className="w-full"
-            />
+              sizes="100vw"
+              style={{
+                width: "100%",
+                height: "auto"
+              }} />
           </li>
           <li
             style={{
@@ -383,9 +399,12 @@ const ShoppingCart = () => {
               id="pay-credit-card"
               width={100}
               height={100}
-              layout="responsive"
               className="w-full"
-            />
+              sizes="100vw"
+              style={{
+                width: "100%",
+                height: "auto"
+              }} />
           </li>
         </ul>
       </section>
@@ -548,9 +567,12 @@ const ShoppingCart = () => {
               src={itemToRemove.image}
               width={200}
               height={200}
-              objectFit="cover"
               className="rounded-[12px] mx-auto mt-4"
-            />
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+                objectFit: "cover"
+              }} />
             <p
               className={`font-[.8rem] my-2 mx-auto`}
               style={{

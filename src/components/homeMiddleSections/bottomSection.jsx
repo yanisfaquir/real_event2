@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
+import React, { useEffect, useState, useContext } from 'react';
+import Image from "next/image";
 import GlobalButton from '../globalButton';
 import Link from 'next/link';
 import { Tooltip } from 'react-tooltip';
+import { AccessibilityContext } from '@/contexts/acessibility';
 
 export const BottomMiddleSection = () => {
+  const { highContrast } = useContext(AccessibilityContext);
   const [isDesktopOrLaptop, setIsDesktopOrLaptop] = useState(false);
 
   useEffect(() => {
@@ -28,7 +30,10 @@ export const BottomMiddleSection = () => {
             id="services-card-home"
             width={400}
             height={32}
-          />
+            style={{
+              maxWidth: "100%",
+              height: "auto"
+            }} />
         </div>
         <div className="services-card-home-text -mt-32">
           <div
@@ -52,14 +57,17 @@ export const BottomMiddleSection = () => {
 
             <Link href="/services">
               <Image
-                src={'/assets/icons/chevron-right-blue.png'}
+                src={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/chevron-right-1.svg`}
                 path="/services"
                 text="Ir a Serviços"
                 id="chevron-right-services"
                 width={isDesktopOrLaptop ? 100 : 80}
                 height={80}
                 alt="chevron-right"
-              />
+                style={{
+                  maxWidth: "100%",
+                  height: "auto"
+                }} />
             </Link>
 
             <h2
@@ -88,9 +96,12 @@ export const BottomMiddleSection = () => {
           alt="Três mulheres deitadas na sobre um pano que está num grama, elas estão sorrindo, sobre o pano também tem um chapéu, um cesto e um rádio"
           width={100}
           height={80}
-          layout="responsive"
           className="w-full"
-        />
+          sizes="100vw"
+          style={{
+            width: "100%",
+            height: "auto"
+          }} />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import GlobalButton from '@/components/globalButton';
-import Image from 'next/image';
+import Image from "next/image";
 import Link from 'next/link'; 
 import { useRouter } from 'next/router';
 
@@ -30,9 +30,11 @@ const Registo = () => {
           <Image
             src="/assets/pictures/registo.png"
             alt="duas pessoas no pc"
-            layout="fill"
-            objectFit="contain"
-          />
+            fill
+            sizes="100vw"
+            style={{
+              objectFit: "contain"
+            }} />
         </div>
 
         <div className="w-1/2 flex justify-center items-center bg-white rounded-[40px] max-w-md md:max-w-lg ml-10">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, forwardRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef, useContext } from 'react';
 import DatePicker from 'react-datepicker';
 import pt from 'date-fns/locale/pt';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -19,12 +19,14 @@ import {
 import GlobalButton from '@/components/globalButton';
 import { Tooltip } from 'react-tooltip';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from "next/image";
 import MicrophoneIcon from '@/components/microphoneIcon';
 import { useRouter } from 'next/router';
 import { v4 as uuidv4 } from 'uuid';
+import { AccessibilityContext } from '@/contexts/acessibility';
 
 export const StartEvent = () => {
+  const { alignment, highContrast } = useContext(AccessibilityContext);
   const formId = uuidv4();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -532,18 +534,21 @@ export const StartEvent = () => {
             }}
           >
             <Image
-              src={'/assets/icons/chevron-left-green.svg'}
+              src={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/chevron-left-green.svg`}
               path="/"
               text={`${currentSection.text}`}
               id={`chevron-left-home-${currentSection.number}`}
               alt="chevron-left"
               width={80}
               height={80}
-            />
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />
           </Link>
         ) : (
           <Image
-            src={'/assets/icons/chevron-left-green.svg'}
+            src={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/chevron-left-green.svg`}
             onClick={() =>
               setCurrentSection((prevState) => ({
                 number: prevState.number - 1,
@@ -566,8 +571,9 @@ export const StartEvent = () => {
               position: 'absolute',
               top: '2rem',
               left: '1%',
-            }}
-          />
+              maxWidth: "100%",
+              height: "auto"
+            }} />
         )}
       </div>
 
@@ -575,10 +581,10 @@ export const StartEvent = () => {
         <section
           className={`event-form mt-20 lg:mt-16 event-form-1 ${currentSection.number === 1 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
         >
-          <p className="flex flex-col text-start pt-20 px-5 text-[4rem] font-bold text-middle-home">
+          <p className={`flex flex-col pt-20 px-5 text-[4rem] font-bold text-middle-home`} style={{textAlign: `${alignment ? alignment : 'start'}`}}>
             Informações do Evento
           </p>
-          <p className="text-black relative max-w-[90vw] px-5 text-start mb-4 text-[1.2rem]">
+          <p className={`text-black relative max-w-[90vw] px-5 mb-4 text-[1.2rem]`} style={{textAlign: `${alignment ? alignment : 'start'}`}}>
             Queremos saber mais sobre o teu serviço de forma a conseguirmos
             partilhar com os nossos utilizadores.
           </p>
@@ -587,8 +593,8 @@ export const StartEvent = () => {
             className="event-form-1 shadow-md flex flex-col lg:flex-row justify-center min-h-[240px] my-8 py-8 px-4 border-[#4A7D8B] bg-white rounded-[8px] border-2 w-[90vw] mx-auto"
           >
             <div className="p-4 w-full lg:w-1/3 min-h-[180px] lg:border-r border-b lg:border-b-0 border-gray-500 relative flex justify-center align-center">
-              <div className="flex flex-col justify-center align-center mx-auto">
-                <label style={{ fontSize: '24px', fontWeight: 'bold' }}>
+              <div className={`flex flex-col justify-center align-center mx-auto`}>
+                <label style={{ fontSize: '24px', fontWeight: 'bold', textAlign: `${alignment ? alignment : 'start'}` }}>
                   Localidade:
                   <div className="flex row" style={{ position: 'relative' }}>
                     <input
@@ -636,7 +642,7 @@ export const StartEvent = () => {
                       right="68"
                     />
                     <GlobalButton
-                      image={'/assets/icons/search-green.svg'}
+                      image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/search-green.svg`}
                       text="Localizar"
                       type="button"
                       id="search-location"
@@ -646,12 +652,13 @@ export const StartEvent = () => {
                 </label>
                 <p
                   aria-live="polite"
-                  className={
-                    !locationEvent && localidadeTouched && !errors?.localizacao
+                  className={`
+                    ${!locationEvent && localidadeTouched && !errors?.localizacao
                       ? 'visible'
-                      : 'invisible'
+                      : 'invisible'}
+                      `
                   }
-                  style={{ color: 'red', marginTop: '5px' }}
+                  style={{ color: 'red', marginTop: '5px', textAlign: `${alignment ? alignment : 'start'}` }}
                 >
                   Campo obrigatório
                 </p>
@@ -664,13 +671,13 @@ export const StartEvent = () => {
                         marginTop: '-24px',
                         marginLeft: '-72px',
                       }}
-                      className="max-w-[320px]"
+                      className={`max-w-[320px]`}
                     >
                       {errors.localizacao}
                     </p>
                   ) : mapImageUrl && altLocation ? (
                     <div alt={`Mapa mostrando ao centro ${altLocation}`}>
-                      <div className="max-w-[400px] text-center">
+                      <div style={{ textAlign: `${alignment ? alignment : 'center'}` }} className={`max-w-[400px]`}>
                         {altLocation}{' '}
                       </div>
                       <iframe
@@ -687,7 +694,7 @@ export const StartEvent = () => {
             </div>
             <div className="p-4 w-full lg:w-1/3 min-h-[180px] lg:border-r border-b lg:border-b-0 border-gray-500 relative flex flex-col justify-center align-center">
               <div className="flex flex-col justify-center mx-auto align-center py-4">
-                <label style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                <label style={{ fontSize: '24px', fontWeight: 'bold', textAlign: `${alignment ? alignment : 'start'}` }}>
                   Data de Início:
                   <div className="flex row relative">
                     <DatePicker
@@ -945,8 +952,10 @@ export const StartEvent = () => {
                 alt="Rapaz de óculos segurando papéis e apontando para algo"
                 width={500}
                 height={80}
-                layout="intrinsic"
-              />
+                style={{
+                  maxWidth: "100%",
+                  height: "auto"
+                }} />
             </div>
             <div className="lg:w-1/2 px-16">
               <p className="flex flex-col text-start text-[4rem] font-bold text-middle-home">
@@ -1043,8 +1052,10 @@ export const StartEvent = () => {
                 alt="Pessoas felizes confraternizando"
                 width={500}
                 height={80}
-                layout="intrinsic"
-              />
+                style={{
+                  maxWidth: "100%",
+                  height: "auto"
+                }} />
             </div>
             <div className="lg:w-1/2 px-16">
               <p className="flex flex-col text-start text-[4rem] font-bold text-middle-home">

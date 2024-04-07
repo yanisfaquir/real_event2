@@ -1,7 +1,7 @@
 import React from 'react';
 import { TopMiddleSection } from './topSection';
 import { BottomMiddleSection } from './bottomSection';
-import Image from 'next/image';
+import Image from "next/image";
 
 export const MiddleSection = ({ data }) => {
   return (
@@ -25,13 +25,7 @@ export const MiddleSection = ({ data }) => {
                 {item.text}
               </p>
             </h1>
-            <Image
-              src={item.image}
-              alt={item.alt}
-              width={600}
-              height={800}
-              layout="cover"
-            />
+            <Image src={item.image} alt={item.alt} width={600} height={800} />
           </div>
         ))}
       </div>
