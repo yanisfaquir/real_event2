@@ -63,7 +63,7 @@ export const BottomMiddleSection = () => {
             </Link>
 
             <h2
-              className={`text-white absolute px-4 mt-64 z-10 text-[1.3rem] max-w-[320px] ${isDesktopOrLaptop ? 'text-start' : 'text-center px-0 -ms-8'}`}
+              className={`text-white absolute ps-4 pe-8 mt-64 z-10 text-[1.3rem] ${isDesktopOrLaptop ? 'text-start' : 'text-center px-0 -ms-8'}`}
             >
               Encontre as melhores opções de catering, espaços, fotografia, DJ e
               som. Aqui na RealEvent temos fornecedores com as mais variadas

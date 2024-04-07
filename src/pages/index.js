@@ -12,11 +12,11 @@ const HomePage = () => {
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
     setIsDesktopOrLaptop(mediaQuery.matches);
-  
+
     const handler = (event) => {
       setIsDesktopOrLaptop(event.matches);
     };
-  
+
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
@@ -44,7 +44,7 @@ const HomePage = () => {
   return (
     <div className="flex flex-col">
       <div className="top-0 h-[92vh] z-0 top-section-home">
-        <h1 className="text-white relative flex justify-center top-[24vh] z-10 text-[4rem] font-bold">
+        <h1 className="text-white relative mx-auto text-center max-w-[850px] top-[24vh] z-10 text-[4rem] font-bold">
           CONHECE A
         </h1>
         <Image
@@ -84,7 +84,6 @@ const HomePage = () => {
       <div>
         <div className="bg-white middle-home-section py-8">
           {router.pathname === '/' && <MiddleSection data={middleData} />}
-          {router.pathname === '/start-event' && <StartEvent />}
         </div>
       </div>
     </div>
