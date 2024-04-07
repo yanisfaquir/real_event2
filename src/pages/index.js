@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import Image from "next/image";
+import Image from 'next/image';
 import GlobalButton from '@/components/globalButton';
 import { MiddleSection } from '@/components/homeMiddleSections/middleSection';
 import { useRouter } from 'next/router';
@@ -45,7 +45,10 @@ const HomePage = () => {
   return (
     <div className="flex flex-col">
       <div className="top-0 h-[92vh] z-0 top-section-home">
-        <h1 style={{ textAlign: `${alignment ? alignment : 'center'}` }} className={`text-white  ${highContrast ? 'bg-black' : 'bg-unset'} relative mx-auto max-w-[850px] top-[24vh] z-10 text-[4rem] font-bold`}>
+        <h1
+          style={{ textAlign: `${alignment ? alignment : 'center'}` }}
+          className={`text-white  ${highContrast ? 'bg-black' : 'bg-unset'} relative mx-auto max-w-[850px] top-[24vh] z-10 text-[4rem] font-bold`}
+        >
           CONHECE A
         </h1>
         <Image
@@ -56,20 +59,28 @@ const HomePage = () => {
           id="logo-navbar-home"
           className={`relative flex align-center mx-auto top-[24vh] z-10  ${highContrast ? 'bg-black' : 'bg-unset'}`}
           style={{
-            maxWidth: "100%",
-            height: "auto"
-          }} />
+            maxWidth: '100%',
+            height: 'auto',
+          }}
+        />
 
-        <h2 style={{ textAlign: `${alignment ? alignment : 'center'}` }} className={`text-white ${highContrast ? 'bg-black' : 'bg-unset'} relative mx-auto max-w-[850px] top-[24vh] z-10 text-[1.5rem]`}>
-          Torne realidade o seu evento dos sonhos! Aqui tu encontras tudo aquilo
-          que precisas para realizar qualquer tipo de evento, desde batizados à
-          convívios.
+        <h2
+          style={{ textAlign: `${alignment ? alignment : 'center'}` }}
+          className={`text-white ${highContrast ? 'bg-black' : 'bg-unset'} relative mx-auto max-w-[850px] top-[24vh] z-10 text-[1.5rem]`}
+        >
+          Torne realidade o evento da sua empresa ! Aqui tu encontras tudo
+          aquilo que precisas para realizar workshops, conferências ou até mesmo
+          um convívios.
         </h2>
-        <ul className={`text-white relative mx-auto flex justify-center max-w-[400px] top-[32vh] z-10 ${highContrast ? 'bg-black' : 'bg-unset'}`}>
+        <ul
+          className={`text-white relative mx-auto flex justify-center max-w-[400px] top-[32vh] z-10 ${highContrast ? 'bg-black' : 'bg-unset'}`}
+        >
           {!router.pathname.includes('/start-event') && (
             <li
               className="mx-2 rounded-[50px] md:grid-cols-12 lg:grid-cols-6"
-              style={{ boxShadow: `${ highContrast ? '0 0 0 3px #FFF000' : 'inset 0 0 0 3px #FFFFFF'}` }}
+              style={{
+                boxShadow: `${highContrast ? '0 0 0 3px #FFF000' : 'inset 0 0 0 3px #FFFFFF'}`,
+              }}
             >
               <GlobalButton
                 size={isDesktopOrLaptop ? 'large' : 'medium'}
@@ -81,11 +92,12 @@ const HomePage = () => {
           )}
         </ul>
         <Image
-          src="/assets/pictures/homepage-bg-1.png"
+          src="/assets/pictures/homepage-imagem.png"
           alt="5 pessoas felizes confraternizando e sorrindo bastante"
           className="brightness-50 home-bg-cover object-cover "
           fill
-          sizes="100vw" />
+          sizes="100vw"
+        />
       </div>
       <div>
         <div className="bg-white middle-home-section py-8">
