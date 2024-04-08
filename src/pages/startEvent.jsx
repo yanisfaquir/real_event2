@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, forwardRef, useContext } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  forwardRef,
+  useContext,
+} from 'react';
 import DatePicker from 'react-datepicker';
 import pt from 'date-fns/locale/pt';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -19,7 +25,7 @@ import {
 import GlobalButton from '@/components/globalButton';
 import { Tooltip } from 'react-tooltip';
 import Link from 'next/link';
-import Image from "next/image";
+import Image from 'next/image';
 import MicrophoneIcon from '@/components/microphoneIcon';
 import { useRouter } from 'next/router';
 import { v4 as uuidv4 } from 'uuid';
@@ -81,10 +87,8 @@ export const StartEvent = () => {
     const value = event.target.value;
 
     if (event.target.checked) {
-      // Se a caixa de seleção estiver marcada, adicione o valor ao array de serviços selecionados
       setSelectedService((prevServices) => [...prevServices, value]);
     } else {
-      // Se a caixa de seleção não estiver marcada, remova o valor do array de serviços selecionados
       setSelectedService((prevServices) =>
         prevServices.filter((service) => service !== value)
       );
@@ -101,27 +105,25 @@ export const StartEvent = () => {
   }, [currentSection]);
 
   const districtLocations = {
-    'Aveiro, Aveiro': 'Aveiro, Aveiro',
-    'Beja, Beja': 'Beja, Beja',
-    'Braga, Braga': 'Braga, Braga',
-    'Bragança, Bragança': 'Bragança, Bragança',
-    'Castelo Branco, Castelo Branco': 'Castelo Branco, Castelo Branco',
-    'Coimbra, Coimbra': 'Coimbra, Coimbra',
-    'Estarreja, Estarreja': 'Estarreja, Estarreja',
-    'Faro, Faro': 'Faro, Faro',
-    'Guarda, Guarda': 'Guarda, Guarda',
-    'Leiria, Leiria': 'Leiria, Leiria',
-    'Lisboa, Lisboa': 'Lisboa, Lisboa',
-    'Porto, Porto': 'Porto, Porto',
-    'São João da Madeira, São João da Madeira':
-      'São João da Madeira, São João da Madeira',
-    'São Roque, São Roque': 'São Roque, São Roque',
-    'Setubal, Setubal': 'Setubal, Setubal',
-    'Viana do Castelo, Viana do Castelo': 'Viana do Castelo, Viana do Castelo',
-    'Vila Real, Vila Real': 'Vila Real, Vila Real',
-    'Viseu, Viseu': 'Viseu, Viseu',
+    Aveiro: 'Aveiro',
+    Beja: 'Beja',
+    Braga: 'Braga',
+    Bragança: 'Bragança',
+    'Castelo Branco': 'Castelo Branco',
+    Coimbra: 'Coimbra',
+    Estarreja: 'Estarreja',
+    Faro: 'Faro',
+    Guarda: 'Guarda',
+    Leiria: 'Leiria',
+    Lisboa: 'Lisboa',
+    Porto: 'Porto',
+    'São João da Madeira': 'São João da Madeira',
+    'São Roque': 'São Roque',
+    Setubal: 'Setubal',
+    'Viana do Castelo': 'Viana do Castelo',
+    'Vila Real': 'Vila Real',
+    Viseu: 'Viseu',
   };
-  // pode ter mais de um serviço selecionado
 
   const handleLocationSearch = async () => {
     dispatch(setLocation(locationEvent));
@@ -159,7 +161,15 @@ export const StartEvent = () => {
 
   const handleSpeechRecognition = (field, id) => {
     try {
-      const recognition = new window.webkitSpeechRecognition();
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        console.error(
+          'Reconhecimento de fala não é suportado neste navegador.'
+        );
+        return;
+      }
+      const recognition = new SpeechRecognition();
       recognition.lang = 'pt-PT';
       recognition.interimResults = true;
 
@@ -542,9 +552,10 @@ export const StartEvent = () => {
               width={80}
               height={80}
               style={{
-                maxWidth: "100%",
-                height: "auto"
-              }} />
+                maxWidth: '100%',
+                height: 'auto',
+              }}
+            />
           </Link>
         ) : (
           <Image
@@ -571,9 +582,10 @@ export const StartEvent = () => {
               position: 'absolute',
               top: '2rem',
               left: '1%',
-              maxWidth: "100%",
-              height: "auto"
-            }} />
+              maxWidth: '100%',
+              height: 'auto',
+            }}
+          />
         )}
       </div>
 
@@ -581,25 +593,75 @@ export const StartEvent = () => {
         <section
           className={`event-form mt-20 lg:mt-16 event-form-1 ${currentSection.number === 1 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
         >
-          <p className={`flex flex-col pt-20 px-5 text-[4rem] font-bold text-middle-home`} style={{textAlign: `${alignment ? alignment : 'start'}`}}>
+          <p
+            className={`flex flex-col pt-20 px-5 text-[4rem] font-bold text-middle-home`}
+            style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+          >
             Informações do Evento
           </p>
-          <p className={`text-black relative max-w-[90vw] px-5 mb-4 text-[1.2rem]`} style={{textAlign: `${alignment ? alignment : 'start'}`}}>
+          <p
+            className={`relative max-w-[90vw] px-5 mb-4 text-[1.2rem]`}
+            style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+          >
             Queremos saber mais sobre o teu serviço de forma a conseguirmos
             partilhar com os nossos utilizadores.
           </p>
           <section
             ref={formRef}
-            className="event-form-1 shadow-md flex flex-col lg:flex-row justify-center min-h-[240px] my-8 py-8 px-4 border-[#4A7D8B] bg-white rounded-[8px] border-2 w-[90vw] mx-auto"
+            className={`event-form-1 shadow-md flex flex-col lg:flex-row justify-center min-h-[240px] my-8 py-8 px-4 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} ${highContrast ? 'bg-black' : 'bg-white'} rounded-[8px] border-2 w-[90vw] mx-auto`}
           >
             <div className="p-4 w-full lg:w-1/3 min-h-[180px] lg:border-r border-b lg:border-b-0 border-gray-500 relative flex justify-center align-center">
-              <div className={`flex flex-col justify-center align-center mx-auto`}>
-                <label style={{ fontSize: '24px', fontWeight: 'bold', textAlign: `${alignment ? alignment : 'start'}` }}>
+              <div
+                className={`flex flex-col justify-center align-center mx-auto`}
+              >
+                <label
+                  style={{
+                    fontSize: '24px',
+                    fontWeight: 'bold',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
+                >
                   Localidade:
                   <div className="flex row" style={{ position: 'relative' }}>
+                    {/* <select
+                      value={locationEvent}
+                      className={`cursor-pointer ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        if (value == '') {
+                          setLocationTouched(true);
+                        } else {
+                          setErrors((prevErrors) => ({
+                            ...prevErrors,
+                            localizacao: null,
+                          }));
+                        }
+                        setEventLocation(value);
+                      }}
+                      onFocus={() => {
+                        if (locationEvent) setLocationTouched(false);
+                      }}
+                      onBlur={() => setLocationTouched(true)}
+                      required
+                      style={{
+                        padding: '8px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        marginTop: '5px',
+                        paddingRight: '120px',
+                        width: '120%',
+                      }}
+                    >
+                      {Object.entries(districtLocations).map(([key, value]) => (
+                        <option key={key} value={value}>
+                          {value}
+                        </option>
+                      ))}
+                    </select> */}
                     <input
                       type="text"
                       value={locationEvent}
+                      className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
                       onChange={(e) => {
                         let value = e.target.value;
                         value = value.replace(/\s+/g, ' ');
@@ -653,12 +715,19 @@ export const StartEvent = () => {
                 <p
                   aria-live="polite"
                   className={`
-                    ${!locationEvent && localidadeTouched && !errors?.localizacao
-                      ? 'visible'
-                      : 'invisible'}
-                      `
-                  }
-                  style={{ color: 'red', marginTop: '5px', textAlign: `${alignment ? alignment : 'start'}` }}
+                    ${
+                      !locationEvent &&
+                      localidadeTouched &&
+                      !errors?.localizacao
+                        ? 'visible text-red-600'
+                        : 'invisible'
+                    }
+                      `}
+                  style={{
+                    color: '#ff0000',
+                    marginTop: '5px',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
                 >
                   Campo obrigatório
                 </p>
@@ -667,17 +736,23 @@ export const StartEvent = () => {
                     <p
                       aria-live="polite"
                       style={{
-                        color: 'red',
+                        color: 'ff0000',
                         marginTop: '-24px',
                         marginLeft: '-72px',
+                        textAlign: `${alignment ? alignment : 'start'}`,
                       }}
-                      className={`max-w-[320px]`}
+                      className={`max-w-[320px] text-red-600`}
                     >
                       {errors.localizacao}
                     </p>
                   ) : mapImageUrl && altLocation ? (
                     <div alt={`Mapa mostrando ao centro ${altLocation}`}>
-                      <div style={{ textAlign: `${alignment ? alignment : 'center'}` }} className={`max-w-[400px]`}>
+                      <div
+                        style={{
+                          textAlign: `${alignment ? alignment : 'center'}`,
+                        }}
+                        className={`max-w-[400px]`}
+                      >
                         {altLocation}{' '}
                       </div>
                       <iframe
@@ -694,12 +769,19 @@ export const StartEvent = () => {
             </div>
             <div className="p-4 w-full lg:w-1/3 min-h-[180px] lg:border-r border-b lg:border-b-0 border-gray-500 relative flex flex-col justify-center align-center">
               <div className="flex flex-col justify-center mx-auto align-center py-4">
-                <label style={{ fontSize: '24px', fontWeight: 'bold', textAlign: `${alignment ? alignment : 'start'}` }}>
+                <label
+                  style={{
+                    fontSize: '24px',
+                    fontWeight: 'bold',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
+                >
                   Data de Início:
                   <div className="flex row relative">
                     <DatePicker
                       selected={startDate}
                       onChange={(date) => handleDateChange(date, 'startDate')}
+                      className={`datePicker ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
                       onKeyDown={handleKeyDown}
                       onFocus={() => {
                         if (startDate) {
@@ -712,7 +794,6 @@ export const StartEvent = () => {
                       dateFormat="dd/MM/yyyy"
                       locale={pt}
                       required
-                      className="datePicker"
                       placeholderText="Digite aqui"
                     />
                     <MicrophoneIcon
@@ -729,7 +810,11 @@ export const StartEvent = () => {
                       ? 'visible'
                       : 'invisible'
                   }
-                  style={{ color: 'red', marginTop: '5px' }}
+                  style={{
+                    color: 'ff0000',
+                    marginTop: '5px',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
                   aria-live="polite"
                 >
                   Campo obrigatório
@@ -738,10 +823,11 @@ export const StartEvent = () => {
                   <p
                     aria-live="polite"
                     style={{
-                      color: 'red',
+                      color: 'ff0000',
                       marginTop: '-24px',
+                      textAlign: `${alignment ? alignment : 'start'}`,
                     }}
-                    className="max-w-[320px]"
+                    className="max-w-[320px] text-red-600"
                   >
                     {errors?.startDate}
                   </p>
@@ -756,7 +842,13 @@ export const StartEvent = () => {
                       : 'flex flex-col justify-center mx-auto align-center py-4'
                   }
                 >
-                  <label style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                  <label
+                    style={{
+                      fontSize: '24px',
+                      fontWeight: 'bold',
+                      textAlign: `${alignment ? alignment : 'start'}`,
+                    }}
+                  >
                     Data de fim:
                     <div className="flex row relative">
                       <DatePicker
@@ -773,7 +865,7 @@ export const StartEvent = () => {
                         dateFormat="dd/MM/yyyy"
                         locale={pt}
                         required
-                        className="datePicker"
+                        className={`datePicker ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
                         placeholderText="Digite aqui"
                       />
                       <MicrophoneIcon
@@ -785,8 +877,12 @@ export const StartEvent = () => {
                     </div>
                   </label>
                   <p
-                    className={!endDate && !sameDay ? 'visible' : 'invisible'}
-                    style={{ color: 'red', marginTop: '5px' }}
+                    className={`text-red-600 ${!endDate && !sameDay ? 'visible text-red-600' : 'invisible'}`}
+                    style={{
+                      color: 'ff0000',
+                      marginTop: '5px',
+                      textAlign: `${alignment ? alignment : 'start'}`,
+                    }}
                     aria-live="polite"
                   >
                     Campo obrigatório
@@ -795,10 +891,11 @@ export const StartEvent = () => {
                     <p
                       aria-live="polite"
                       style={{
-                        color: 'red',
+                        color: 'ff0000',
                         marginTop: '-24px',
+                        textAlign: `${alignment ? alignment : 'start'}`,
                       }}
-                      className="max-w-[320px]"
+                      className="max-w-[320px] text-red-600"
                     >
                       {errors?.endDate}
                     </p>
@@ -807,11 +904,12 @@ export const StartEvent = () => {
               )}
               <label
                 className={`flex align-center justify-start mx-auto text-[1.2rem] ${!sameDay ? 'md:mb-0' : 'lg:-mb-10'}`}
+                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
               >
                 Este evento acontecerá no mesmo dia:
                 <input
                   type="checkbox"
-                  className="mt-1 ms-1 date-checkbox cursor-pointer"
+                  className={`mt-1 ms-1 width-[1rem] date-checkbox cursor-pointer ${highContrast ? 'high-contrast' : ''}`}
                   checked={sameDay}
                   onChange={handleSameDayChange}
                 />
@@ -819,19 +917,25 @@ export const StartEvent = () => {
             </div>
             <div className="p-4 w-full lg:w-1/3 min-h-[180px] relative flex flex-col justify-center items-center align-center">
               <div className="flex flex-col justify-center mx-auto align-center py-4 -mt-4">
-                <label style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                <label
+                  style={{
+                    fontSize: '24px',
+                    fontWeight: 'bold',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
+                >
                   Hora de Início:
                   <div className="flex row relative">
                     <DatePicker
                       selected={startTime}
                       onChange={(time) => handleTimeChange(time, 'startTime')}
+                      className={`datePicker ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
                       showTimeSelect
                       showTimeSelectOnly
                       timeIntervals={1}
                       timeCaption="Horário"
                       dateFormat="HH:mm"
                       timeFormat="HH:mm"
-                      className="datePicker"
                       placeholderText="Digite aqui"
                       onFocus={() => {
                         if (startTime) {
@@ -851,10 +955,14 @@ export const StartEvent = () => {
                 <p
                   className={
                     !startTime && !errors?.startTime && startTimeTouched
-                      ? 'visible'
+                      ? 'visible text-red-600'
                       : 'invisible'
                   }
-                  style={{ color: 'red', marginTop: '5px' }}
+                  style={{
+                    color: 'ff0000',
+                    marginTop: '5px',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
                   aria-live="polite"
                 >
                   Campo obrigatório
@@ -863,10 +971,11 @@ export const StartEvent = () => {
                   <p
                     aria-live="polite"
                     style={{
-                      color: 'red',
+                      color: 'ff0000',
                       marginTop: '-24px',
+                      textAlign: `${alignment ? alignment : 'start'}`,
                     }}
-                    className="max-w-[320px]"
+                    className="max-w-[320px] text-red-600"
                   >
                     {errors?.startTime}
                   </p>
@@ -874,7 +983,13 @@ export const StartEvent = () => {
               </div>
 
               <div className="flex flex-col justify-center mx-auto align-center py-4 -mt-1">
-                <label style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                <label
+                  style={{
+                    fontSize: '24px',
+                    fontWeight: 'bold',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
+                >
                   Hora de Fim:
                   <div className="flex row relative">
                     <DatePicker
@@ -886,7 +1001,7 @@ export const StartEvent = () => {
                       timeCaption="Horário"
                       dateFormat="HH:mm"
                       timeFormat="HH:mm"
-                      className="datePicker"
+                      className={`datePicker ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
                       placeholderText="Digite aqui"
                       onFocus={() => {
                         if (endTime) {
@@ -917,10 +1032,14 @@ export const StartEvent = () => {
                 <p
                   className={
                     !endTime && !errors?.endTime && endTimeTouched
-                      ? 'visible'
+                      ? 'visible text-red-600'
                       : 'invisible'
                   }
-                  style={{ color: 'red', marginTop: '5px' }}
+                  style={{
+                    color: 'ff0000',
+                    marginTop: '5px',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
                   aria-live="polite"
                 >
                   Campo obrigatório
@@ -929,10 +1048,11 @@ export const StartEvent = () => {
                   <p
                     aria-live="polite"
                     style={{
-                      color: 'red',
+                      color: 'ff0000',
                       marginTop: '-24px',
+                      textAlign: `${alignment ? alignment : 'start'}`,
                     }}
-                    className="max-w-[320px]"
+                    className="max-w-[320px] text-red-600"
                   >
                     {errors?.endTime}
                   </p>
@@ -953,15 +1073,22 @@ export const StartEvent = () => {
                 width={500}
                 height={80}
                 style={{
-                  maxWidth: "100%",
-                  height: "auto"
-                }} />
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
             </div>
             <div className="lg:w-1/2 px-16">
-              <p className="flex flex-col text-start text-[4rem] font-bold text-middle-home">
+              <p
+                className={`flex flex-col text-[4rem] font-bold text-middle-home`}
+                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+              >
                 Tipos de serviços
               </p>
-              <p className="text-black relative max-w-[90vw] text-start mb-8 text-[1.2rem]">
+              <p
+                className={`relative max-w-[90vw] mb-8 text-[1.2rem]`}
+                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+              >
                 Selecione abaixo qual dos serviços gostaria de contratar para o
                 seu evento.
               </p>
@@ -973,16 +1100,20 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
                     type="checkbox"
                     value="Catering"
                     checked={selectedService.includes('Catering')}
                     onChange={handleServiceChange}
-                    className="mx-2 date-checkbox cursor-pointer"
+                    className={`mx-2 w-[1rem] date-checkbox cursor-pointer ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>Catering</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    Catering
+                  </label>
                 </li>
 
                 <li
@@ -991,16 +1122,20 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
                     type="checkbox"
                     value="Mechardising"
                     checked={selectedService.includes('Mechardising')}
                     onChange={handleServiceChange}
-                    className="mx-2 date-checkbox cursor-pointer"
+                    className={`mx-2 w-[1rem] date-checkbox cursor-pointer ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>Mechardising</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    Mechardising
+                  </label>
                 </li>
 
                 <li
@@ -1009,16 +1144,20 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
                     type="checkbox"
                     value="Espaço"
                     checked={selectedService.includes('Espaço')}
                     onChange={handleServiceChange}
-                    className="mx-2 date-checkbox cursor-pointer"
+                    className={`mx-2 w-[1rem] date-checkbox cursor-pointer ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>Espaço</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    Espaço
+                  </label>
                 </li>
 
                 <li
@@ -1027,16 +1166,20 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
                     type="checkbox"
                     value="DJ"
                     checked={selectedService.includes('DJ')}
                     onChange={handleServiceChange}
-                    className="mx-2 date-checkbox cursor-pointer"
+                    className={`mx-2 w-[1rem] date-checkbox cursor-pointer ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>DJ e Som</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    DJ e Som
+                  </label>
                 </li>
               </ul>
             </div>
@@ -1053,15 +1196,22 @@ export const StartEvent = () => {
                 width={500}
                 height={80}
                 style={{
-                  maxWidth: "100%",
-                  height: "auto"
-                }} />
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
             </div>
             <div className="lg:w-1/2 px-16">
-              <p className="flex flex-col text-start text-[4rem] font-bold text-middle-home">
+              <p
+                className="flex flex-col text-[4rem] font-bold text-middle-home"
+                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+              >
                 Tipos de eventos
               </p>
-              <p className="text-black relative max-w-[90vw] text-start mb-8 text-[1.2rem]">
+              <p
+                className="relative max-w-[90vw] mb-8 text-[1.2rem]"
+                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+              >
                 Selecione abaixo qual o evento.
               </p>
 
@@ -1072,16 +1222,20 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
                     type="radio"
                     value="Jantar"
                     checked={selectedEvent === 'Jantar'}
                     onChange={handleEventChange}
-                    className="mx-2"
+                    className={`mx-2 ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>Jantar</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    Jantar
+                  </label>
                 </li>
 
                 <li
@@ -1090,16 +1244,20 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
                     type="radio"
                     value="Cocktail"
                     checked={selectedEvent === 'Cocktail'}
                     onChange={handleEventChange}
-                    className="mx-2"
+                    className={`mx-2 ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>Cocktail</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    Cocktail
+                  </label>
                 </li>
                 <li
                   style={{
@@ -1107,16 +1265,20 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
                     type="radio"
                     value="Aniversario"
                     checked={selectedEvent === 'Aniversario'}
                     onChange={handleEventChange}
-                    className="mx-2"
+                    className={`mx-2 ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>Aniversário Empresa</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    Aniversário Empresa
+                  </label>
                 </li>
 
                 <li
@@ -1125,16 +1287,20 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
                     type="radio"
                     value="Bootcamp"
                     checked={selectedEvent === 'Bootcamp'}
                     onChange={handleEventChange}
-                    className="mx-2"
+                    className={`mx-2 ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>Bootcamp</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    Bootcamp
+                  </label>
                 </li>
               </ul>
             </div>
@@ -1147,7 +1313,7 @@ export const StartEvent = () => {
               size="large"
               type="primary"
               onClick={handleSubmit}
-              text="SEGUINTE"
+              text="Seguinte"
               disabled={isButtonDisabled}
             />
           </div>

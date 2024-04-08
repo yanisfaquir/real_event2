@@ -3,7 +3,6 @@
 @import 'tailwindcss/utilities';
 
 html, body {
-  /* font-family: 'Inter', sans-serif; */
   background-color: #ececec;
  }
 
@@ -98,6 +97,10 @@ html, body {
     right: unset !important;
     left: 8%;
   }
+
+  .image-mapping-button {
+    display: none;
+  }
 }
 
 @media (max-width: 540px) {
@@ -147,6 +150,10 @@ html, body {
   accent-color: #4a7d8b;
 }
 
+.date-checkbox.high-contrast {
+  accent-color: #fff000;
+}
+
 .disabled {
   opacity: 0.5;
   pointer-events: none;
@@ -168,6 +175,11 @@ input[type='radio'] {
 
 input[type='radio']:checked {
   background-color: #4a7d8b;
+  padding: 0.5rem;
+}
+
+input[type='radio'].high-contrast:checked {
+  background-color: #fff000;
   padding: 0.5rem;
 }
 
@@ -225,7 +237,6 @@ input[type='radio']:checked {
   border-radius: 50px;
   width: -moz-fit-content;
   width: fit-content;
-  background-color: #4A7D8B;
   display: flex;
   flex-direction: column-reverse;
   padding: .5rem .25rem;
@@ -235,8 +246,9 @@ input[type='radio']:checked {
   box-shadow: 1px 1px 8px #ffffff;
 }
 
-.cart-popover-container {
-  box-shadow: 4px 16px 8px #ffffff;
+.cart-popover-container,
+.services-card-home {
+  box-shadow: 1px 2px 8px #ffffff;
 }
 
 .shortcuts-options.open {
@@ -258,4 +270,16 @@ input[type='radio']:checked {
   bottom: 8%;
   right: 16%;
   position: fixed;
+}
+
+.inner-border {
+  box-shadow: inset 0 0 0 4px white;
+}
+
+.input-high-contrast::placeholder {
+  color: white;
+ }
+
+ .high-contrast-dialog {
+  background-color: #000000 !important;
 }

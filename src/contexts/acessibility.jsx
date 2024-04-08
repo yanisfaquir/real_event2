@@ -2,11 +2,89 @@ import React, { createContext, useState, useEffect } from 'react';
 import Router from 'next/router';
 export const AccessibilityContext = createContext();
 import { useHotkeys } from 'react-hotkeys-hook';
+import { useRouter } from 'next/router';
 
 export const AccessibilityProvider = ({ children }) => {
+  const router = useRouter();
+  const alignments = ['left', 'center', 'justify', 'right'];
   const [alignment, setAlignment] = useState(null);
   const [highContrast, setHighContrast] = useState(false);
-  const alignments = ['left', 'center', 'justify', 'right'];
+  const [showImageInfo, setShowImageInfo] = useState(false);
+
+  const resetStyles = () => {
+    setAlignment(null);
+    const images = document.querySelectorAll('.image-info');
+    const elements = document.querySelectorAll(
+      'body, p, h1, h2, h3, h4, h5, h6, span, label, a, article, button, strong, nav, div, section, ul, html'
+    );
+    images.forEach((image) => {
+      image.classList.remove(
+        'border-4',
+        'border-white',
+        'rounded-md',
+        'inner-border',
+        'flex'
+      );
+    });
+    setHighContrast(false);
+    setShowImageInfo(false);
+    elements.forEach((element) => {
+      element.style.backgroundColor = '';
+      element.style.color = '';
+      element.style.borderColor = '';
+    });
+  };
+
+  const toggleImageInfo = () => {
+    setShowImageInfo(!showImageInfo);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      const images = document.querySelectorAll('.image-info');
+      if (window.matchMedia('(min-width: 1024px)').matches) {
+        if (showImageInfo) {
+          images.forEach((image) => {
+            image.classList.add(
+              'border-4',
+              'border-white',
+              'rounded-md',
+              'inner-border',
+              'flex'
+            );
+          });
+        } else {
+          images.forEach((image) => {
+            image.classList.remove(
+              'border-4',
+              'border-white',
+              'rounded-md',
+              'inner-border',
+              'flex'
+            );
+          });
+        }
+      } else {
+        images.forEach((image) => {
+          image.classList.remove(
+            'border-4',
+            'border-white',
+            'rounded-md',
+            'inner-border',
+            'flex'
+          );
+        });
+        setShowImageInfo(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [showImageInfo]);
 
   const toggleHighContrast = () => {
     setHighContrast(!highContrast);
@@ -17,23 +95,11 @@ export const AccessibilityProvider = ({ children }) => {
     setAlignment(alignments[(index + 1) % alignments.length]);
   };
 
-  const resetStyles = () => {
-    setAlignment(null);
-    const elements = document.querySelectorAll(
-      'body, p, h1, h2, h3, h4, h5, h6, span, label, a, article, button, strong, nav, div, section, ul, html'
-    );
-    setHighContrast(false)
-    elements.forEach((element) => {
-      element.style.backgroundColor = '';
-      element.style.color = '';
-      element.style.borderColor = '';
-    });
-  };
-
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const elements = document.querySelectorAll(
-        'body, p, h1, h2, h3, h4, h5, h6, span, label, a, article, button, strong, nav, div, section, ul, html'
+        //'body, p, h1, h2, h3, h4, h5, h6, span, label, a, article, button, strong, nav, div, section, ul, html'
+        'body, html'
       );
 
       elements.forEach((element) => {
@@ -43,9 +109,8 @@ export const AccessibilityProvider = ({ children }) => {
           }
           element.style.color = '#ffffff';
           if (
-            (element.tagName === 'BUTTON' ||
-            element.tagName === 'LI')
-            && element.tagName !== 'A' &&
+            (element.tagName === 'BUTTON' || element.tagName === 'LI') &&
+            element.tagName !== 'A' &&
             !element.querySelector('img')
           ) {
             element.style.borderColor = '#ffff00';
@@ -60,6 +125,12 @@ export const AccessibilityProvider = ({ children }) => {
       });
     }
   }, [highContrast]);
+
+
+
+
+
+
 
   const alignmentTranslations = {
     left: 'esquerda',
@@ -92,7 +163,7 @@ export const AccessibilityProvider = ({ children }) => {
         element.style.wordSpacing = `${wordSpacing || 0.5}px`;
       });
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -108,7 +179,7 @@ export const AccessibilityProvider = ({ children }) => {
         originalFontSizes.set(element, fontSize);
       });
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -122,7 +193,7 @@ export const AccessibilityProvider = ({ children }) => {
         originalLineSpacings.set(element, lineSpacing);
       });
     }
-  }, []);
+  }, [router]);
 
   const increaseTextSpacing = () => {
     const scaleFactor = 5;
@@ -266,6 +337,7 @@ export const AccessibilityProvider = ({ children }) => {
   };
 
   useHotkeys('shift+x', toggleShortcut, { enabled: enableShortcut });
+  useHotkeys('shift+c', toggleImageInfo, { enabled: enableShortcut });
   useHotkeys('ctrl+q', toggleAlignment, { enabled: enableShortcut });
   useHotkeys('ctrl+b', increaseLineSpacing, { enabled: enableShortcut });
   useHotkeys('shift+z', resetStyles, { enabled: enableShortcut });
@@ -281,43 +353,6 @@ export const AccessibilityProvider = ({ children }) => {
     enabled: enableShortcut,
   });
   // useHotkeys('ctrl+alt+z', () => Router.push(isLoggedIn ? '/profile' : '/login'), { enabled: enableShortcut });
-  useHotkeys('ctrl+alt+z', () => Router.push('/supplierRegister'), {
-    enabled: enableShortcut,
-  });
-  useHotkeys('ctrl+alt+w', () => Router.push('/servicesResults'), {
-    enabled: enableShortcut,
-  });
-
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined') {
-  //     const elements = document.querySelectorAll(
-  //       'p, h1, h2, h3, h4, h5, h6, span, label, a, article, button, li, strong'
-  //     );
-
-  //     const styles = {};
-  //     elements.forEach((element) => {
-  //       styles[element] = {
-  //         fontSize: element.style.fontSize,
-  //         lineHeight: element.style.lineHeight,
-  //         textAlign: element.style.textAlign,
-  //         wordSpacing: element.style.wordSpacing,
-  //       };
-  //     });
-
-  //     setTextElements(elements);
-  //     setOriginalStyles(styles);
-  //   }
-  // }, []);
-
-  // const resetStyles = () => {
-  //   textElements.forEach((element) => {
-  //     const originalStyle = originalStyles[element];
-  //     element.style.fontSize = originalStyle.fontSize;
-  //     element.style.lineHeight = originalStyle.lineHeight;
-  //     element.style.textAlign = originalStyle.textAlign;
-  //     element.style.wordSpacing = originalStyle.wordSpacing;
-  //   });
-  // };
 
   return (
     <AccessibilityContext.Provider
@@ -337,13 +372,13 @@ export const AccessibilityProvider = ({ children }) => {
         increaseTextSpacing,
         toggleShortcut,
         enableShortcut,
-        // resetStyles,
-        // originalStyles,
         resetStyles,
         alignment,
         toggleAlignment,
         toggleHighContrast,
         highContrast,
+        toggleImageInfo,
+        showImageInfo,
       }}
     >
       {children}

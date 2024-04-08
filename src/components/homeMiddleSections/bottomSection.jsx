@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
-import Image from "next/image";
+import Image from 'next/image';
 import GlobalButton from '../globalButton';
 import Link from 'next/link';
 import { Tooltip } from 'react-tooltip';
 import { AccessibilityContext } from '@/contexts/acessibility';
 
 export const BottomMiddleSection = () => {
-  const { highContrast } = useContext(AccessibilityContext);
+  const { highContrast, alignment, showImageInfo } =
+    useContext(AccessibilityContext);
   const [isDesktopOrLaptop, setIsDesktopOrLaptop] = useState(false);
 
   useEffect(() => {
@@ -22,7 +23,9 @@ export const BottomMiddleSection = () => {
   }, []);
   return (
     <div className="mx-auto my-4 flex flex-col align-center items-center justify-center">
-      <div className="services-card-home flex justify-around align-center items-center px-4 w-[86vw] lg:w-[94vw] rounded-[50px] bg-[#4A7D8B] z-0">
+      <div
+        className={`services-card-home flex justify-around align-center items-center px-4 w-[86vw] lg:w-[94vw] rounded-[50px] ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'} z-0`}
+      >
         <div className="p-8">
           <Image
             src="/assets/pictures/card-sm-4-home.png"
@@ -31,13 +34,17 @@ export const BottomMiddleSection = () => {
             width={400}
             height={32}
             style={{
-              maxWidth: "100%",
-              height: "auto"
-            }} />
+              maxWidth: '100%',
+              height: 'auto',
+            }}
+          />
         </div>
         <div className="services-card-home-text -mt-32">
           <div
-            className={`flex align-center items-center ${isDesktopOrLaptop ? 'justify-center text-center' : ''}`}
+            className={`flex align-center items-center ${isDesktopOrLaptop ? `justify-center` : ''}`}
+            style={{
+              textAlign: `${isDesktopOrLaptop ? `${alignment ? alignment : 'center'}` : ''}`,
+            }}
           >
             <div className="mx-2 border-4 rounded-[50px] md:grid-cols-12 lg:grid-cols-6">
               <GlobalButton
@@ -65,13 +72,17 @@ export const BottomMiddleSection = () => {
                 height={80}
                 alt="chevron-right"
                 style={{
-                  maxWidth: "100%",
-                  height: "auto"
-                }} />
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
             </Link>
 
             <h2
-              className={`text-white absolute ps-4 pe-8 mt-64 z-10 text-[1.3rem] ${isDesktopOrLaptop ? 'text-start' : 'text-center px-0 -ms-8'}`}
+              className={`text-white absolute ps-4 pe-8 mt-64 z-10 text-[1.3rem] ${isDesktopOrLaptop ? 'w-[500px]' : 'px-0 -ms-8'}`}
+              style={{
+                textAlign: `${isDesktopOrLaptop ? `${alignment ? alignment : 'center'}` : ''}`,
+              }}
             >
               Encontre as melhores opções de catering, espaços, fotografia, DJ e
               som. Aqui na RealEvent temos fornecedores com as mais variadas
@@ -81,16 +92,25 @@ export const BottomMiddleSection = () => {
         </div>
       </div>
       <div
-        className="flex align-center items-center text-center justify-center py-8 w-[86vw] lg:w-[94vw] rounded-[50px] z-0 relative"
+        className="flex align-center items-center text-center justify-center my-8 w-[86vw] lg:w-[94vw] rounded-[50px] z-0 relative"
         aria-label="Organizar seu evento nunca foi tão prático"
       >
-        <article className="text-white absolute z-10 top-50 text-[4rem] text-bold bottom-card-home">
-          Organizar seu evento
-          <br />
-          nunca foi tão
-          <br />
-          <p className="text-[10rem] font-bold bottom-card-home">Prático</p>
-        </article>
+        {!showImageInfo && (
+          <>
+            <article
+              className={`text-white absolute z-10 top-50 text-[4rem] ${highContrast ? 'bg-black' : 'bg-unset'} text-bold bottom-card-home`}
+              style={{
+                textAlign: `${isDesktopOrLaptop ? `${alignment ? alignment : 'center'}` : ''}`,
+              }}
+            >
+              Organizar seu evento
+              <br />
+              nunca foi tão
+              <br />
+              <p className="text-[10rem] font-bold bottom-card-home">Prático</p>
+            </article>
+          </>
+        )}
         <Image
           src="/assets/pictures/card-bottom-home.png"
           alt="Três mulheres deitadas na sobre um pano que está num grama, elas estão sorrindo, sobre o pano também tem um chapéu, um cesto e um rádio"
@@ -99,9 +119,10 @@ export const BottomMiddleSection = () => {
           className="w-full"
           sizes="100vw"
           style={{
-            width: "100%",
-            height: "auto"
-          }} />
+            width: '100%',
+            height: 'auto',
+          }}
+        />
       </div>
     </div>
   );

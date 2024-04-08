@@ -11,6 +11,10 @@ const nextConfig = {
       "rc-tree",
       "rc-table",
     ],
+    i18n: {
+      locales: ['pt-PT'],
+      defaultLocale: 'pt-PT',
+   },
   };
 
 export default nextConfig;

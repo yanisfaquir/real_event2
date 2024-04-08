@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import GlobalButton from './globalButton';
 import Link from 'next/link';
 import { Tooltip } from 'react-tooltip';
-import Image from "next/image";
+import Image from 'next/image';
 import services from '../components/services.json';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -49,7 +49,6 @@ const Navbar = ({ inView }) => {
   const {
     isCustomFont,
     toggleFont,
-    toggleTextAlignment,
     getNextAlignment,
     getCurrentAlignmentTranslation,
     iconClicked,
@@ -60,12 +59,12 @@ const Navbar = ({ inView }) => {
     toggleShortcut,
     enableShortcut,
     resetStyles,
-    // originalStyles,
-    alignment, toggleAlignment,
+    alignment,
+    toggleAlignment,
     toggleHighContrast,
     highContrast,
-    toggleImageDescriptions,
-    showImageDescriptions
+    toggleImageInfo,
+    showImageInfo,
   } = useContext(AccessibilityContext);
 
   const handleCartMobileClick = () => {
@@ -105,7 +104,9 @@ const Navbar = ({ inView }) => {
 
   const cartPopoverContent =
     router.pathname !== '/shopping-cart' ? (
-      <div className={`p-2 cart-popover ${highContrast ? 'bg-black' : 'bg-white'}`}>
+      <div
+        className={`p-2 cart-popover ${highContrast ? 'bg-black' : 'bg-white'}`}
+      >
         {cartItems.slice(0, 2).map((item, index) => (
           <div
             key={index}
@@ -118,11 +119,14 @@ const Navbar = ({ inView }) => {
               height={100}
               className="rounded-[12px] ms-2 me-2 my-2"
               style={{
-                maxWidth: "100%",
-                height: "auto",
-                objectFit: "cover"
-              }} />
-            <div className="flex flex-col my-4">
+                maxWidth: '100%',
+                height: 'auto',
+                objectFit: 'cover',
+              }}
+            />
+            <div
+              className={`flex flex-col my-4 ${highContrast ? 'text-white' : 'text-black'}`}
+            >
               <h2>
                 <strong className="max-w-[120px]">{item.name}</strong>
               </h2>
@@ -132,12 +136,16 @@ const Navbar = ({ inView }) => {
           </div>
         ))}
         {extraItemsCount > 0 && (
-          <p className="ms-2">E mais {extraItemsCount} itens...</p>
+          <p className={`ms-2 ${highContrast ? 'text-white' : 'text-black'}`}>
+            E mais {extraItemsCount} itens...
+          </p>
         )}
         <div className="flex justify-between py-4">
           <li
             className="list-none rounded-[50px] w-[100%]"
-            style={{ boxShadow: `${ highContrast ? '0 0 0 2px #fff000' : '0 0 0 2px #4A7D8B'}` }}
+            style={{
+              boxShadow: `${highContrast ? '0 0 0 2px #fff000' : '0 0 0 2px #4A7D8B'}`,
+            }}
           >
             <div>
               <GlobalButton
@@ -165,7 +173,7 @@ const Navbar = ({ inView }) => {
     <div className="">
       <div className="relative">
         <div
-          className={`${enableShortcut ? 'flex' : 'hidden'} text-white shortcuts-container fixed bottom-[8%] z-10 border-[4px] border-white bg-[#4A7D8B] rounded-[50px] py-3 shadow-lg`}
+          className={`${enableShortcut ? 'flex' : 'hidden'} text-white shortcuts-container fixed bottom-[8%] z-10 border-[4px] border-white ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'} rounded-[50px] py-3 shadow-lg`}
         >
           {enableShortcut && (
             <li className={`list-none relative min-w-[56px] mx-2`}>
@@ -188,13 +196,19 @@ const Navbar = ({ inView }) => {
 
           {isShortcutsOpen && (
             <ul
-              className={`shortcuts-options ${isShortcutsOpen ? 'open' : ''}`}
+              className={`${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'} shortcuts-options ${isShortcutsOpen ? 'open' : ''}`}
             >
               <li className="list-none relative min-w-[56px]">
-                <strong className="uppercase">shift + x</strong>: Habilitar/Desabilitar Atalhos
+                <strong className="uppercase">shift + c</strong>:
+                Habilitar/Desabilitar Image Mapping
               </li>
               <li className="list-none relative min-w-[56px]">
-                <strong className="uppercase">shift + z</strong>: Restaurar estilização original
+                <strong className="uppercase">shift + x</strong>:
+                Habilitar/Desabilitar Atalhos
+              </li>
+              <li className="list-none relative min-w-[56px]">
+                <strong className="uppercase">shift + z</strong>: Restaurar
+                estilização original
               </li>
               <li className="list-none relative min-w-[56px]">
                 <strong className="uppercase">ctrl + q</strong>: Alternar
@@ -217,8 +231,8 @@ const Navbar = ({ inView }) => {
                 Aumentar espaçamento entre palavras
               </li>
               <li className="list-none relative min-w-[56px]">
-                <strong className="uppercase">ctrl + alt + q</strong>:
-                Alterar Contraste
+                <strong className="uppercase">ctrl + alt + q</strong>: Alterar
+                Contraste
               </li>
               <li className="list-none relative min-w-[56px]">
                 <strong className="uppercase">ctrl + alt + d</strong>: Ir para a
@@ -232,19 +246,11 @@ const Navbar = ({ inView }) => {
                 <strong className="uppercase">ctrl + alt + s</strong>: Ir para
                 carrinho de compras
               </li>
-              <li className="list-none relative min-w-[56px]">
-                <strong className="uppercase">ctrl + alt + z</strong>: Ir para
-                registro de fornecedores
-              </li>
-              <li className="list-none relative min-w-[56px]">
-                <strong className="uppercase">ctrl + alt + w</strong>: Ir para
-                lista de serviços
-              </li>
             </ul>
           )}
         </div>
-        <div className="accessibility-container fixed bottom-[8%] z-10 border-[4px] border-white bg-[#4A7D8B] rounded-[50px] py-3 shadow-lg">
-          <li className="list-none relative min-w-[56px]">
+        <div className={`accessibility-container fixed bottom-[8%] z-10 border-[4px] border-white ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'} rounded-[50px] py-3 shadow-lg`}>
+          <li className={`list-none relative min-w-[56px]`}>
             <GlobalButton
               image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/acessibility-icon.svg`}
               text={
@@ -262,7 +268,7 @@ const Navbar = ({ inView }) => {
           </li>
           {isAcessibilityOpen && (
             <ul
-              className={`accessibility-options ${isAcessibilityOpen ? 'open' : ''}`}
+              className={`${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'} accessibility-options ${isAcessibilityOpen ? 'open' : ''}`}
             >
               <li className="list-none relative min-w-[56px]">
                 <GlobalButton
@@ -325,17 +331,20 @@ const Navbar = ({ inView }) => {
                   text={`Alterar contraste`}
                   id={`high-contrast-navbar`}
                   onClick={toggleHighContrast}
-
                 />
               </li>
-              {/* <li className="list-none relative mt-2 min-w-[56px]">
+              <li className="list-none relative mt-2 min-w-[56px] image-mapping-button">
                 <GlobalButton
                   image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/mark-icon.svg`}
-                  text={`Habilitar destaque`}
+                  text={
+                    showImageInfo
+                      ? 'Desabilitar Image Mapping'
+                      : `Habilitar Image Mapping`
+                  }
                   id={`mark-navbar`}
-                  onClick={toggleImageDescriptions}
+                  onClick={toggleImageInfo}
                 />
-              </li> */}
+              </li>
               {isWindows && (
                 <li className="list-none relative mt-2 min-w-[56px] shortcut-button">
                   <GlobalButton
@@ -363,10 +372,10 @@ const Navbar = ({ inView }) => {
         </div>
       </div>
       <nav
-        className={`desktop-navbar fixed z-10 top-0 left-1/2 transform -translate-x-1/2 mt-5 border-4 border-white bg-[#4A7D8B] rounded-[50px] pb-2 px-[2rem] h-[76px] ${
+        className={`desktop-navbar fixed z-10 top-0 left-1/2 transform -translate-x-1/2 mt-5 border-4 border-white ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'} rounded-[50px] pb-2 px-[2rem] h-[76px] ${
           inView
             ? ''
-            : 'desktop-navbar-scrolled fixed z-10 w-[100vw] mt-[0px] mx-[0px] px-[0rem] border-none border-bottom-2 border-transparent rounded-none px-[2rem] h-[72px] bg-[#4A7D8B]'
+            : `desktop-navbar-scrolled fixed z-10 w-[100vw] mt-[0px] mx-[0px] px-[0rem] border-none border-bottom-2 border-transparent rounded-none px-[2rem] h-[72px] ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'}`
         }`}
       >
         <div className="flex justify-between items-center">
@@ -477,9 +486,9 @@ const Navbar = ({ inView }) => {
       </nav>
 
       <nav
-        className={`mobile-navbar fixed z-10 top-0 w-[100vw] top-0 mt-0 mx-0 px-[0rem] border-2 border-transparent rounded-none pb-1 px-[2rem] h-[62px] bg-[#4A7D8B]`}
+        className={`mobile-navbar fixed z-10 top-0 w-[100vw] top-0 mt-0 mx-0 px-[0rem] border-2 border-transparent rounded-none pb-1 px-[2rem] h-[62px] ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'}`}
       >
-        <ul className="flex justify-between items-center my-1">
+        <ul className="flex justify-between items-center mt-2">
           <li className="-me-3 -mt-1">
             {router.pathname !== '/shopping-cart' ? (
               <Popover
@@ -536,10 +545,11 @@ const Navbar = ({ inView }) => {
                 height={32}
                 id="logo-navbar"
                 style={{
-                  maxWidth: "100%",
-                  height: "auto",
-                  objectFit: "cover"
-                }} />
+                  maxWidth: '100%',
+                  height: 'auto',
+                  objectFit: 'cover',
+                }}
+              />
             </Link>
           </li>
           <li className="-me-4" onClick={handleButtonClick}>
@@ -551,7 +561,7 @@ const Navbar = ({ inView }) => {
           </li>
         </ul>
         <ul
-          className={`sidemenu flex flex-col h-[100%] items-center fixed transition-all object-cover transition duration-300 z-9 bg-[#4A7D8B] ${
+          className={`sidemenu flex flex-col h-[100%] items-center fixed transition-all object-cover transition duration-300 z-9 ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'} ${
             navOpen ? 'sidemenu-expanded' : 'sidemenu-collapsed'
           }`}
         >
