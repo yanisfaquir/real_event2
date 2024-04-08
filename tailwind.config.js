@@ -24,5 +24,7 @@ module.exports = {
       display: ['group-focus'],
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwindcss/nesting'),
+  ],
 };
