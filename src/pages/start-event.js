@@ -1,12 +1,12 @@
-import React from 'react';
-import { StartEvent } from './startEvent';
+// import React from 'react';
+// import { StartEvent } from './startEvent';
 
-const StartEventPage = () => {
-  return (
-    <div>
-      <StartEvent />
-    </div>
-  );
-};
+// const StartEventPage = () => {
+//   return (
+//     <div>
+//       <StartEvent />
+//     </div>
+//   );
+// };
 
-export default StartEventPage;
+// export default StartEventPage;

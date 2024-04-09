@@ -31,7 +31,8 @@ import { useRouter } from 'next/router';
 import { v4 as uuidv4 } from 'uuid';
 import { AccessibilityContext } from '@/contexts/acessibility';
 
-export const StartEvent = () => {
+const StartEvent = () => {
+
   const { alignment, highContrast } = useContext(AccessibilityContext);
   const formId = uuidv4();
   const dispatch = useDispatch();
@@ -1307,7 +1308,7 @@ export const StartEvent = () => {
           </div>
         </section>
 
-        {router.pathname === '/start-event' && (
+        {router.pathname === '/startEvent' && (
           <div className={`flex justify-center p-8`}>
             <GlobalButton
               size="large"
@@ -1322,3 +1323,4 @@ export const StartEvent = () => {
     </div>
   );
 };
+export default StartEvent;
