@@ -1,0 +1,44 @@
+{
+  "services": [
+    {
+      "id": 0,
+      "type": "Catering",
+      "name": "Serviço de Catering",
+      "price": 100.0,
+      "location": "Aveiro",
+      "rating": 4.5,
+      "reviews": 100,
+      "image": "/assets/pictures/picture-catering.jpeg"
+    },
+    {
+      "id": 1,
+      "type": "Fotografia",
+      "name": "Serviço de Fotografia",
+      "price": 200.0,
+      "location": "Aveiro",
+      "rating": 4.0,
+      "reviews": 200,
+      "image": "/assets/pictures/picture-fotografia.jpg"
+    },
+    {
+      "id": 2,
+      "type": "Espaço",
+      "name": "Aluguel de Espaço",
+      "price": 300.0,
+      "location": "Aveiro",
+      "rating": 4.7,
+      "reviews": 300,
+      "image": "/assets/pictures/picture-local.jpg"
+    },
+    {
+      "id": 3,
+      "type": "DJ",
+      "name": "Serviço de DJ",
+      "price": 400.0,
+      "location": "Aveiro",
+      "rating": 4.2,
+      "reviews": 150,
+      "image": "/assets/pictures/picture-dj.jpg"
+    }
+  ]
+}
