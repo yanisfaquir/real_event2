@@ -78,7 +78,7 @@ const HomePage = () => {
             <ul
               className={`text-white relative mx-auto flex justify-center max-w-[400px] top-[32vh] z-10 ${highContrast ? 'bg-black' : 'bg-unset'}`}
             >
-              {!router.pathname.includes('/start-event') && (
+              {!router.pathname.includes('/startEvent') && (
                 <li
                   className="mx-2 rounded-[50px] md:grid-cols-12 lg:grid-cols-6"
                   style={{
@@ -88,7 +88,7 @@ const HomePage = () => {
                   <GlobalButton
                     size={isDesktopOrLaptop ? 'large' : 'medium'}
                     type="custom"
-                    path="/start-event"
+                    path="/startEvent"
                     text="Iniciar"
                   />
                 </li>

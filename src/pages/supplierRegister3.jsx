@@ -31,10 +31,10 @@ const SupplierRegister = () => {
             Voltar 
           </Tooltip>
 
-          <Link href="/start-event/step-service">
+          <Link href="/startEvent/step-service">
             <Image
               src={'/assets/icons/chevron-left-green.svg'}
-              path="/start-event/step-service"
+              path="/startEvent/step-service"
               text=" Voltar à página de tipos de serviço"
               id="chevron-left-service"
               alt="chevron-left"
