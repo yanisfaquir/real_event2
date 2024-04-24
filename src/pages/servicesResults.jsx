@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { CiStar } from 'react-icons/ci';
 import { FaChevronDown } from 'react-icons/fa';
 import GlobalButton from '@/components/globalButton';
-import Image from 'next/image';
+import Image from "next/image";
 import { useSelector, useDispatch } from 'react-redux';
 import { setActionServiceType } from '@/redux/actions/eventActions';
 
@@ -39,9 +39,7 @@ const UseServiceResults = () => {
         alt="Imagem da casa"
         width={400}
         height={400}
-        layout="cover"
-        key="quinta1-1"
-      />,
+        key="quinta1-1" />,
         nome: 'Quinta da Atela',
         local: 'Aveiro',
         classificacao: '4.9 (50) - Alpiarça',
@@ -53,9 +51,7 @@ const UseServiceResults = () => {
         alt="Imagem da casa"
         width={400}
         height={400}
-        layout="cover"
-        key="quinta1-2"
-      />, 
+        key="quinta1-2" />, 
         nome: 'Quinta da Atela 2',
         local: 'Aveiro',
         classificacao: '4.9 (50) - Alpiarça 2',
@@ -67,9 +63,7 @@ const UseServiceResults = () => {
         alt="Imagem da casa"
         width={400}
         height={400}
-        layout="cover"
-        key="quinta1-3"
-      />, 
+        key="quinta1-3" />, 
         nome: 'Quinta da Atela',
         local: 'Porto',
         classificacao: '4.9 (50) - Alpiarça',
