@@ -1,9 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { MdMic } from 'react-icons/md';
 import { Tooltip } from 'react-tooltip';
+import { AccessibilityContext } from '@/contexts/acessibility';
 
-const MicrophoneIcon = ({ handleSpeechRecognition, isStreaming, id, field, right }) => {
+const MicrophoneIcon = ({
+  handleSpeechRecognition,
+  isStreaming,
+  id,
+  field,
+  right,
+}) => {
   const [micId, setMicId] = useState(id);
+  const { highContrast } = useContext(AccessibilityContext);
 
   useEffect(() => {
     if (isStreaming) {
@@ -19,7 +27,7 @@ const MicrophoneIcon = ({ handleSpeechRecognition, isStreaming, id, field, right
         onClick={() => handleSpeechRecognition(field, id)}
         style={{
           cursor: 'pointer',
-          color: isStreaming ? '#990000' : '#007BFF',
+          color: isStreaming ? '#990000' : `${highContrast ? '#fff000' : '#007BFF'}`,
           transform: 'translateY(-50%)',
           zIndex: 9,
           transition: 'all 0.2s ease-in-out',
@@ -34,7 +42,7 @@ const MicrophoneIcon = ({ handleSpeechRecognition, isStreaming, id, field, right
       />
       <Tooltip
         anchorSelect={`#${micId}`}
-        place="top"
+        place="end"
         style={{ fontSize: '1.2em', zIndex: '20', zIndex: '20' }}
       >
         Microfone

@@ -3,7 +3,7 @@ import GlobalButton from '@/components/globalButton';
 import HomePage from '@/pages';
 import { Tooltip } from 'react-tooltip';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from "next/image";
 import { IoIosAttach } from "react-icons/io";
 
 const SupplierRegister = () => {
@@ -31,21 +31,28 @@ const SupplierRegister = () => {
             Voltar 
           </Tooltip>
 
-          <Link href="/start-event/step-service">
+          <Link href="/startEvent/step-service">
             <Image
               src={'/assets/icons/chevron-left-green.svg'}
-              path="/start-event/step-service"
+              path="/startEvent/step-service"
               text=" Voltar à página de tipos de serviço"
               id="chevron-left-service"
               alt="chevron-left"
               width={100}
               height={80}
-            />
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />
           </Link>
         </div>
         <div className="flex flex-col lg:flex-row-reverse items-center mt-10">
             <div className="lg:w-1/2 p-10 hidden lg:block card-home-item mx-auto relative justify-self-end">
-                <Image src='/assets/pictures/card-sm-1-home-blue.png' alt="Mulher loira de frente a um computador segurando um smartphone" width={400} height={600} layout="cover" />
+                <Image
+                  src='/assets/pictures/card-sm-1-home-blue.png'
+                  alt="Mulher loira de frente a um computador segurando um smartphone"
+                  width={400}
+                  height={600} />
             </div>
 
           <div className='lg:w-1/2 p-10'>

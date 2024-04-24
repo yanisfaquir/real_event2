@@ -15,7 +15,7 @@ module.exports = {
           'linear-gradient(307deg, rgba(74,125,139,1) 30%, rgba(196,241,253,1) 92%)',
       },
       fontFamily: {
-        inter: ['Inter', 'sans-serif'],
+        inter: ['Inter'],
       },
       colors: {
         customBlue: '#4A7D8B',
@@ -24,5 +24,7 @@ module.exports = {
       display: ['group-focus'],
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwindcss/nesting'),
+  ],
 };

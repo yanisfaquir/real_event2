@@ -1,8 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  forwardRef,
+  useContext,
+} from 'react';
 import DatePicker from 'react-datepicker';
 import pt from 'date-fns/locale/pt';
 import 'react-datepicker/dist/react-datepicker.css';
-import { parse } from 'date-fns';
+import { parse, isBefore, endOfDay } from 'date-fns';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   setLocation,
@@ -22,26 +28,32 @@ import Link from 'next/link';
 import Image from 'next/image';
 import MicrophoneIcon from '@/components/microphoneIcon';
 import { useRouter } from 'next/router';
+import { v4 as uuidv4 } from 'uuid';
+import { AccessibilityContext } from '@/contexts/acessibility';
 
-export const StartEvent = () => {
+const StartEvent = () => {
+
+  const { alignment, highContrast } = useContext(AccessibilityContext);
+  const formId = uuidv4();
   const dispatch = useDispatch();
   const router = useRouter();
   const location = useSelector((state) => state.event.location);
   const mapImageUrl = useSelector((state) => state.event.mapImageUrl);
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(
-    new Date(new Date().setHours(new Date().getHours() + 1))
-  );
+  const [startDate, setStartDate] = useState(null);
+
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
   const [sameDay, setSameDay] = useState(true);
-  const [endDate, setEndDate] = useState(
-    sameDay ? null : new Date(new Date().setDate(new Date().getDate() + 1))
-  );
+  const [endDate, setEndDate] = useState(null);
 
   const [localidadeTouched, setLocationTouched] = useState(false);
+  const [startDateTouched, setStartDateTouched] = useState(false);
+  const [endDateTouched, setEndDateTouched] = useState(false);
+  const [startTimeTouched, setStartTimeTouched] = useState(false);
+  const [endTimeTouched, setEndTimeTouched] = useState(false);
   const [coordenadas, setCoordenadas] = useState({});
-  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({});
   const [locationEvent, setEventLocation] = useState('');
   const [altLocation, setAltLocation] = useState('');
   const [isStreaming, setIsStreaming] = useState({});
@@ -49,15 +61,19 @@ export const StartEvent = () => {
     number: 1,
     text: 'Ir à Página Inicial',
   });
-  const [selectedService, setSelectedService] = useState('');
+  const [selectedService, setSelectedService] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState('');
   const formRef = useRef(null);
 
   useEffect(() => {
     const unixStartTimestamp = Math.floor(new Date().getTime() / 1000);
-    const unixEndTimestamp = Math.floor(new Date().setHours(new Date().getHours() + 1) / 1000);
-    const unixEndTimestampNextDay = Math.floor(new Date().setDate(new Date().getDate() + 1) / 1000);
-  
+    const unixEndTimestamp = Math.floor(
+      new Date().setHours(new Date().getHours() + 1) / 1000
+    );
+    const unixEndTimestampNextDay = Math.floor(
+      new Date().setDate(new Date().getDate() + 1) / 1000
+    );
+
     dispatch(setStartActionDate(unixStartTimestamp));
     dispatch(setStartActionTime(unixStartTimestamp));
     dispatch(setEndActionTime(unixEndTimestamp));
@@ -69,7 +85,15 @@ export const StartEvent = () => {
   };
 
   const handleServiceChange = (event) => {
-    setSelectedService(event.target.value);
+    const value = event.target.value;
+
+    if (event.target.checked) {
+      setSelectedService((prevServices) => [...prevServices, value]);
+    } else {
+      setSelectedService((prevServices) =>
+        prevServices.filter((service) => service !== value)
+      );
+    }
   };
 
   useEffect(() => {
@@ -80,6 +104,27 @@ export const StartEvent = () => {
       });
     }
   }, [currentSection]);
+
+  const districtLocations = {
+    Aveiro: 'Aveiro',
+    Beja: 'Beja',
+    Braga: 'Braga',
+    Bragança: 'Bragança',
+    'Castelo Branco': 'Castelo Branco',
+    Coimbra: 'Coimbra',
+    Estarreja: 'Estarreja',
+    Faro: 'Faro',
+    Guarda: 'Guarda',
+    Leiria: 'Leiria',
+    Lisboa: 'Lisboa',
+    Porto: 'Porto',
+    'São João da Madeira': 'São João da Madeira',
+    'São Roque': 'São Roque',
+    Setubal: 'Setubal',
+    'Viana do Castelo': 'Viana do Castelo',
+    'Vila Real': 'Vila Real',
+    Viseu: 'Viseu',
+  };
 
   const handleLocationSearch = async () => {
     dispatch(setLocation(locationEvent));
@@ -99,16 +144,33 @@ export const StartEvent = () => {
         );
         setError(null);
       } else {
-        setError('Localidade não encontrada');
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          localizacao: 'Localidade não encontrada',
+        }));
+
+        dispatch(setMapImageUrl(null));
+        dispatch(setLocation(null));
       }
     } catch (error) {
-      setError('Erro ao buscar coordenadas linha 60');
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        coordenadas: 'Erro ao buscar coordenadas',
+      }));
     }
   };
 
   const handleSpeechRecognition = (field, id) => {
     try {
-      const recognition = new window.webkitSpeechRecognition();
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        console.error(
+          'Reconhecimento de fala não é suportado neste navegador.'
+        );
+        return;
+      }
+      const recognition = new SpeechRecognition();
       recognition.lang = 'pt-PT';
       recognition.interimResults = true;
 
@@ -222,7 +284,7 @@ export const StartEvent = () => {
           );
           return;
         }
-    
+
         const combinedStartDateTime = new Date(
           startDate.getFullYear(),
           startDate.getMonth(),
@@ -230,7 +292,7 @@ export const StartEvent = () => {
           startTime.getHours(),
           startTime.getMinutes()
         );
-    
+
         const combinedEndDateTime = new Date(
           sameDay ? startDate.getFullYear() : endDate.getFullYear(),
           sameDay ? startDate.getMonth() : endDate.getMonth(),
@@ -238,25 +300,29 @@ export const StartEvent = () => {
           endTime.getHours(),
           endTime.getMinutes()
         );
-    
+
         const unixStartTimestamp = Math.floor(
           combinedStartDateTime.getTime() / 1000
         );
-        const unixEndTimestamp = Math.floor(combinedEndDateTime.getTime() / 1000);
-    
+        const unixEndTimestamp = Math.floor(
+          combinedEndDateTime.getTime() / 1000
+        );
+
         dispatch(setStartActionDate(unixStartTimestamp));
         !sameDay ? dispatch(setEndActionDate(unixEndTimestamp)) : '';
         dispatch(setStartActionTime(unixStartTimestamp));
         dispatch(setEndActionTime(unixEndTimestamp));
-        dispatch(setStartEnd({ start: unixStartTimestamp, end: unixEndTimestamp }));
-    
+        dispatch(
+          setStartEnd({ start: unixStartTimestamp, end: unixEndTimestamp })
+        );
+
         dispatch(setLocation(location));
         dispatch(setMapImageUrl(mapImageUrl));
         break;
       case 2:
         dispatch(setActionServiceType(selectedService));
         break;
-        case 3:
+      case 3:
         dispatch(setActionEventType(selectedEvent));
         router.push('/servicesResults');
         break;
@@ -312,25 +378,161 @@ export const StartEvent = () => {
     setSameDay(event.target.checked);
     setEndDate(null);
     dispatch(setActionSameDay(event.target.checked));
-    if (!event.target.checked) {
+    if (!event.target.checked && startDate) {
       const newEndDate = new Date(new Date().setDate(startDate.getDate() + 1));
       setEndDate(newEndDate);
-      dispatch(setEndActionDate(newEndDate.toISOString()));
+      //dispatch(setEndActionDate(newEndDate.toISOString()));
     }
   };
 
-  const isFormValid = location !== '' && error == null;
+  const handleDateChange = (date, field) => {
+    if (field === 'startDate') {
+      setStartDate(date);
+      if (isBefore(date, endOfDay(new Date()))) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: 'A datas não podem ser hoje ou anterior ao dia atual',
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: null,
+        }));
+      }
+      if (startDate && date && date < startDate) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: 'A data de fim deve ser após a data de início',
+        }));
+      }
+    } else if (field === 'endDate') {
+      setEndDate(date);
+      if (isBefore(date, endOfDay(new Date()))) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: 'A datas não podem ser hoje ou anterior ao dia atual',
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: null,
+        }));
+      }
+
+      if (startDate && date && date < startDate) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: 'A data de fim deve ser após a data de início',
+        }));
+      }
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    const allowedKeys = [
+      'Tab',
+      'Alt',
+      'Backspace',
+      'Delete',
+      'Enter',
+      'ArrowUp',
+      'ArrowDown',
+      'ArrowLeft',
+      'ArrowRight',
+    ];
+    const key = event.key;
+
+    if (!/[0-9/]/.test(key) && !allowedKeys.includes(key)) {
+      event.preventDefault();
+    }
+  };
+
+  const handleTimeChange = (time, field) => {
+    if (field === 'startTime') {
+      setStartTime(time);
+      if (endTime && time?.getTime() >= endTime?.getTime() - 60 * 60 * 1000) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]:
+            'O horário de início deve ser pelo menos uma hora antes do horário de fim',
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: null,
+        }));
+      }
+    } else if (field === 'endTime') {
+      setEndTime(time);
+      if (
+        startTime &&
+        time?.getTime() <= startTime?.getTime() + 60 * 60 * 1000
+      ) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]:
+            'O horário de fim deve ser pelo menos uma hora após o horário de início',
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          startTime: null,
+        }));
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          endTime: null,
+        }));
+      }
+    }
+  };
+
+  const [isButtonDisabled, setButtonDisabled] = useState(true);
+
+  useEffect(() => {
+    const isValid = () => {
+      switch (currentSection.number) {
+        case 1:
+          return (
+            altLocation &&
+            startDate &&
+            startTime &&
+            (sameDay || endDate) &&
+            endTime
+          );
+        case 2:
+          return selectedService && selectedService.length > 0;
+        case 3:
+          return selectedEvent && selectedEvent.length > 0;
+        default:
+          return false;
+      }
+    };
+
+    setButtonDisabled(!isValid());
+  }, [
+    locationEvent,
+    startDate,
+    startTime,
+    sameDay,
+    endDate,
+    endTime,
+    selectedService,
+    selectedEvent,
+    currentSection.number,
+  ]);
 
   return (
-    <div>
-      <div className="-mb-20 p-4 relative">
-        <Tooltip
-          anchorSelect={`#chevron-left-home-${currentSection.number}`}
-          place="top"
-          style={{ fontSize: '1.2em' }}
-        >
-          {`${currentSection.text}`}
-        </Tooltip>
+    <div className="w-[90vw] mx-auto mt-20">
+      <div className="-mb-20 row p-4 relative">
+        <div className="lg:block hidden">
+          <Tooltip
+            anchorSelect={`#chevron-left-home-${currentSection.number}`}
+            place="right"
+            style={{ fontSize: '1.2em' }}
+          >
+            {`${currentSection.text}`}
+          </Tooltip>
+        </div>
         {currentSection.number === 1 ? (
           <Link
             href="/"
@@ -339,22 +541,26 @@ export const StartEvent = () => {
               zIndex: '9',
               position: 'absolute',
               top: '2rem',
-              left: '2%',
+              left: '1%',
             }}
           >
             <Image
-              src={'/assets/icons/chevron-left-green.svg'}
+              src={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/chevron-left-green.svg`}
               path="/"
               text={`${currentSection.text}`}
               id={`chevron-left-home-${currentSection.number}`}
               alt="chevron-left"
-              width={100}
+              width={80}
               height={80}
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+              }}
             />
           </Link>
         ) : (
           <Image
-            src={'/assets/icons/chevron-left-green.svg'}
+            src={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/chevron-left-green.svg`}
             onClick={() =>
               setCurrentSection((prevState) => ({
                 number: prevState.number - 1,
@@ -369,14 +575,16 @@ export const StartEvent = () => {
             text={currentSection.text}
             id={`chevron-left-home-${currentSection.number}`}
             alt="chevron-left"
-            width={100}
+            width={80}
             height={80}
             style={{
               cursor: 'pointer',
               zIndex: '9',
               position: 'absolute',
               top: '2rem',
-              left: '2%',
+              left: '1%',
+              maxWidth: '100%',
+              height: 'auto',
             }}
           />
         )}
@@ -386,28 +594,98 @@ export const StartEvent = () => {
         <section
           className={`event-form mt-20 lg:mt-16 event-form-1 ${currentSection.number === 1 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
         >
-          <p className="flex flex-col text-start pt-20 px-10 text-[4rem] font-bold text-middle-home">
+          <p
+            className={`flex flex-col pt-20 px-5 text-[4rem] font-bold text-middle-home`}
+            style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+          >
             Informações do Evento
           </p>
-          <p className="text-black relative max-w-[90vw] text-start mb-4 px-10 text-[1.2rem]">
+          <p
+            className={`relative max-w-[90vw] px-5 mb-4 text-[1.2rem]`}
+            style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+          >
             Queremos saber mais sobre o teu serviço de forma a conseguirmos
             partilhar com os nossos utilizadores.
           </p>
           <section
             ref={formRef}
-            className="event-form-1 shadow-md flex flex-col lg:flex-row justify-center min-h-[240px] my-8 py-8 px-4 border-[#4A7D8B] bg-white rounded-[8px] border-2 w-[90vw] mx-auto"
+            className={`event-form-1 shadow-md flex flex-col lg:flex-row justify-center min-h-[240px] my-8 py-8 px-4 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} ${highContrast ? 'bg-black' : 'bg-white'} rounded-[8px] border-2 w-[90vw] mx-auto`}
           >
             <div className="p-4 w-full lg:w-1/3 min-h-[180px] lg:border-r border-b lg:border-b-0 border-gray-500 relative flex justify-center align-center">
-              <div className="flex flex-col justify-center align-center mx-auto">
-                <label style={{ fontSize: '24px', fontWeight: 'bold' }}>
+              <div
+                className={`flex flex-col justify-center align-center mx-auto`}
+              >
+                <label
+                  style={{
+                    fontSize: '24px',
+                    fontWeight: 'bold',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
+                >
                   Localidade:
                   <div className="flex row" style={{ position: 'relative' }}>
+                    {/* <select
+                      value={locationEvent}
+                      className={`cursor-pointer ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        if (value == '') {
+                          setLocationTouched(true);
+                        } else {
+                          setErrors((prevErrors) => ({
+                            ...prevErrors,
+                            localizacao: null,
+                          }));
+                        }
+                        setEventLocation(value);
+                      }}
+                      onFocus={() => {
+                        if (locationEvent) setLocationTouched(false);
+                      }}
+                      onBlur={() => setLocationTouched(true)}
+                      required
+                      style={{
+                        padding: '8px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        marginTop: '5px',
+                        paddingRight: '120px',
+                        width: '120%',
+                      }}
+                    >
+                      {Object.entries(districtLocations).map(([key, value]) => (
+                        <option key={key} value={value}>
+                          {value}
+                        </option>
+                      ))}
+                    </select> */}
                     <input
                       type="text"
                       value={locationEvent}
-                      onChange={(e) => setEventLocation(e.target.value)}
+                      className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        value = value.replace(/\s+/g, ' ');
+                        value = value.replace(/^\s+/, '');
+                        if (value == '') {
+                          setLocationTouched(true);
+                        } else {
+                          setErrors((prevErrors) => ({
+                            ...prevErrors,
+                            localizacao: null,
+                          }));
+                        }
+                        setEventLocation(value);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handleLocationSearch();
+                        }
+                      }}
                       placeholder="Digite aqui"
-                      onFocus={() => setLocationTouched(false)}
+                      onFocus={() => {
+                        if (locationEvent) setLocationTouched(false);
+                      }}
                       onBlur={() => setLocationTouched(true)}
                       required
                       style={{
@@ -427,7 +705,7 @@ export const StartEvent = () => {
                       right="68"
                     />
                     <GlobalButton
-                      image={'/assets/icons/search-green.svg'}
+                      image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/search-green.svg`}
                       text="Localizar"
                       type="button"
                       id="search-location"
@@ -436,21 +714,46 @@ export const StartEvent = () => {
                   </div>
                 </label>
                 <p
-                  className={
-                    !locationEvent && localidadeTouched
-                      ? 'visible'
-                      : 'invisible'
-                  }
-                  style={{ color: 'red', marginTop: '5px' }}
+                  aria-live="polite"
+                  className={`
+                    ${
+                      !locationEvent &&
+                      localidadeTouched &&
+                      !errors?.localizacao
+                        ? 'visible text-red-600'
+                        : 'invisible'
+                    }
+                      `}
+                  style={{
+                    color: '#ff0000',
+                    marginTop: '5px',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
                 >
                   Campo obrigatório
                 </p>
-                <div className="flex flex-col justify-center items-center text-[1.2rem]">
-                  {error?.includes('localização') ? (
-                    <div>{error}</div>
-                  ) : mapImageUrl ? (
-                    <div>
-                      <div className="max-w-[400px] text-center">
+                <div className="flex flex-col justify-center items-center">
+                  {errors?.localizacao ? (
+                    <p
+                      aria-live="polite"
+                      style={{
+                        color: 'ff0000',
+                        marginTop: '-24px',
+                        marginLeft: '-72px',
+                        textAlign: `${alignment ? alignment : 'start'}`,
+                      }}
+                      className={`max-w-[320px] text-red-600`}
+                    >
+                      {errors.localizacao}
+                    </p>
+                  ) : mapImageUrl && altLocation ? (
+                    <div alt={`Mapa mostrando ao centro ${altLocation}`}>
+                      <div
+                        style={{
+                          textAlign: `${alignment ? alignment : 'center'}`,
+                        }}
+                        className={`max-w-[400px]`}
+                      >
                         {altLocation}{' '}
                       </div>
                       <iframe
@@ -458,7 +761,7 @@ export const StartEvent = () => {
                         height="120"
                         src={mapImageUrl}
                         style={{ border: 0 }}
-                        alt={`Mapa mostrando ao centro ${altLocation}`}
+                        tabIndex={-1}
                       ></iframe>
                     </div>
                   ) : null}
@@ -467,26 +770,31 @@ export const StartEvent = () => {
             </div>
             <div className="p-4 w-full lg:w-1/3 min-h-[180px] lg:border-r border-b lg:border-b-0 border-gray-500 relative flex flex-col justify-center align-center">
               <div className="flex flex-col justify-center mx-auto align-center py-4">
-                <label style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                <label
+                  style={{
+                    fontSize: '24px',
+                    fontWeight: 'bold',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
+                >
                   Data de Início:
                   <div className="flex row relative">
                     <DatePicker
                       selected={startDate}
-                      onChange={(date) => {
-                        if (date) {
-                          setStartDate(date);
-                          dispatch(setStartActionDate(date.toISOString()));
-                        } else {
-                          const now = new Date();
-                          setStartDate(now);
-                          dispatch(setStartActionDate(now.toISOString()));
+                      onChange={(date) => handleDateChange(date, 'startDate')}
+                      className={`datePicker ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
+                      onKeyDown={handleKeyDown}
+                      onFocus={() => {
+                        if (startDate) {
+                          setStartDateTouched(false);
                         }
                       }}
-                      dateFormat="dd 'de' MMMM 'de' yyyy"
+                      onBlur={() => {
+                        setStartDateTouched(true);
+                      }}
+                      dateFormat="dd/MM/yyyy"
                       locale={pt}
-                      minDate={startDate ? new Date() : null}
                       required
-                      className="datePicker"
                       placeholderText="Digite aqui"
                     />
                     <MicrophoneIcon
@@ -498,11 +806,33 @@ export const StartEvent = () => {
                   </div>
                 </label>
                 <p
-                  className={!startDate ? 'visible' : 'invisible'}
-                  style={{ color: 'red', marginTop: '5px' }}
+                  className={
+                    !startDate && startDateTouched && !errors?.startDate
+                      ? 'visible'
+                      : 'invisible'
+                  }
+                  style={{
+                    color: 'ff0000',
+                    marginTop: '5px',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
+                  aria-live="polite"
                 >
                   Campo obrigatório
                 </p>
+                {errors?.startDate && (
+                  <p
+                    aria-live="polite"
+                    style={{
+                      color: 'ff0000',
+                      marginTop: '-24px',
+                      textAlign: `${alignment ? alignment : 'start'}`,
+                    }}
+                    className="max-w-[320px] text-red-600"
+                  >
+                    {errors?.startDate}
+                  </p>
+                )}
               </div>
 
               {!sameDay && (
@@ -513,23 +843,30 @@ export const StartEvent = () => {
                       : 'flex flex-col justify-center mx-auto align-center py-4'
                   }
                 >
-                  <label style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                  <label
+                    style={{
+                      fontSize: '24px',
+                      fontWeight: 'bold',
+                      textAlign: `${alignment ? alignment : 'start'}`,
+                    }}
+                  >
                     Data de fim:
                     <div className="flex row relative">
                       <DatePicker
                         selected={endDate}
-                        onChange={handleEndDateChange}
-                        minDate={
-                          endDate && !sameDay
-                            ? new Date(
-                                new Date().setDate(startDate.getDate() + 1)
-                              )
-                            : ''
-                        }
-                        dateFormat="dd 'de' MMMM 'de' yyyy"
+                        onChange={(date) => handleDateChange(date, 'endDate')}
+                        onFocus={() => {
+                          if (endDate) {
+                            setEndDateTouched(false);
+                          }
+                        }}
+                        onBlur={() => {
+                          setEndDateTouched(true);
+                        }}
+                        dateFormat="dd/MM/yyyy"
                         locale={pt}
                         required
-                        className="datePicker"
+                        className={`datePicker ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
                         placeholderText="Digite aqui"
                       />
                       <MicrophoneIcon
@@ -541,20 +878,39 @@ export const StartEvent = () => {
                     </div>
                   </label>
                   <p
-                    className={!endDate && !sameDay ? 'visible' : 'invisible'}
-                    style={{ color: 'red', marginTop: '5px' }}
+                    className={`text-red-600 ${!endDate && !sameDay ? 'visible text-red-600' : 'invisible'}`}
+                    style={{
+                      color: 'ff0000',
+                      marginTop: '5px',
+                      textAlign: `${alignment ? alignment : 'start'}`,
+                    }}
+                    aria-live="polite"
                   >
                     Campo obrigatório
                   </p>
+                  {errors?.endDate && (
+                    <p
+                      aria-live="polite"
+                      style={{
+                        color: 'ff0000',
+                        marginTop: '-24px',
+                        textAlign: `${alignment ? alignment : 'start'}`,
+                      }}
+                      className="max-w-[320px] text-red-600"
+                    >
+                      {errors?.endDate}
+                    </p>
+                  )}
                 </div>
               )}
               <label
                 className={`flex align-center justify-start mx-auto text-[1.2rem] ${!sameDay ? 'md:mb-0' : 'lg:-mb-10'}`}
+                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
               >
                 Este evento acontecerá no mesmo dia:
                 <input
                   type="checkbox"
-                  className="mt-1 ms-1 date-checkbox cursor-pointer"
+                  className={`mt-1 ms-1 width-[1rem] date-checkbox cursor-pointer ${highContrast ? 'high-contrast' : ''}`}
                   checked={sameDay}
                   onChange={handleSameDayChange}
                 />
@@ -562,20 +918,32 @@ export const StartEvent = () => {
             </div>
             <div className="p-4 w-full lg:w-1/3 min-h-[180px] relative flex flex-col justify-center items-center align-center">
               <div className="flex flex-col justify-center mx-auto align-center py-4 -mt-4">
-                <label style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                <label
+                  style={{
+                    fontSize: '24px',
+                    fontWeight: 'bold',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
+                >
                   Hora de Início:
                   <div className="flex row relative">
                     <DatePicker
                       selected={startTime}
-                      onChange={handleStartTimeChange}
+                      onChange={(time) => handleTimeChange(time, 'startTime')}
+                      className={`datePicker ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
                       showTimeSelect
                       showTimeSelectOnly
                       timeIntervals={1}
                       timeCaption="Horário"
                       dateFormat="HH:mm"
                       timeFormat="HH:mm"
-                      className="datePicker"
                       placeholderText="Digite aqui"
+                      onFocus={() => {
+                        if (startTime) {
+                          setStartTimeTouched(false);
+                        }
+                      }}
+                      onBlur={() => setStartTimeTouched(true)}
                     />
                     <MicrophoneIcon
                       handleSpeechRecognition={handleSpeechRecognition}
@@ -586,28 +954,62 @@ export const StartEvent = () => {
                   </div>
                 </label>
                 <p
-                  className={!startTime ? 'visible' : 'invisible'}
-                  style={{ color: 'red', marginTop: '5px' }}
+                  className={
+                    !startTime && !errors?.startTime && startTimeTouched
+                      ? 'visible text-red-600'
+                      : 'invisible'
+                  }
+                  style={{
+                    color: 'ff0000',
+                    marginTop: '5px',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
+                  aria-live="polite"
                 >
                   Campo obrigatório
                 </p>
+                {errors?.startTime && (
+                  <p
+                    aria-live="polite"
+                    style={{
+                      color: 'ff0000',
+                      marginTop: '-24px',
+                      textAlign: `${alignment ? alignment : 'start'}`,
+                    }}
+                    className="max-w-[320px] text-red-600"
+                  >
+                    {errors?.startTime}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col justify-center mx-auto align-center py-4 -mt-1">
-                <label style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                <label
+                  style={{
+                    fontSize: '24px',
+                    fontWeight: 'bold',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
+                >
                   Hora de Fim:
                   <div className="flex row relative">
                     <DatePicker
                       selected={endTime}
-                      onChange={handleEndTimeChange}
+                      onChange={(time) => handleTimeChange(time, 'endTime')}
                       showTimeSelect
                       showTimeSelectOnly
                       timeIntervals={1}
                       timeCaption="Horário"
                       dateFormat="HH:mm"
                       timeFormat="HH:mm"
-                      className="datePicker"
+                      className={`datePicker ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
                       placeholderText="Digite aqui"
+                      onFocus={() => {
+                        if (endTime) {
+                          setEndTimeTouched(false);
+                        }
+                      }}
+                      onBlur={() => setEndTimeTouched(true)}
                       minTime={
                         startTime
                           ? new Date(
@@ -629,11 +1031,33 @@ export const StartEvent = () => {
                   </div>
                 </label>
                 <p
-                  className={!endTime ? 'visible' : 'invisible'}
-                  style={{ color: 'red', marginTop: '5px' }}
+                  className={
+                    !endTime && !errors?.endTime && endTimeTouched
+                      ? 'visible text-red-600'
+                      : 'invisible'
+                  }
+                  style={{
+                    color: 'ff0000',
+                    marginTop: '5px',
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                  }}
+                  aria-live="polite"
                 >
                   Campo obrigatório
                 </p>
+                {errors?.endTime && (
+                  <p
+                    aria-live="polite"
+                    style={{
+                      color: 'ff0000',
+                      marginTop: '-24px',
+                      textAlign: `${alignment ? alignment : 'start'}`,
+                    }}
+                    className="max-w-[320px] text-red-600"
+                  >
+                    {errors?.endTime}
+                  </p>
+                )}
               </div>
             </div>
           </section>
@@ -642,23 +1066,32 @@ export const StartEvent = () => {
         <section
           className={`event-form mt-20 lg:mt-12 event-form-2 ${currentSection.number === 2 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
         >
-          <div className="flex flex-col lg:flex-row items-center mt-10">
-            <div className="lg:w-1/2 p-16 hidden lg:block ms-24">
+          <div className="flex flex-col lg:flex-row items-end align-end mt-10">
+            <div className="lg:w-1/2 px-16 py-8 hidden lg:block ms-24">
               <Image
                 src={'/assets/pictures/service-type-img.png'}
                 alt="Rapaz de óculos segurando papéis e apontando para algo"
                 width={500}
                 height={80}
-                layout="intrinsic"
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
               />
             </div>
             <div className="lg:w-1/2 px-16">
-              <p className="flex flex-col text-start text-[4rem] font-bold text-middle-home">
+              <p
+                className={`flex flex-col text-[4rem] font-bold text-middle-home`}
+                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+              >
                 Tipos de serviços
               </p>
-              <p className="text-black relative max-w-[90vw] text-start mb-8 text-[1.2rem]">
-                Selecione abaixo qual o serviço gostaria de contratar para o seu
-                evento.
+              <p
+                className={`relative max-w-[90vw] mb-8 text-[1.2rem]`}
+                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+              >
+                Selecione abaixo qual dos serviços gostaria de contratar para o
+                seu evento.
               </p>
 
               <ul ref={formRef} className=" text-[1.2rem]">
@@ -668,16 +1101,20 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
-                    type="radio"
+                    type="checkbox"
                     value="Catering"
-                    checked={selectedService === 'Catering'}
+                    checked={selectedService.includes('Catering')}
                     onChange={handleServiceChange}
-                    className="mx-2"
+                    className={`mx-2 w-[1rem] date-checkbox cursor-pointer ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>Catering (descrição breve)</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    Catering
+                  </label>
                 </li>
 
                 <li
@@ -686,16 +1123,20 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
-                    type="radio"
-                    value="Fotografia"
-                    checked={selectedService === 'Fotografia'}
+                    type="checkbox"
+                    value="Mechardising"
+                    checked={selectedService.includes('Mechardising')}
                     onChange={handleServiceChange}
-                    className="mx-2"
+                    className={`mx-2 w-[1rem] date-checkbox cursor-pointer ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>Fotografia (descrição breve)</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    Mechardising
+                  </label>
                 </li>
 
                 <li
@@ -704,16 +1145,20 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
-                    type="radio"
+                    type="checkbox"
                     value="Espaço"
-                    checked={selectedService === 'Espaço'}
+                    checked={selectedService.includes('Espaço')}
                     onChange={handleServiceChange}
-                    className="mx-2"
+                    className={`mx-2 w-[1rem] date-checkbox cursor-pointer ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>Espaço (descrição breve)</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    Espaço
+                  </label>
                 </li>
 
                 <li
@@ -722,16 +1167,20 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
-                    type="radio"
+                    type="checkbox"
                     value="DJ"
-                    checked={selectedService === 'DJ'}
+                    checked={selectedService.includes('DJ')}
                     onChange={handleServiceChange}
-                    className="mx-2"
+                    className={`mx-2 w-[1rem] date-checkbox cursor-pointer ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>DJ e Som (descrição breve)</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    DJ e Som
+                  </label>
                 </li>
               </ul>
             </div>
@@ -740,21 +1189,30 @@ export const StartEvent = () => {
         <section
           className={`event-form event-form-3 ${currentSection.number === 3 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
         >
-          <div className="flex flex-col lg:flex-row-reverse items-center mt-10">
-            <div className="lg:w-1/2 p-16 hidden ms-24 lg:block">
+          <div className="flex flex-col lg:flex-row-reverse items-end align-end mt-10">
+            <div className="lg:w-1/2 px-16 py-8 hidden ms-24 lg:block">
               <Image
                 src={'/assets/pictures/event-type-img.png'}
                 alt="Pessoas felizes confraternizando"
                 width={500}
                 height={80}
-                layout="intrinsic"
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
               />
             </div>
             <div className="lg:w-1/2 px-16">
-              <p className="flex flex-col text-start text-[4rem] font-bold text-middle-home">
+              <p
+                className="flex flex-col text-[4rem] font-bold text-middle-home"
+                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+              >
                 Tipos de eventos
               </p>
-              <p className="text-black relative max-w-[90vw] text-start mb-8 text-[1.2rem]">
+              <p
+                className="relative max-w-[90vw] mb-8 text-[1.2rem]"
+                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+              >
                 Selecione abaixo qual o evento.
               </p>
 
@@ -765,16 +1223,20 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
                     type="radio"
                     value="Jantar"
                     checked={selectedEvent === 'Jantar'}
                     onChange={handleEventChange}
-                    className="mx-2"
+                    className={`mx-2 ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>Jantar</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    Jantar
+                  </label>
                 </li>
 
                 <li
@@ -783,16 +1245,20 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
                     type="radio"
                     value="Cocktail"
                     checked={selectedEvent === 'Cocktail'}
                     onChange={handleEventChange}
-                    className="mx-2"
+                    className={`mx-2 ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>Cocktail</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    Cocktail
+                  </label>
                 </li>
                 <li
                   style={{
@@ -800,16 +1266,20 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
                     type="radio"
                     value="Aniversario"
                     checked={selectedEvent === 'Aniversario'}
                     onChange={handleEventChange}
-                    className="mx-2"
+                    className={`mx-2 ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>Aniversário Empresa</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    Aniversário Empresa
+                  </label>
                 </li>
 
                 <li
@@ -818,31 +1288,39 @@ export const StartEvent = () => {
                     height: '120px',
                     borderRadius: '8px',
                   }}
-                  className="flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2"
+                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
                 >
                   <input
                     type="radio"
                     value="Bootcamp"
                     checked={selectedEvent === 'Bootcamp'}
                     onChange={handleEventChange}
-                    className="mx-2"
+                    className={`mx-2 ${highContrast ? 'high-contrast' : ''}`}
                   />
-                  <label>Bootcamp</label>
+                  <label
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                  >
+                    Bootcamp
+                  </label>
                 </li>
               </ul>
             </div>
           </div>
         </section>
 
-        <div className={`flex justify-center p-8`}>
-          <GlobalButton
-            size="large"
-            type="primary"
-            onClick={handleSubmit}
-            text="SEGUINTE"
-          />
-        </div>
+        {router.pathname === '/startEvent' && (
+          <div className={`flex justify-center p-8`}>
+            <GlobalButton
+              size="large"
+              type="primary"
+              onClick={handleSubmit}
+              text="Seguinte"
+              disabled={isButtonDisabled}
+            />
+          </div>
+        )}
       </form>
     </div>
   );
 };
+export default StartEvent;
