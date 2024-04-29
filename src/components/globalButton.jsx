@@ -20,7 +20,7 @@ const GlobalButton = ({
   const buttonSizes = {
     small: 'py-1 px-2 text-[1.25rem] min-w-32',
     medium: 'py-2 px-3 text-[1.5rem] min-w-40',
-    large: 'py-3 px-4 text-[1.75rem] min-w-48',
+    large: 'py-3 px-3 text-[1.25rem] min-w-44',
     custom: 'py-4 px-4',
   };
 
@@ -68,8 +68,8 @@ const GlobalButton = ({
             <Image
               src={image}
               alt={text}
-              width={32}
-              height={32}
+              width={26}
+              height={26}
               style={{
                 maxWidth: "100%",
                 height: "auto"
@@ -79,8 +79,8 @@ const GlobalButton = ({
           <Image
             src={image}
             alt={text}
-            width={32}
-            height={32}
+            width={26}
+            height={26}
             style={{
               maxWidth: "100%",
               height: "auto"

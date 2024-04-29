@@ -346,7 +346,7 @@ const Navbar = ({ inView }) => {
                 />
               </li>
               {isWindows && (
-                <li className="list-none relative mt-2 min-w-[56px] shortcut-button">
+                <li className="list-none relative mt-2 min-w-[46px] shortcut-button">
                   <GlobalButton
                     image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/shortcut-icon.svg`}
                     text={
@@ -372,10 +372,10 @@ const Navbar = ({ inView }) => {
         </div>
       </div>
       <nav
-        className={`desktop-navbar fixed z-10 top-0 left-1/2 transform -translate-x-1/2 mt-5 border-4 border-white ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'} rounded-[50px] pb-2 px-[2rem] h-[76px] ${
+        className={`desktop-navbar fixed z-10 top-0 left-1/2 transform -translate-x-1/2 mt-5 border-4 border-white ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'} rounded-[50px] pb-2 px-[2rem] h-[60px] ${
           inView
             ? ''
-            : `desktop-navbar-scrolled fixed z-10 w-[100vw] mt-[0px] mx-[0px] px-[0rem] border-none border-bottom-2 border-transparent rounded-none px-[2rem] h-[72px] ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'}`
+            : `desktop-navbar-scrolled fixed z-10 w-[100vw] mt-[0px] mx-[0px] px-[0rem] border-none border-bottom-2 border-transparent rounded-none px-[2rem] h-[55px] ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'}`
         }`}
       >
         <div className="flex justify-between items-center">
@@ -392,13 +392,13 @@ const Navbar = ({ inView }) => {
 
           <section className="w-1/2 py-2 gap-2 flex justify-center items-center">
             <GlobalButton
-              size="medium"
+              size="small"
               type="custom"
               path="/about"
               text="Sobre"
             />
             <GlobalButton
-              size="medium"
+              size="small"
               type="custom"
               path="/supplierRegister1"
               text="Fornecedor"
@@ -412,7 +412,7 @@ const Navbar = ({ inView }) => {
               text="Conecte-se"
               id="user-navbar"
             />
-            <div style={{ position: 'relative', width: '24%', height: '44px' }}>
+            <div style={{ position: 'relative', width: '18%', height: '44px' }}>
               <div style={{ position: 'absolute', right: 0, top: 6 }}>
                 <GlobalButton
                   image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/star-icon-white.svg`}
@@ -422,7 +422,7 @@ const Navbar = ({ inView }) => {
                 />
               </div>
             </div>
-            <div style={{ position: 'relative', width: '24%', height: '44px' }}>
+            <div style={{ position: 'relative', width: '18%', height: '44px' }}>
               {router.pathname !== '/shopping-cart' ? (
                 <Popover
                   content={cartPopoverContent}
