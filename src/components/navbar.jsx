@@ -381,14 +381,12 @@ const Navbar = ({ inView }) => {
         <div className="flex justify-between items-center">
           <section className="w-1/4 py-2 flex items-center">
             <div className="-mt-2">
-              <li className="list-none relative min-w-[56px]">
-                <GlobalButton
-                  image="/assets/icons/logorealevent.png"
-                  path="/"
-                  text={`Ir à Página inicial`}
-                  id="logo-navbar"
-                />
-              </li>
+              <GlobalButton
+                image="/assets/icons/realevent-icon.png"
+                path="/"
+                text={`Ir à Página inicial`}
+                id="logo-navbar"
+              />
             </div>
           </section>
 
