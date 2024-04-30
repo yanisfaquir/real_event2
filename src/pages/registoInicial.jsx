@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import GlobalButton from '@/components/globalButton';
-import Image from 'next/image';
+import Image from "next/image";
 import Link from 'next/link'; // Import the Link component
 
 const SelecaoRegisto = () => {
@@ -21,9 +21,11 @@ const SelecaoRegisto = () => {
         <Image
           src="/assets/pictures/registo.png"
           alt="imagem representativa"
-          layout="fill"
-          objectFit="contain"
-        />
+          fill
+          sizes="100vw"
+          style={{
+            objectFit: "contain"
+          }} />
       </div>
 
       <div className="w-1/2 flex justify-center items-center bg-white rounded-[40px] max-w-md md:max-w-lg ml-10">
