@@ -5,22 +5,15 @@ const Profile = () => {
   const [serviceProviderProfile, setServiceProviderProfile] = useState({
     name: 'Pedro Mindera',
     location: 'Porto, Portugal',
-    description:
-      'Oferecemos serviços de catering inesquecíveis para todo tipo de eventos. Especializados em cozinha mediterrânica.',
+    description: 'Oferecemos serviços de catering inesquecíveis para todo tipo de eventos. Especializados em cozinha mediterrânica.',
     services: 'Catering, Decoração, Planeamento de Eventos',
     experienceYears: 5,
     profilePictureUrl: 'https://via.placeholder.com/150',
-    photos: [
-      'https://via.placeholder.com/200',
-      'https://via.placeholder.com/200',
-      'https://via.placeholder.com/200',
-    ],
+    photos: ['https://via.placeholder.com/200', 'https://via.placeholder.com/200', 'https://via.placeholder.com/200'],
   });
 
   const [isEditing, setIsEditing] = useState(false);
-  const [editedPhotos, setEditedPhotos] = useState([
-    ...serviceProviderProfile.photos,
-  ]);
+  const [editedPhotos, setEditedPhotos] = useState([...serviceProviderProfile.photos]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -31,7 +24,6 @@ const Profile = () => {
     e.preventDefault();
     setIsEditing(false);
     setServiceProviderProfile((prev) => ({ ...prev, photos: editedPhotos }));
-    console.log('Perfil atualizado:', serviceProviderProfile);
   };
 
   const handleChange = (e) => {
@@ -44,10 +36,7 @@ const Profile = () => {
 
   const handlePhotoChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      const newPhotosList = [
-        ...editedPhotos,
-        URL.createObjectURL(e.target.files[0]),
-      ];
+      const newPhotosList = [...editedPhotos, URL.createObjectURL(e.target.files[0])];
       setEditedPhotos(newPhotosList);
     }
   };
@@ -58,85 +47,86 @@ const Profile = () => {
   };
 
   return (
-    <div className="px-4 py-8">
-      <div className="bg-white p-8 rounded-lg shadow-md border-2 border-[#4A7D8B] max-w-4xl mx-auto mt-20 mb-10 space-y-6" style={{ padding: '2rem 4rem' }}>
-        <div className="flex justify-between items-center">
-          <img
-            src={serviceProviderProfile.profilePictureUrl}
-            alt="Profile"
-            className="w-28 h-28 rounded-full border-4 border-[#4A7D8B]"
-          />
-          <GlobalButton
-            size="small"
-            type="primary"
-            onClick={handleEdit}
-            text="Editar Perfil"
-          />
+    <div className="min-h-screen bg-[#f0f2f5] p-8 flex justify-center items-center">
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-4xl">
+        <div className="p-8">
+          <div className="flex items-center space-x-6 mb-6">
+            <img src={serviceProviderProfile.profilePictureUrl} alt="Profile" className="w-28 h-28 rounded-full border-4 border-[#4A7D8B]" />
+            <div className="space-y-2">
+              <h2 className="text-3xl font-bold text-[#4A7D8B]">{serviceProviderProfile.name}</h2>
+              <p className="text-lg text-[#4A7D8B]">{serviceProviderProfile.location}</p>
+            </div>
+            <GlobalButton size="small" type="primary" onClick={handleEdit} text="Editar Perfil" />
+          </div>
+          <div className="mt-4">
+            <h3 className="text-xl font-semibold mb-2">Sobre</h3>
+            <p className="mb-4">{serviceProviderProfile.description}</p>
+            <p className="font-semibold">Serviços:</p>
+            <p>{serviceProviderProfile.services}</p>
+          </div>
         </div>
-        <div>
-          <h5 className="text-2xl font-semibold text-[#4A7D8B]">
-            {serviceProviderProfile.name}
-          </h5>
-          <p className="text-[#4A7D8B]">{serviceProviderProfile.location}</p>
-          <h6 className="text-xl font-semibold mt-4">Sobre</h6>
-          <p>{serviceProviderProfile.description}</p>
-          <p>Serviços: {serviceProviderProfile.services}</p>
-          <p>Experiência: {serviceProviderProfile.experienceYears} anos</p>
-          <div className="flex space-x-2 mt-4">
+        <div className="px-8 py-4 bg-gray-100">
+          <h3 className="font-semibold mb-2">Fotos</h3>
+          <div className="flex space-x-2">
             {serviceProviderProfile.photos.map((photo, index) => (
-              <img
-                key={index}
-                src={photo}
-                alt="Service"
-                className="w-24 h-24 rounded-lg"
-              />
+              <img key={index} src={photo} alt="Service" className="w-24 h-24 object-cover rounded-lg" />
             ))}
           </div>
         </div>
       </div>
-
       {isEditing && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-8 rounded-lg space-y-4" style={{ width: 'auto', padding: '2rem' }}>
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 overflow-y-auto">
+    <div className="relative bg-white p-8 rounded-lg space-y-4 shadow-xl" style={{ width: '60%', maxHeight: '80%', overflowY: 'auto' }}>
+      <button onClick={() => setIsEditing(false)} className="absolute top-0 right-0 mt-4 mr-4">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600 hover:text-gray-900 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
             <h2 className="font-bold text-lg">Editar Perfil</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <input
-                name="name"
-                value={serviceProviderProfile.name}
-                onChange={handleChange}
-                className="p-2 border rounded"
-                placeholder="Nome"
-              />
-              <input
-                name="location"
-                value={serviceProviderProfile.location}
-                onChange={handleChange}
-                className="p-2 border rounded"
-                placeholder="Localização"
-              />
-              <textarea
-                name="description"
-                value={serviceProviderProfile.description}
-                onChange={handleChange}
-                className="p-2 border rounded"
-                placeholder="Descrição"
-              ></textarea>
-              <input
-                name="services"
-                value={serviceProviderProfile.services}
-                onChange={handleChange}
-                className="p-2 border rounded"
-                placeholder="Serviços"
-              />
-              <input
-                name="experienceYears"
-                type="number"
-                value={serviceProviderProfile.experienceYears}
-                onChange={handleChange}
-                className="p-2 border rounded"
-                placeholder="Anos de Experiência"
-              />
-              <div className="flex space-x-2 mt-4">
+            <label className="block text-[#4A7D8B] font-bold mb-0">Nome</label>
+<input
+  name="name"
+  value={serviceProviderProfile.name}
+  onChange={handleChange}
+  className="p-2 rounded w-full"
+  style={{ border: '1px solid #4A7D8B' }}
+  placeholder="Nome"
+/>
+
+<label className="block text-[#4A7D8B] font-bold mb-0">Localização</label>
+<input
+  name="location" 
+  value={serviceProviderProfile.location} 
+  onChange={handleChange}
+  className="p-2 rounded w-full"
+  style={{ border: '1px solid #4A7D8B' }}
+  placeholder="Localização"
+/>
+
+<label className="block text-[#4A7D8B] font-bold mb-0">Descrição</label>
+<textarea
+  name="description"
+  value={serviceProviderProfile.description}
+  onChange={handleChange}
+  className="p-2 rounded w-full"
+  style={{ border: '1px solid #4A7D8B' }}
+  placeholder="Descrição"
+></textarea>
+
+<label className="block text-[#4A7D8B] font-bold mb-0">Serviços</label>
+<input
+  name="services" 
+  value={serviceProviderProfile.services} 
+  onChange={handleChange}
+  className="p-2 rounded w-full"
+  style={{ border: '1px solid #4A7D8B' }}
+  placeholder="Serviços"
+/>
+
+
+
+              <div className="flex flex-wrap gap-2 mt-4">
                 {editedPhotos.map((photo, index) => (
                   <div key={index} className="relative">
                     <img
@@ -153,30 +143,34 @@ const Profile = () => {
                     </button>
                   </div>
                 ))}
-                <label className="block">
+                <label className="block w-24 h-24 flex justify-center items-center rounded-lg bg-gray-200 cursor-pointer">
                   <span className="sr-only">Adicionar foto</span>
                   <input
                     type="file"
                     onChange={handlePhotoChange}
-                    className="block w-full text-sm text-[#4A7D8B]"
+                    className="opacity-0 absolute"
                   />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#4A7D8B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
                 </label>
               </div>
-              <div className="flex justify-end space-x-4">
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(false)}
-                  className="px-4 py-2 rounded bg-gray-200
-                  ">
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded bg-[#4A7D8B] text-white"
-                >
-                  Salvar
-                </button>
-              </div>
+              
+              <div className="flex justify-end space-x-4 mt-4" >
+  <GlobalButton
+    type="terciary" 
+    onClick={() => setIsEditing(false)}
+    text="Cancelar"
+    size="small"
+  />
+  <GlobalButton
+  type="primary" 
+  submitType="submit" 
+  text="Salvar"
+  size="small"
+/>
+</div>
+
             </form>
           </div>
         </div>
@@ -186,3 +180,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

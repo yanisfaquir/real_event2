@@ -5,7 +5,7 @@ import { Tooltip } from 'react-tooltip';
 
 const GlobalButton = ({
   size = 'medium',
-  type = 'primary',
+  type = 'primary', // Pode ser 'submit', 'button', etc. Agora será usado corretamente.
   path,
   onClick,
   text,
@@ -35,13 +35,13 @@ const GlobalButton = ({
     if (!disabled && onClick) {
       onClick(event);
     }
- };
+  };
 
- const handleKeyDown = (event) => {
+  const handleKeyDown = (event) => {
     if (!disabled && (event.code === 'Enter' || event.code === 'Space')) {
       handleClick(event);
     }
- };
+  };
 
   return (
     <>
@@ -59,7 +59,7 @@ const GlobalButton = ({
           aria-label={text}
           className="transition duration-300 hover:scale-125 mx-4"
           id={id}
-          type="button"
+          type={type}
         >
           {path ? (
             <Link href={path}>
@@ -78,13 +78,14 @@ const GlobalButton = ({
                 onClick={handleClick}
                 onKeyDown={handleKeyDown}
                 title={text}
+                type={type}
               >
                 {text || 'Button'}
               </button>
             </Link>
           ) : (
             <button
-              type="button"
+              type={type}
               className={buttonStyle}
               onClick={handleClick}
               onKeyDown={handleKeyDown}
