@@ -3,7 +3,7 @@
 @import 'tailwindcss/utilities';
 
 html, body {
-  background-color: #ececec;
+  background-color: #6A9DAB;
  }
 
 .brightness-50 {
@@ -282,4 +282,19 @@ input[type='radio'].high-contrast:checked {
 
  .high-contrast-dialog {
   background-color: #000000 !important;
+}
+
+.cover-spread {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: auto;
+  height: 100vh;
+  object-fit: fill;
+}
+
+@media (max-width: 768px) {
+ .cover-spread {
+    object-fit: cover !important;
+  }
 }
