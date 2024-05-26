@@ -288,13 +288,14 @@ input[type='radio'].high-contrast:checked {
   position: absolute;
   top: 0;
   right: 0;
-  width: auto;
-  height: 100vh;
+  width: 100vw;
+  height: unset !important;
   object-fit: fill;
 }
 
 @media (max-width: 768px) {
  .cover-spread {
     object-fit: cover !important;
+    height: 100vh !important;
   }
 }
