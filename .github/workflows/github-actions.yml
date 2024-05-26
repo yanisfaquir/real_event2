@@ -26,7 +26,6 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -41,21 +40,22 @@ jobs:
       - name: Build
         run: npm run build
 
-  # deploy:
-  #     runs-on: ubuntu-latest
-  #     if: github.ref == 'refs/heads/main'
-  #     steps:
-  #       - name: Checkout code
-  #         uses: actions/checkout@v4
-  #       - name: Install dependencies
-  #         run: npm install
-  #       - name: Run Eslint
-  #         run: npm run lint
-  #         continue-on-error: false
-  #       - name: Run Prettier
-  #         run: npm run prettier
-  #         continue-on-error: false
-  #       - name: Build
-  #         run: npm run build
-  #       # - name: Deploy
-  #       #   run: npx netlify-cli deploy --site ${{ secrets.NETLIFY_SITE_ID }} --auth ${{ secrets.NETLIFY_AUTH_TOKEN }} --prod
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Run Eslint
+        run: npm run lint
+        continue-on-error: false
+      - name: Run Prettier
+        run: npm run prettier
+        continue-on-error: false
+      - name: Build
+        run: npm run build
+      - name: Deploy
+        run: npx netlify-cli deploy --site ${{ secrets.NETLIFY_SITE_ID }} --auth ${{ secrets.NETLIFY_AUTH_TOKEN }} --prod
