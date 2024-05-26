@@ -10,4 +10,5 @@ module.exports = {
     unoptimized: true,
   },
   distDir: 'out',
+  output: 'export',
 };
