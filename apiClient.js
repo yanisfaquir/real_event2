@@ -1,42 +1,82 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3500/'; // Substitua pelo URL correto do seu backend
+const API_URL = 'http://localhost:3500'; // Substitua pelo URL correto do seu backend
 
-// Função para obter o token do armazenamento local ou de outra fonte
-function getToken() {
-  return localStorage.getItem('token');
+function getCookie(name) {
+  var nameEQ = name + '=';
+  var ca = document.cookie.split(';');
+  for (var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
+}
+
+function setCookie(name, value, days) {
+  var expires = '';
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    expires = '; expires=' + date.toUTCString();
+  }
+  console.log(value);
+  document.cookie = name + '=' + (value || '') + expires + '; path=/';
+}
+
+function removeCookie(name) {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
 }
 
 // Função para autenticar o usuário e obter o token
-async function authenticateUser(username, password) {
+async function authenticateUser(email, password, role) {
   try {
     const response = await axios.post(`${API_URL}/api/auth/login`, {
-      username,
+      email,
       password,
+      role,
     });
-    localStorage.setItem('token', response.data.token); // Armazena o token no armazenamento local
-    return response.data.token; // Retorna o token para ser usado em outras requisições
+    setCookie('refreshToken', response.data.data.refreshToken, 30);
+    setCookie('accessToken', response.data.data.user.accessToken, 1 / 24);
+    return response.data;
   } catch (error) {
     console.error('Erro ao autenticar usuário:', error);
     throw error;
   }
 }
 
-// Configuração do Axios com interceptor para adicionar o Bearer Token
-axios.interceptors.request.use(
-  function (config) {
-    const token = getToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+// // Configuração do Axios com interceptor para adicionar o Bearer Token
+// axios.interceptors.request.use(
+//   function (config) {
+//     const token = getCookie('accessToken');
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
+//     return config;
+//   },
+//   function (error) {
+//     return Promise.reject(error);
+//   }
+// );
+
+// Interceptor de resposta para lidar com erros 401 e tentar atualizar o token
+axios.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      const tokenData = await refreshAccessToken();
+      if (tokenData) {
+        originalRequest.headers.Authorization = `Bearer ${tokenData.accessToken}`;
+        return axios(originalRequest);
+      }
     }
-    return config;
-  },
-  function (error) {
     return Promise.reject(error);
   }
 );
 
-class ApiClient {
+export default class ApiClient {
   constructor() {
     this.apiClient = axios.create({
       baseURL: API_URL,
@@ -46,10 +86,45 @@ class ApiClient {
     });
   }
 
-  // Método para autenticar o usuário e obter o token
-  async authenticate(username, password) {
-    const token = await authenticateUser(username, password);
-    return token;
+  // Método para iniciar o processo de autenticação com Google
+  initiateGoogleAuth() {
+    return this.apiClient.get('/api/auth/google');
+  }
+
+  // Método para lidar com o retorno do Google após o usuário conceder permissão
+  handleGoogleCallback(code) {
+    return this.apiClient.get(`/api/auth/google/callback?code=${code}`);
+  }
+
+  // Método para autenticar o usuário e obter os dados do usuário
+  async authenticate(email, password, role) {
+    const userData = await authenticateUser(email, password, role);
+    return userData;
+  }
+
+  // Função para atualizar o token de acesso
+  async refreshAccessToken() {
+    try {
+      const refreshToken = getCookie('refreshToken');
+
+      if (!refreshToken) {
+        console.error('Refresh token não encontrado');
+        removeCookie('accessToken');
+        return null;
+      }
+      const response = await this.apiClient.post(
+        `${API_URL}/api/auth/refresh/info`,
+        {
+          refreshToken,
+        }
+      );
+      setCookie('accessToken', response.data.data.accessToken, 1 / 24);
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao atualizar o token de acesso:', error);
+      removeCookie('accessToken');
+      throw error;
+    }
   }
 
   // Função para registrar um novo usuário
@@ -203,18 +278,16 @@ class ApiClient {
   getAllSuppliers(queryParams) {
     const token = getToken(); // Supondo que getToken() retorna o token atual
     return this.apiClient
-     .get('/allSuppliers', {
+      .get('/allSuppliers', {
         params: queryParams,
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-     .then((response) => response.data)
-     .catch((error) => {
+      .then((response) => response.data)
+      .catch((error) => {
         console.error('Erro ao buscar todos os fornecedores:', error);
         throw error;
       });
   }
 }
-
-export default new ApiClient();

@@ -9,7 +9,7 @@ export const TopMiddleSection = () => {
       className={`flex flex-col relative align-start`}
       style={{ textAlign: `${alignment ? alignment : 'start'}` }}
     >
-      <section className="flex flex-col z-9 lg:py-20 py-10 px-10 text-[4rem] font-bold text-middle-home">
+      <section className="flex flex-col z-9 lg:py-20 py-10 px-10 text-4xl md:text-6xl font-bold text-middle-home">
         <article className={``}>
           Em apenas 3{' '}
           <p
