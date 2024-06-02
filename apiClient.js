@@ -98,13 +98,8 @@ class ApiClient {
 
   // Método para atualizar um usuário
   updateUser(id, userData) {
-    const token = getToken(); // Supondo que getToken() retorna o token atual
     return this.apiClient
-      .patch(`/user/updateUser/${id}`, userData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .patch(`/user/updateUser/${id}`, userData)
       .then((response) => response.data)
       .catch((error) => {
         console.error('Erro ao atualizar usuário:', error);
@@ -112,14 +107,10 @@ class ApiClient {
       });
   }
 
+  // Método para atualizar um fornecedor
   updateSupplier(id, supplierData) {
-    const token = getToken(); // Supondo que getToken() retorna o token atual
     return this.apiClient
-      .patch(`/supplier/updateSupplier/${id}`, supplierData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .patch(`/supplier/updateSupplier/${id}`, supplierData)
       .then((response) => response.data)
       .catch((error) => {
         console.error('Erro ao atualizar fornecedor:', error);
@@ -129,13 +120,8 @@ class ApiClient {
 
   // Método para substituir um usuário
   replaceUser(id, userData) {
-    const token = getToken(); // Supondo que getToken() retorna o token atual
     return this.apiClient
-      .put(`/user/replaceUser/${id}`, userData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .put(`/user/replaceUser/${id}`, userData)
       .then((response) => response.data)
       .catch((error) => {
         console.error('Erro ao substituir usuário:', error);
@@ -143,14 +129,10 @@ class ApiClient {
       });
   }
 
+  // Método para substituir um fornecedor
   replaceSupplier(id, supplierData) {
-    const token = getToken(); // Supondo que getToken() retorna o token atual
     return this.apiClient
-      .put(`/supplier/replaceSupplier/${id}`, supplierData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .put(`/supplier/replaceSupplier/${id}`, supplierData)
       .then((response) => response.data)
       .catch((error) => {
         console.error('Erro ao substituir fornecedor:', error);
@@ -160,13 +142,8 @@ class ApiClient {
 
   // Método para deletar um usuário
   deleteUser(id) {
-    const token = getToken(); // Supondo que getToken() retorna o token atual
     return this.apiClient
-      .delete(`/user/delete/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .delete(`/user/delete/${id}`)
       .then((response) => response.data)
       .catch((error) => {
         console.error('Erro ao deletar usuário:', error);
@@ -174,14 +151,10 @@ class ApiClient {
       });
   }
 
+  // Método para deletar um fornecedor
   deleteSupplier(id) {
-    const token = getToken(); // Supondo que getToken() retorna o token atual
     return this.apiClient
-      .delete(`/supplier/delete/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .delete(`/supplier/delete/${id}`)
       .then((response) => response.data)
       .catch((error) => {
         console.error('Erro ao deletar fornecedor:', error);
@@ -199,22 +172,130 @@ class ApiClient {
         throw error;
       });
   }
+
   // Método para buscar todos os fornecedores com paginação e filtros
   getAllSuppliers(queryParams) {
-    const token = getToken(); // Supondo que getToken() retorna o token atual
     return this.apiClient
-     .get('/allSuppliers', {
+      .get('/allSuppliers', {
         params: queryParams,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       })
-     .then((response) => response.data)
-     .catch((error) => {
+      .then((response) => response.data)
+      .catch((error) => {
         console.error('Erro ao buscar todos os fornecedores:', error);
+        throw error;
+      });
+  }
+
+  // Método para buscar todos os serviços
+  getAllServices() {
+    return this.apiClient
+      .get('/service/getAll')
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar todos os serviços:', error);
+        throw error;
+      });
+  }
+
+  // Método para buscar um serviço pelo ID
+  getServiceById(id) {
+    return this.apiClient
+      .get(`/service/getService/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar serviço:', error);
+        throw error;
+      });
+  }
+
+  // Método para criar um novo serviço
+  createService(serviceData) {
+    return this.apiClient
+      .post('/service/create', serviceData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao criar serviço:', error);
+        throw error;
+      });
+  }
+
+  // Método para atualizar um serviço
+  updateService(id, serviceData) {
+    return this.apiClient
+      .patch(`/service/update/${id}`, serviceData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao atualizar serviço:', error);
+        throw error;
+      });
+  }
+
+  // Método para deletar um serviço
+  deleteService(id) {
+    return this.apiClient
+      .delete(`/service/delete/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao deletar serviço:', error);
+        throw error;
+      });
+  }
+
+  // Método para buscar todos os eventos
+  getAllEvents() {
+    return this.apiClient
+      .get('/event/getAll')
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar todos os eventos:', error);
+        throw error;
+      });
+  }
+
+  // Método para buscar um evento pelo ID
+  getEventById(id) {
+    return this.apiClient
+      .get(`/event/getEvent/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar evento:', error);
+        throw error;
+      });
+  }
+
+  // Método para criar um novo evento
+  createEvent(eventData) {
+    return this.apiClient
+      .post('/event/create', eventData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao criar evento:', error);
+        throw error;
+      });
+  }
+
+  // Método para atualizar um evento
+  updateEvent(id, eventData) {
+    return this.apiClient
+      .patch(`/event/update/${id}`, eventData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao atualizar evento:', error);
+        throw error;
+      });
+  }
+
+  // Método para deletar um evento
+  deleteEvent(id) {
+    return this.apiClient
+      .delete(`/event/delete/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao deletar evento:', error);
         throw error;
       });
   }
 }
 
 export default new ApiClient();
+
