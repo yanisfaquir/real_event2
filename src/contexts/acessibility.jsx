@@ -1,9 +1,137 @@
 import React, { createContext, useState, useEffect } from 'react';
-
+import Router from 'next/router';
 export const AccessibilityContext = createContext();
+import { useHotkeys } from 'react-hotkeys-hook';
+import { useRouter } from 'next/router';
 
 export const AccessibilityProvider = ({ children }) => {
+  const router = useRouter();
   const alignments = ['left', 'center', 'justify', 'right'];
+  const [alignment, setAlignment] = useState(null);
+  const [highContrast, setHighContrast] = useState(false);
+  const [showImageInfo, setShowImageInfo] = useState(false);
+
+  const resetStyles = () => {
+    setAlignment(null);
+    const images = document.querySelectorAll('.image-info');
+    const elements = document.querySelectorAll(
+      'body, p, h1, h2, h3, h4, h5, h6, span, label, a, article, button, strong, nav, div, section, ul, html'
+    );
+    images.forEach((image) => {
+      image.classList.remove(
+        'border-4',
+        'border-white',
+        'rounded-md',
+        'inner-border',
+        'flex'
+      );
+    });
+    setHighContrast(false);
+    setShowImageInfo(false);
+    elements.forEach((element) => {
+      element.style.backgroundColor = '';
+      element.style.color = '';
+      element.style.borderColor = '';
+    });
+  };
+
+  const toggleImageInfo = () => {
+    setShowImageInfo(!showImageInfo);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      const images = document.querySelectorAll('.image-info');
+      if (window.matchMedia('(min-width: 1024px)').matches) {
+        if (showImageInfo) {
+          images.forEach((image) => {
+            image.classList.add(
+              'border-4',
+              'border-white',
+              'rounded-md',
+              'inner-border',
+              'flex'
+            );
+          });
+        } else {
+          images.forEach((image) => {
+            image.classList.remove(
+              'border-4',
+              'border-white',
+              'rounded-md',
+              'inner-border',
+              'flex'
+            );
+          });
+        }
+      } else {
+        images.forEach((image) => {
+          image.classList.remove(
+            'border-4',
+            'border-white',
+            'rounded-md',
+            'inner-border',
+            'flex'
+          );
+        });
+        setShowImageInfo(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [showImageInfo]);
+
+  const toggleHighContrast = () => {
+    setHighContrast(!highContrast);
+  };
+
+  const toggleAlignment = () => {
+    const index = alignments.indexOf(alignment);
+    setAlignment(alignments[(index + 1) % alignments.length]);
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const elements = document.querySelectorAll(
+        //'body, p, h1, h2, h3, h4, h5, h6, span, label, a, article, button, strong, nav, div, section, ul, html'
+        'body, html'
+      );
+
+      elements.forEach((element) => {
+        if (highContrast) {
+          if (element.tagName !== 'A') {
+            element.style.backgroundColor = '#000000';
+          }
+          element.style.color = '#ffffff';
+          if (
+            (element.tagName === 'BUTTON' || element.tagName === 'LI') &&
+            element.tagName !== 'A' &&
+            !element.querySelector('img')
+          ) {
+            element.style.borderColor = '#ffff00';
+            element.style.color = '#000000';
+            element.style.backgroundColor = '#ffff00';
+          }
+        } else {
+          element.style.backgroundColor = '';
+          element.style.color = '';
+          element.style.borderColor = '';
+        }
+      });
+    }
+  }, [highContrast]);
+
+
+
+
+
+
+
   const alignmentTranslations = {
     left: 'esquerda',
     center: 'centralizado',
@@ -25,7 +153,7 @@ export const AccessibilityProvider = ({ children }) => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const elements = document.querySelectorAll(
-        'p, h1, h2, h3, h4, h5, h6, span, label, a, article, button, li'
+        'p, h1, h2, h3, h4, h5, h6, span, label, a, article, button, li, strong'
       );
 
       elements.forEach((element) => {
@@ -35,12 +163,12 @@ export const AccessibilityProvider = ({ children }) => {
         element.style.wordSpacing = `${wordSpacing || 0.5}px`;
       });
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const elements = document.querySelectorAll(
-        'p, h1, h2, h3, h4, h5, h6, span, label, a, article, button, li'
+        'p, h1, h2, h3, h4, h5, h6, span, label, a, article, button, li, strong'
       );
 
       setTextElements(elements);
@@ -51,12 +179,12 @@ export const AccessibilityProvider = ({ children }) => {
         originalFontSizes.set(element, fontSize);
       });
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const elements = document.querySelectorAll(
-        'p, h1, h2, h3, h4, h5, h6, span, label, article'
+        'p, h1, h2, h3, h4, h5, h6, span, label, article, strong'
       );
 
       elements.forEach((element) => {
@@ -65,14 +193,14 @@ export const AccessibilityProvider = ({ children }) => {
         originalLineSpacings.set(element, lineSpacing);
       });
     }
-  }, []);
+  }, [router]);
 
   const increaseTextSpacing = () => {
     const scaleFactor = 5;
     const maxScaleFactor = 3;
 
     const textElements = document.querySelectorAll(
-      'p, h1, h2, h3, h4, h5, h6, span, label, a, article, button, li'
+      'p, h1, h2, h3, h4, h5, h6, span, label, a, article, button, li, strong'
     );
 
     textElements.forEach((element) => {
@@ -162,12 +290,12 @@ export const AccessibilityProvider = ({ children }) => {
   };
 
   const getNextAlignment = () => {
-    const currentIndex = alignments.indexOf(textAlignment);
+    const currentIndex = alignments.indexOf(alignment);
     const nextIndex = (currentIndex + 1) % alignments.length;
     return alignments[nextIndex];
   };
   const getCurrentAlignmentTranslation = () => {
-    return alignmentTranslations[textAlignment];
+    return alignmentTranslations[alignment];
   };
 
   const toggleTextAlignment = () => {
@@ -182,7 +310,7 @@ export const AccessibilityProvider = ({ children }) => {
   useEffect(() => {
     if (iconClicked) {
       const textElements = document.querySelectorAll(
-        'p, h1, h2, h3, h4, h5, h6, span, label, a, article'
+        'p, h1, h2, h3, h4, h5, h6, span, label, a, article, strong'
       );
       textElements.forEach((element) => {
         element.style.textAlign = textAlignment;
@@ -203,6 +331,29 @@ export const AccessibilityProvider = ({ children }) => {
       : 'sans-serif';
   }, [isCustomFont]);
 
+  const [enableShortcut, setEnableShortcut] = useState(false);
+  const toggleShortcut = () => {
+    setEnableShortcut(!enableShortcut);
+  };
+
+  useHotkeys('shift+x', toggleShortcut, { enabled: enableShortcut });
+  useHotkeys('shift+c', toggleImageInfo, { enabled: enableShortcut });
+  useHotkeys('ctrl+q', toggleAlignment, { enabled: enableShortcut });
+  useHotkeys('ctrl+b', increaseLineSpacing, { enabled: enableShortcut });
+  useHotkeys('shift+z', resetStyles, { enabled: enableShortcut });
+  useHotkeys('ctrl+shift+z', decreaseFontSize, { enabled: enableShortcut });
+  useHotkeys('ctrl+shift+x', increaseFontSize, { enabled: enableShortcut });
+  useHotkeys('ctrl+shift+c', increaseTextSpacing, { enabled: enableShortcut });
+  useHotkeys('ctrl+alt+q', toggleHighContrast, { enabled: enableShortcut });
+  useHotkeys('ctrl+alt+d', () => Router.push('/'), { enabled: enableShortcut });
+  useHotkeys('ctrl+alt+a', () => Router.push('/startEvent'), {
+    enabled: enableShortcut,
+  });
+  useHotkeys('ctrl+alt+s', () => Router.push('/shopping-cart'), {
+    enabled: enableShortcut,
+  });
+  // useHotkeys('ctrl+alt+z', () => Router.push(isLoggedIn ? '/profile' : '/login'), { enabled: enableShortcut });
+
   return (
     <AccessibilityContext.Provider
       value={{
@@ -219,6 +370,15 @@ export const AccessibilityProvider = ({ children }) => {
         decreaseFontSize,
         increaseLineSpacing,
         increaseTextSpacing,
+        toggleShortcut,
+        enableShortcut,
+        resetStyles,
+        alignment,
+        toggleAlignment,
+        toggleHighContrast,
+        highContrast,
+        toggleImageInfo,
+        showImageInfo,
       }}
     >
       {children}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import GlobalButton from '@/components/globalButton';
-import Image from 'next/image';
+import Image from "next/image";
 import { useRouter } from 'next/router';
 
 const LoginPage = () => {
@@ -26,9 +26,11 @@ const LoginPage = () => {
           <Image
             src="/assets/pictures/card-login.png"
             alt="Login visual representation"
-            layout="fill"
-            objectFit="contain"
-          />
+            fill
+            sizes="100vw"
+            style={{
+              objectFit: "contain"
+            }} />
         </div>
 
         <div className="w-full md:w-1/2 flex justify-center items-center bg-white rounded-lg md:rounded-[40px] max-w-md md:max-w-lg mx-auto">

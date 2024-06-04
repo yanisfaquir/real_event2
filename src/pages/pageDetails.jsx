@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Image from 'next/image';
+import Image from "next/image";
 
 const serviceData = {
   nome: "DJ Tomané Tomaça Music",
@@ -21,10 +21,15 @@ const PageComponent = () => {
             <Image
               src={serviceData.imagem}
               alt={serviceData.nome}
-              width={400}  // Ajuste para um tamanho maior
-              height={250} // Mantém a proporção da imagem
-              layout="responsive"
-            />
+              // Ajuste para um tamanho maior
+              width={400}
+              // Mantém a proporção da imagem
+              height={250}
+              sizes="100vw"
+              style={{
+                width: "100%",
+                height: "auto"
+              }} />
           </div>
           <div className="md:col-span-2">
             <h2 className="text-2xl font-semibold">{serviceData.nome}</h2>

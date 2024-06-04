@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import services from '../components/services.json';
 import MicrophoneIcon from '@/components/microphoneIcon';
 import GlobalButton from '@/components/globalButton';
@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dialog } from 'evergreen-ui';
 import { setCurrentCartSection } from '@/redux/reducers/cartReducer';
+import { AccessibilityContext } from '@/contexts/acessibility';
 
 const ShoppingCart = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,9 @@ const ShoppingCart = () => {
     (state) => state.cart.currentSection
   );
   const [selectedPaymentId, setSelectedPaymentId] = useState(null);
+
+  const { highContrast, alignment, showImageInfo } =
+    useContext(AccessibilityContext);
 
   const handleCartSectionClick = () => {
     setCurrentSection((prevState) => ({
@@ -148,10 +152,13 @@ const ShoppingCart = () => {
       className={`flex justify-between w-full px-[5vw] ${isDesktopOrLaptop ? '' : 'flex-col'}`}
     >
       <section
-        className={`view-cart-elements cart-form-1 ${currentSectionNumber == '1' ? 'move-in visible h-auto block' : 'hidden move-out invisible h-0 overflow-hidden'} mb-8 shadow-md rounded-[50px] bg-[#F7F7F7] relative ${isDesktopOrLaptop ? 'min-w-[42vw]' : 'min-w-[60vw] mx-auto left-50 right-50 px-4'} mt-20 lg:mt-32`}
+        className={`view-cart-elements cart-form-1 ${currentSectionNumber == '1' ? 'move-in visible h-auto block' : 'hidden move-out invisible h-0 overflow-hidden'} mb-8 shadow-md rounded-[50px] ${highContrast ? 'bg-black' : 'bg-[#F7F7F7]'} relative ${isDesktopOrLaptop ? 'min-w-[42vw]' : 'min-w-[60vw] mx-auto left-50 right-50 px-4'} mt-20 lg:mt-32`}
       >
         <h1
           className={`font-bold text-[1.5rem] relative left-1/2 transform -translate-x-1/2 p-8`}
+          style={{
+            textAlign: `${alignment ? alignment : 'start'}`,
+          }}
         >
           MEU CARRINHO
           <hr />
@@ -169,7 +176,7 @@ const ShoppingCart = () => {
                   minHeight: '120px',
                   borderRadius: '8px',
                 }}
-                className={`flex items-center align-center p-8 my-8 border-[#4A7D8B] shadow-md border-2 ${isDesktopOrLaptop ? '' : 'flex-col'}`}
+                className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2 ${isDesktopOrLaptop ? '' : 'flex-col'}`}
               >
                 <div
                   className={`flex justify-between items-center w-[100%] ${isDesktopOrLaptop ? '' : 'flex-col'}`}
@@ -182,17 +189,29 @@ const ShoppingCart = () => {
                       src={item.image}
                       width={100}
                       height={100}
-                      objectFit="cover"
                       className="rounded-[12px] mx-4"
+                      style={{
+                        maxWidth: '100%',
+                        height: 'auto',
+                        objectFit: 'cover',
+                      }}
                     />
                     <div
                       className={`flex w-[100%] ${isDesktopOrLaptop ? 'flex-col justify-start items-start' : 'flex-col justify-center items-center'}`}
                     >
-                      <p className={`font-bold text-[1.2rem]`}>{item.name}</p>
+                      <p
+                        className={`font-bold text-[1.2rem]`}
+                        style={{
+                          textAlign: `${alignment ? alignment : 'start'}`,
+                        }}
+                      >
+                        {item.name}
+                      </p>
                       <p
                         className={`font-[.8rem]`}
                         style={{
                           color: '#666a74',
+                          textAlign: `${alignment ? alignment : 'start'}`,
                         }}
                       >
                         €{item.price}
@@ -201,6 +220,7 @@ const ShoppingCart = () => {
                         className={`font-[.8rem]`}
                         style={{
                           color: '#666a74',
+                          textAlign: `${alignment ? alignment : 'start'}`,
                         }}
                       >
                         {item.location}
@@ -209,29 +229,47 @@ const ShoppingCart = () => {
                         className="font-[.8rem]"
                         style={{
                           color: '#666a74',
+                          textAlign: `${alignment ? alignment : 'start'}`,
                         }}
                       >
                         {' '}
                         <Image
-                          src="/assets/icons/star-icon-black.svg"
+                          src={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/star-icon-black.svg`}
                           alt="Avaliação"
                           id="star-evaluation"
                           width={16}
                           className="inline -mt-1"
                           height={16}
+                          style={{
+                            maxWidth: '100%',
+                            height: 'auto',
+                            objectFit: 'cover',
+                          }}
                         />{' '}
-                        <span className="inline font-bold">{item.rating} </span>
-                        <span className="inline font-regular">
+                        <span
+                          className="inline font-bold"
+                          style={{
+                            textAlign: `${alignment ? alignment : 'start'}`,
+                          }}
+                        >
+                          {item.rating}{' '}
+                        </span>
+                        <span
+                          className="inline font-regular"
+                          style={{
+                            textAlign: `${alignment ? alignment : 'start'}`,
+                          }}
+                        >
                           ({item.reviews})
                         </span>
                       </p>
                     </div>
                   </div>
                   <div
-                    className={`rounded-[50px] flex justify-center py-3 border-[#4A7D8B] shadow-md`}
+                    className={`rounded-[50px] flex justify-center py-3 ${highContrast ? 'border-white shadow-white' : 'border-[#4A7D8B] shadow-[#dddddd]'} shadow-md`}
                   >
                     <GlobalButton
-                      image={'/assets/icons/trash-black.svg'}
+                      image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/trash-black.svg`}
                       onClick={() => handleOpenDialog(item)}
                       text={'Remover item da lista do carrinho'}
                       id={'remove-item'}
@@ -302,8 +340,12 @@ const ShoppingCart = () => {
               id="pay-multibanco"
               width={100}
               height={100}
-              layout="responsive"
               className="w-full"
+              sizes="100vw"
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
             />
           </li>{' '}
           <li
@@ -329,8 +371,12 @@ const ShoppingCart = () => {
               id="pay-mbway"
               width={100}
               height={100}
-              layout="responsive"
               className="w-full"
+              sizes="100vw"
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
             />
           </li>
           <li
@@ -356,8 +402,12 @@ const ShoppingCart = () => {
               id="pay-paypal"
               width={100}
               height={100}
-              layout="responsive"
               className="w-full"
+              sizes="100vw"
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
             />
           </li>
           <li
@@ -383,8 +433,12 @@ const ShoppingCart = () => {
               id="pay-credit-card"
               width={100}
               height={100}
-              layout="responsive"
               className="w-full"
+              sizes="100vw"
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
             />
           </li>
         </ul>
@@ -403,7 +457,11 @@ const ShoppingCart = () => {
           <div className="flex flex-col">
             <label
               className="flex flex-col"
-              style={{ fontSize: '24px', fontWeight: 'bold' }}
+              style={{
+                fontSize: '24px',
+                fontWeight: 'bold',
+                textAlign: `${alignment ? alignment : 'start'}`,
+              }}
             >
               CÓDIGO PROMOCIONAL
               <div className="flex justify-between items-center relative">
@@ -412,7 +470,7 @@ const ShoppingCart = () => {
                   placeholder="Digite aqui"
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value)}
-                  className={`flex-grow ${isDesktopOrLaptop ? 'w-3/5' : 'w-2/5'} rounded-s-md mt-1`}
+                  className={`flex-grow ${isDesktopOrLaptop ? 'w-3/5' : 'w-2/5'} rounded-s-md mt-1 ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
                   style={{
                     padding: '7px',
                     border: '1px solid #ccc',
@@ -429,9 +487,9 @@ const ShoppingCart = () => {
                 />
                 <button
                   onClick={handlePromoSubmit}
-                  className={`bg-[#4A7D8B] -ms-1 mt-1 ${isDesktopOrLaptop ? 'w-2/5' : 'w-3/5'} rounded-2 text-white p-2 hover:bg-[#7D9EA8] rounded-e-md`}
+                  className={`${highContrast ? 'bg-[#fff000] text-black' : 'bg-[#4A7D8B] text-white'} -ms-1 mt-1 ${isDesktopOrLaptop ? 'w-2/5' : 'w-3/5'} rounded-2 p-2 hover:bg-[#7D9EA8] rounded-e-md`}
                 >
-                  SUBMETER
+                  Submeter
                 </button>
               </div>
               <div
@@ -485,7 +543,6 @@ const ShoppingCart = () => {
                 style={{
                   fontSize: '40px',
                   fontWeight: 'bold',
-                  color: '#000000',
                 }}
               >
                 €{discount ? total - total * discount : total}
@@ -542,14 +599,21 @@ const ShoppingCart = () => {
             onCloseComplete={() => setDialogOpen(false)}
             confirmLabel="Fechar"
             hasFooter={false}
+            style={{
+              backgroundColor: highContrast ? '#000000' : '#ffffff',
+            }}
           >
             <Image
               alt={itemToRemove.name}
               src={itemToRemove.image}
               width={200}
               height={200}
-              objectFit="cover"
               className="rounded-[12px] mx-auto mt-4"
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+                objectFit: 'cover',
+              }}
             />
             <p
               className={`font-[.8rem] my-2 mx-auto`}
