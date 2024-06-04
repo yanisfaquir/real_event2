@@ -295,7 +295,201 @@ class ApiClient {
         throw error;
       });
   }
+
+  // Métodos para ShoppingCart
+  // Método para buscar um carrinho pelo ID
+  getShoppingCartById(id) {
+    return this.apiClient
+      .get(`/shoppingCart/getShoppingCart/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para buscar todos os carrinhos
+  getAllShoppingCarts() {
+    return this.apiClient
+      .get('/shoppingCart/getAllShoppingCarts')
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar todos os carrinhos:', error);
+        throw error;
+      });
+  }
+
+  // Método para criar um novo carrinho
+  createShoppingCart(cartData) {
+    return this.apiClient
+      .post('/shoppingCart/createShoppingCart', cartData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao criar carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para atualizar parcialmente um carrinho
+  patchShoppingCart(id, cartData) {
+    return this.apiClient
+      .patch(`/shoppingCart/patchShoppingCart/${id}`, cartData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao atualizar parcialmente o carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para substituir um carrinho
+  putShoppingCart(id, cartData) {
+    return this.apiClient
+      .put(`/shoppingCart/putShoppingCart/${id}`, cartData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao substituir carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para deletar um carrinho
+  deleteShoppingCart(id) {
+    return this.apiClient
+      .delete(`/shoppingCart/deleteShoppingCart/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao deletar carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para criar uma nova estrela
+  createStar(starData) {
+    return this.apiClient
+      .post('/star', starData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao criar estrela:', error);
+        throw error;
+      });
+  }
+
+  // Método para buscar todas as estrelas de um fornecedor
+  getStarsBySupplierId(supplierId) {
+    return this.apiClient
+      .get(`/star/${supplierId}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar estrelas:', error);
+        throw error;
+      });
+  }
+
+  // Método para atualizar uma estrela
+  updateStar(starId, starData) {
+    return this.apiClient
+      .patch(`/star/${starId}`, starData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao atualizar estrela:', error);
+        throw error;
+      });
+  }
+
+  // Método para deletar uma estrela
+  deleteStar(starId) {
+    return this.apiClient
+      .delete(`/star/${starId}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao deletar estrela:', error);
+        throw error;
+      });
+  }
+
+  // Método para calcular a média das estrelas de um fornecedor
+  getAverageStarsBySupplierId(supplierId) {
+    return this.apiClient
+      .get(`/star/average/${supplierId}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao calcular média das estrelas:', error);
+        throw error;
+      });
+  }
+
+  // Métodos para ShoppingCart (adapte os nomes dos métodos conforme necessário)
+  // Método para buscar um carrinho pelo ID
+  getShoppingCartById(id) {
+    return this.apiClient
+      .get(`/shoppingCart/getShoppingCart/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para buscar todos os carrinhos
+  getAllShoppingCarts() {
+    return this.apiClient
+      .get('/shoppingCart/getAllShoppingCarts')
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar todos os carrinhos:', error);
+        throw error;
+      });
+  }
+
+  // Método para criar um novo carrinho
+  createShoppingCart(cartData) {
+    return this.apiClient
+      .post('/shoppingCart/createShoppingCart', cartData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao criar carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para atualizar parcialmente um carrinho
+  patchShoppingCart(id, cartData) {
+    return this.apiClient
+      .patch(`/shoppingCart/patchShoppingCart/${id}`, cartData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao atualizar parcialmente o carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para substituir um carrinho
+  putShoppingCart(id, cartData) {
+    return this.apiClient
+      .put(`/shoppingCart/putShoppingCart/${id}`, cartData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao substituir carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para deletar um carrinho
+  deleteShoppingCart(id) {
+    return this.apiClient
+      .delete(`/shoppingCart/deleteShoppingCart/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao deletar carrinho:', error);
+        throw error;
+      });
+  }
+
 }
+
+
+
+
 
 export default new ApiClient();
 
