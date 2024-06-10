@@ -12,3 +12,4 @@ module.exports = {
   distDir: 'out',
   output: 'build',
 };
+
