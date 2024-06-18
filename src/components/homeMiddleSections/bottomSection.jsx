@@ -79,7 +79,7 @@ export const BottomMiddleSection = () => {
             </Link>
 
             <h2
-              className={`text-white absolute ps-4 pe-8 mt-64 z-10 text-[1.3rem] ${isDesktopOrLaptop ? 'w-[500px]' : 'px-0 -ms-8'}`}
+              className={`text-white absolute ps-4 pe-8 mt-64 z-10 text-xl md:text-2xl ${isDesktopOrLaptop ? 'w-[500px]' : 'px-0 -ms-8'}`}
               style={{
                 textAlign: `${isDesktopOrLaptop ? `${alignment ? alignment : 'center'}` : ''}`,
               }}
@@ -98,7 +98,7 @@ export const BottomMiddleSection = () => {
         {!showImageInfo && (
           <>
             <article
-              className={`text-white absolute z-10 top-50 text-[4rem] ${highContrast ? 'bg-black' : 'bg-unset'} text-bold bottom-card-home`}
+              className={`text-white absolute z-10 md:top-50 text-xl md:text-6xl ${highContrast ? 'bg-black' : 'bg-unset'} text-bold`}
               style={{
                 textAlign: `${isDesktopOrLaptop ? `${alignment ? alignment : 'center'}` : ''}`,
               }}
@@ -107,7 +107,7 @@ export const BottomMiddleSection = () => {
               <br />
               nunca foi tão
               <br />
-              <p className="text-[10rem] font-bold bottom-card-home">Prático</p>
+              <p className="text-6xl md:text-9xl font-bold py-4 md:py-16">Prático</p>
             </article>
           </>
         )}

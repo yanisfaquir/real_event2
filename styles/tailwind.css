@@ -3,7 +3,11 @@
 @import 'tailwindcss/utilities';
 
 html, body {
-  background-color: #ececec;
+  background-color: #acc4cb;
+ }
+
+ p, h1, h2, h3, h4, h5, h6, span, label, a, article, strong, b {
+  line-height: 1.25;
  }
 
 .brightness-50 {
@@ -282,4 +286,18 @@ input[type='radio'].high-contrast:checked {
 
  .high-contrast-dialog {
   background-color: #000000 !important;
+}
+
+input:-internal-autofill-selected {
+  appearance: unset !important;
+  background-image: none !important;
+  background-color: unset !important;
+  color: unset !important;
+}
+
+.rounded-button img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 50px;
 }

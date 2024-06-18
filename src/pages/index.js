@@ -9,7 +9,7 @@ import { Tooltip } from 'react-tooltip';
 const HomePage = () => {
   const router = useRouter();
   const [isDesktopOrLaptop, setIsDesktopOrLaptop] = useState(false);
-  const { alignment, highContrast, showImageInfo } =
+  const { alignment, highContrast, showImageInfo, fontSize } =
     useContext(AccessibilityContext);
 
   useEffect(() => {
@@ -26,8 +26,8 @@ const HomePage = () => {
   const middleData = [
     {
       image: `${showImageInfo ? '/assets/pictures/card-sm-1-home.png' : '/assets/pictures/card-sm-1-home-blue.png'}`,
-      title: 'Encontre o serviço que precisas',
-      text: 'Crie um evento e explore o nosso site para encontrar o serviço perfeito para o seu evento.',
+      title: 'Encontre o serviço ideal',
+      text: 'Crie um evento e explore o nosso site para encontrar o serviço para o seu evento.',
       alt: 'Mulher loira mexendo no celular de frente para um laptop',
     },
     {
@@ -50,8 +50,8 @@ const HomePage = () => {
         {!showImageInfo && (
           <div>
             <h1
-              style={{ textAlign: `${alignment ? alignment : 'center'}` }}
-              className={`text-white  ${highContrast ? 'bg-black' : 'bg-unset'} relative mx-auto max-w-[800px] top-[24vh] z-10 text-[4rem] font-bold`}
+              style={{ textAlign: `${alignment ? alignment : 'center'}`, fontSize: `${fontSize * 56}px`,}}
+              className={`text-white  ${highContrast ? 'bg-black' : 'bg-unset'} relative mx-auto max-w-[800px] top-[20vh] z-10 font-bold`}
             >
               CONHECE A
             </h1>
@@ -68,8 +68,8 @@ const HomePage = () => {
               }}
             />
             <h2
-              style={{ textAlign: `${alignment ? alignment : 'center'}` }}
-              className={`text-white ${highContrast ? 'bg-black' : 'bg-unset'} relative mx-auto max-w-[850px] top-[24vh] z-10 text-[1.5rem]`}
+              style={{ textAlign: `${alignment ? alignment : 'center'}`, fontSize: `${fontSize * 24}px`}}
+              className={`text-white ${highContrast ? 'bg-black' : 'bg-unset'} relative mx-auto max-w-[850px] top-[24vh] z-10`}
             >
               Torne realidade o evento da sua empresa! Aqui você encontra tudo
               aquilo que precisa para realizar workshops, conferências ou até
