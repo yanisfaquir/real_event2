@@ -26,16 +26,21 @@ const Profile = () => {
   const [passwordConfirmError, setConfirmPasswordError] = useState('');
   const [nameError, setNameError] = useState('');
 
-  const [profileImageUrl, setProfileImageUrl] = useState(user ? user.photo : '');
+  const [profileImageUrl, setProfileImageUrl] = useState(
+    user ? user.photo : ''
+  );
   const [formData, setFormData] = useState({
-    name: user?.name || '',
+    role: user?.role || '',
+    name:
+      user?.role === 'Fornecedor' || user?.role === 'supplier'
+        ? user?.name_company || ''
+        : user?.name || '',
     email: user?.email || '',
     password: user?.password || '',
     contact: user?.contact || '',
     address: user?.address || '',
     postal_code: user?.postal_code || '',
-    photo: user?.photo ||'',
-    role: user?.role ||'',
+    photo: user?.photo || '',
   });
 
   useEffect(() => {
@@ -141,51 +146,51 @@ const Profile = () => {
 
   const handleImageUpload = (event) => {
     const fileArray = event?.target?.files;
-    if (!fileArray ||!fileArray.length) {
+    if (!fileArray || !fileArray.length) {
       return;
     }
-  
+
     const file = fileArray[0];
     if (!file) {
       return;
     }
-  
+
     if (/(\jpg|\jpeg|\png|\bmp)$/i.test(file.type)) {
       if (file.size > 3145728) {
         alert('O arquivo deve ter menos de 3MB.');
         return;
       }
-  
+
       const reader = new FileReader();
-  
+
       reader.onloadend = function () {
         // Create a temporary canvas element
         const img = new Image();
         img.src = reader.result;
-  
+
         img.onload = function () {
           // Calculate the scale factor based on the desired output size
           const scaleFactor = Math.min(1, 800 / img.width, 800 / img.height);
-  
+
           // Create a canvas element and draw the scaled image onto it
           const canvas = document.createElement('canvas');
           canvas.width = img.width * scaleFactor;
           canvas.height = img.height * scaleFactor;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-  
+
           // Convert the canvas content to a data URL
           const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8); // 0.8 is the quality factor
-  
+
           // Update the state with the compressed image
           setProfileImageUrl(compressedDataUrl);
           setFormData((prevState) => ({
-           ...prevState,
+            ...prevState,
             photo: compressedDataUrl,
           }));
         };
       };
-  
+
       reader.readAsDataURL(file);
     } else {
       console.log(file.type);
@@ -223,23 +228,39 @@ const Profile = () => {
   };
 
   const handleSubmit = (event) => {
-   event.preventDefault();
+    event.preventDefault();
 
-    setFormData((prevState) => ({
-      ...prevState,
-      role: role == '' || role == 'Utilizador' ? 'user' : 'supplier',
-      points: 0,
-      discounts: 0,
-    }));
+    if (role == 'Utilizador') {
+      setFormData((prevState) => ({
+        ...prevState,
+        role: 'user',
+        points: 0,
+        discounts: 0,
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        role: 'supplier',
+        name_company: formData.name,
+        popularity_seal: false,
+        highlight_start_date: 0,
+        highlight_end_date: 0,
+        highlight_status: false,
+      }));
+    }
 
     const apiInstance = new ApiClient();
-    const response = apiInstance.registerUser(
-      formData
-    );
+    if (role == 'Fornecedor') {
+      const response = apiInstance.registerSupplier(formData);
+      console.log(response);
 
-    console.log(response)
+      console.log(formData);
+    } else {
+      const response = apiInstance.registerUser(formData);
+      console.log(response);
 
-    console.log(formData);
+      console.log(formData);
+    }
   };
 
   return (
@@ -310,7 +331,7 @@ const Profile = () => {
                   fontSize: `${fontSize * 20}px`,
                 }}
               >
-                Email:
+                {role == 'Utilizador' ? 'Email' : 'Email Fornecedor'}:
                 <div className="flex row" style={{ position: 'relative' }}>
                   <input
                     type="email"
@@ -544,7 +565,7 @@ const Profile = () => {
                   fontSize: `${fontSize * 20}px`,
                 }}
               >
-                Contato:
+                {role == 'Utilizador' ? 'Contato' : 'Contato Fornecedor'}:
                 <div className="flex row" style={{ position: 'relative' }}>
                   <input
                     type="tel"

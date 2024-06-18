@@ -453,7 +453,7 @@ const Navbar = ({ inView }) => {
               <GlobalButton
                 image={`${user ? user?.photo : `/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/user-white.svg`}`}
                 path={`${user ? '/profile' : '/login'}`}
-                text={`${user ? user?.name : 'Conecte-se'}`}
+                text={`${user ? user.name || user.name_company  : 'Conecte-se'}`}
                 id="user-navbar"
                 width="40"
                 customClass={`${user?.photo ? 'rounded-button' : ''}`}
@@ -654,7 +654,7 @@ const Navbar = ({ inView }) => {
             <GlobalButton
               image={`${user ? user.photo : `/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/user-white.svg`}`}
               path={`${user ? '/profile' : '/login'}`}
-              text={`${user ? user.name : 'Conecte-se'}`}
+              text={`${user ? user.name || user.name_company : 'Conecte-se'}`}
               id="user-navbar"
               width="40"
               customClass={`${user?.photo ? 'rounded-button' : ''}`}

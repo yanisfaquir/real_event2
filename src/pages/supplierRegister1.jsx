@@ -6,8 +6,8 @@ import { useRouter } from 'next/router';
 import { setSelectedService, setErrorMessage } from '../redux/reducers/supplierReducer1'; 
 
 const SupplierRegister = () => {
-  // const [selectedService, setSelectedService] = useState(null);
-  const selectedService = useSelector((state) => state.supplier1.selectedService);
+  const [selectedService, setSelectedService] = useState(null);
+  //const selectedService = useSelector((state) => state.supplier1.selectedService);
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
   const dispatch = useDispatch();

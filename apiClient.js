@@ -45,20 +45,6 @@ async function authenticateUser(email, password, role) {
   }
 }
 
-// // Configuração do Axios com interceptor para adicionar o Bearer Token
-// axios.interceptors.request.use(
-//   function (config) {
-//     const token = getCookie('accessToken');
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   function (error) {
-//     return Promise.reject(error);
-//   }
-// );
-
 // Interceptor de resposta para lidar com erros 401 e tentar atualizar o token
 axios.interceptors.response.use(
   (response) => response,
