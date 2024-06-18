@@ -159,13 +159,8 @@ export default class ApiClient {
 
   // Método para atualizar um usuário
   updateUser(id, userData) {
-    const token = getToken(); // Supondo que getToken() retorna o token atual
     return this.apiClient
-      .patch(`/user/updateUser/${id}`, userData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .patch(`/user/updateUser/${id}`, userData)
       .then((response) => response.data)
       .catch((error) => {
         console.error('Erro ao atualizar usuário:', error);
@@ -173,14 +168,10 @@ export default class ApiClient {
       });
   }
 
+  // Método para atualizar um fornecedor
   updateSupplier(id, supplierData) {
-    const token = getToken(); // Supondo que getToken() retorna o token atual
     return this.apiClient
-      .patch(`/supplier/updateSupplier/${id}`, supplierData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .patch(`/supplier/updateSupplier/${id}`, supplierData)
       .then((response) => response.data)
       .catch((error) => {
         console.error('Erro ao atualizar fornecedor:', error);
@@ -190,13 +181,8 @@ export default class ApiClient {
 
   // Método para substituir um usuário
   replaceUser(id, userData) {
-    const token = getToken(); // Supondo que getToken() retorna o token atual
     return this.apiClient
-      .put(`/user/replaceUser/${id}`, userData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .put(`/user/replaceUser/${id}`, userData)
       .then((response) => response.data)
       .catch((error) => {
         console.error('Erro ao substituir usuário:', error);
@@ -204,14 +190,10 @@ export default class ApiClient {
       });
   }
 
+  // Método para substituir um fornecedor
   replaceSupplier(id, supplierData) {
-    const token = getToken(); // Supondo que getToken() retorna o token atual
     return this.apiClient
-      .put(`/supplier/replaceSupplier/${id}`, supplierData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .put(`/supplier/replaceSupplier/${id}`, supplierData)
       .then((response) => response.data)
       .catch((error) => {
         console.error('Erro ao substituir fornecedor:', error);
@@ -221,13 +203,8 @@ export default class ApiClient {
 
   // Método para deletar um usuário
   deleteUser(id) {
-    const token = getToken(); // Supondo que getToken() retorna o token atual
     return this.apiClient
-      .delete(`/user/delete/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .delete(`/user/delete/${id}`)
       .then((response) => response.data)
       .catch((error) => {
         console.error('Erro ao deletar usuário:', error);
@@ -235,14 +212,10 @@ export default class ApiClient {
       });
   }
 
+  // Método para deletar um fornecedor
   deleteSupplier(id) {
-    const token = getToken(); // Supondo que getToken() retorna o token atual
     return this.apiClient
-      .delete(`/supplier/delete/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .delete(`/supplier/delete/${id}`)
       .then((response) => response.data)
       .catch((error) => {
         console.error('Erro ao deletar fornecedor:', error);
@@ -260,15 +233,12 @@ export default class ApiClient {
         throw error;
       });
   }
+
   // Método para buscar todos os fornecedores com paginação e filtros
   getAllSuppliers(queryParams) {
-    const token = getToken(); // Supondo que getToken() retorna o token atual
     return this.apiClient
       .get('/allSuppliers', {
         params: queryParams,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       })
       .then((response) => response.data)
       .catch((error) => {
@@ -276,4 +246,304 @@ export default class ApiClient {
         throw error;
       });
   }
+
+  // Método para buscar todos os serviços
+  getAllServices() {
+    return this.apiClient
+      .get('/service/getAll')
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar todos os serviços:', error);
+        throw error;
+      });
+  }
+
+  // Método para buscar um serviço pelo ID
+  getServiceById(id) {
+    return this.apiClient
+      .get(`/service/getService/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar serviço:', error);
+        throw error;
+      });
+  }
+
+  // Método para criar um novo serviço
+  createService(serviceData) {
+    return this.apiClient
+      .post('/service/create', serviceData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao criar serviço:', error);
+        throw error;
+      });
+  }
+
+  // Método para atualizar um serviço
+  updateService(id, serviceData) {
+    return this.apiClient
+      .patch(`/service/update/${id}`, serviceData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao atualizar serviço:', error);
+        throw error;
+      });
+  }
+
+  // Método para deletar um serviço
+  deleteService(id) {
+    return this.apiClient
+      .delete(`/service/delete/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao deletar serviço:', error);
+        throw error;
+      });
+  }
+
+  // Método para buscar todos os eventos
+  getAllEvents() {
+    return this.apiClient
+      .get('/event/getAll')
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar todos os eventos:', error);
+        throw error;
+      });
+  }
+
+  // Método para buscar um evento pelo ID
+  getEventById(id) {
+    return this.apiClient
+      .get(`/event/getEvent/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar evento:', error);
+        throw error;
+      });
+  }
+
+  // Método para criar um novo evento
+  createEvent(eventData) {
+    return this.apiClient
+      .post('/event/create', eventData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao criar evento:', error);
+        throw error;
+      });
+  }
+
+  // Método para atualizar um evento
+  updateEvent(id, eventData) {
+    return this.apiClient
+      .patch(`/event/update/${id}`, eventData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao atualizar evento:', error);
+        throw error;
+      });
+  }
+
+  // Método para deletar um evento
+  deleteEvent(id) {
+    return this.apiClient
+      .delete(`/event/delete/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao deletar evento:', error);
+        throw error;
+      });
+  }
+
+  // Métodos para ShoppingCart
+  // Método para buscar um carrinho pelo ID
+  getShoppingCartById(id) {
+    return this.apiClient
+      .get(`/shoppingCart/getShoppingCart/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para buscar todos os carrinhos
+  getAllShoppingCarts() {
+    return this.apiClient
+      .get('/shoppingCart/getAllShoppingCarts')
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar todos os carrinhos:', error);
+        throw error;
+      });
+  }
+
+  // Método para criar um novo carrinho
+  createShoppingCart(cartData) {
+    return this.apiClient
+      .post('/shoppingCart/createShoppingCart', cartData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao criar carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para atualizar parcialmente um carrinho
+  patchShoppingCart(id, cartData) {
+    return this.apiClient
+      .patch(`/shoppingCart/patchShoppingCart/${id}`, cartData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao atualizar parcialmente o carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para substituir um carrinho
+  putShoppingCart(id, cartData) {
+    return this.apiClient
+      .put(`/shoppingCart/putShoppingCart/${id}`, cartData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao substituir carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para deletar um carrinho
+  deleteShoppingCart(id) {
+    return this.apiClient
+      .delete(`/shoppingCart/deleteShoppingCart/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao deletar carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para criar uma nova estrela
+  createStar(starData) {
+    return this.apiClient
+      .post('/star', starData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao criar estrela:', error);
+        throw error;
+      });
+  }
+
+  // Método para buscar todas as estrelas de um fornecedor
+  getStarsBySupplierId(supplierId) {
+    return this.apiClient
+      .get(`/star/${supplierId}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar estrelas:', error);
+        throw error;
+      });
+  }
+
+  // Método para atualizar uma estrela
+  updateStar(starId, starData) {
+    return this.apiClient
+      .patch(`/star/${starId}`, starData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao atualizar estrela:', error);
+        throw error;
+      });
+  }
+
+  // Método para deletar uma estrela
+  deleteStar(starId) {
+    return this.apiClient
+      .delete(`/star/${starId}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao deletar estrela:', error);
+        throw error;
+      });
+  }
+
+  // Método para calcular a média das estrelas de um fornecedor
+  getAverageStarsBySupplierId(supplierId) {
+    return this.apiClient
+      .get(`/star/average/${supplierId}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao calcular média das estrelas:', error);
+        throw error;
+      });
+  }
+
+  // Métodos para ShoppingCart (adapte os nomes dos métodos conforme necessário)
+  // Método para buscar um carrinho pelo ID
+  getShoppingCartById(id) {
+    return this.apiClient
+      .get(`/shoppingCart/getShoppingCart/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para buscar todos os carrinhos
+  getAllShoppingCarts() {
+    return this.apiClient
+      .get('/shoppingCart/getAllShoppingCarts')
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao buscar todos os carrinhos:', error);
+        throw error;
+      });
+  }
+
+  // Método para criar um novo carrinho
+  createShoppingCart(cartData) {
+    return this.apiClient
+      .post('/shoppingCart/createShoppingCart', cartData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao criar carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para atualizar parcialmente um carrinho
+  patchShoppingCart(id, cartData) {
+    return this.apiClient
+      .patch(`/shoppingCart/patchShoppingCart/${id}`, cartData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao atualizar parcialmente o carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para substituir um carrinho
+  putShoppingCart(id, cartData) {
+    return this.apiClient
+      .put(`/shoppingCart/putShoppingCart/${id}`, cartData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao substituir carrinho:', error);
+        throw error;
+      });
+  }
+
+  // Método para deletar um carrinho
+  deleteShoppingCart(id) {
+    return this.apiClient
+      .delete(`/shoppingCart/deleteShoppingCart/${id}`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Erro ao deletar carrinho:', error);
+        throw error;
+      });
+  }
+
 }
