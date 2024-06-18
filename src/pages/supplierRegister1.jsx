@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import GlobalButton from '@/components/globalButton';
 import { useSelector, useDispatch } from 'react-redux';
-import Image from "next/image";
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { setSelectedService, setErrorMessage } from '../redux/reducers/supplierReducer1'; 
 
@@ -12,7 +12,7 @@ const SupplierRegister = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const services = ['Catering', 'Merchandising', 'Stands', 'Brindes'];
+  const services = ['Catering', 'Espaço', 'DJ', 'Merchandising'];
 
   const handleServiceChange = (event) => {
     // setSelectedService(event.target.value);
@@ -43,10 +43,8 @@ const SupplierRegister = () => {
               alt="Mulher loira de frente a um computador segurando um smartphone"
               width={400}
               height={400}
-              style={{
-                maxWidth: "100%",
-                height: "auto"
-              }} />
+              layout="intrinsic"
+            />
           </div>
         </div>
         <div className='col-span-2 lg:col-span-1 w-full lg:w-auto mt-10 ml-4 justify-self-start'>

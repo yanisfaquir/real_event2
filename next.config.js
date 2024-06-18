@@ -10,4 +10,6 @@ module.exports = {
     unoptimized: true,
   },
   distDir: 'out',
+  output: 'build',
 };
+
