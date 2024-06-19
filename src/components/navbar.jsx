@@ -433,8 +433,14 @@ const Navbar = ({ inView }) => {
             <GlobalButton
               size="medium"
               type="custom"
-              path="/supplierRegister1"
-              text="Fornecedor"
+              path="/suppliers"
+              text="Fornecedores"
+            />
+            <GlobalButton
+              size="medium"
+              type="custom"
+              path="/services"
+              text="Serviços"
             />
           </section>
 

@@ -237,7 +237,7 @@ export default class ApiClient {
   // Método para buscar todos os fornecedores com paginação e filtros
   getAllSuppliers(queryParams) {
     return this.apiClient
-      .get('/allSuppliers', {
+      .get('/supplier/allSuppliers', {
         params: queryParams,
       })
       .then((response) => response.data)
@@ -248,9 +248,11 @@ export default class ApiClient {
   }
 
   // Método para buscar todos os serviços
-  getAllServices() {
+  getAllServices(queryParams) {
     return this.apiClient
-      .get('/service/getAll')
+      .get('/service/allServices', {
+        params: queryParams,
+      })
       .then((response) => response.data)
       .catch((error) => {
         console.error('Erro ao buscar todos os serviços:', error);
@@ -545,5 +547,16 @@ export default class ApiClient {
         throw error;
       });
   }
+
+  getAllServicesBySupplierId(supplierId) {
+    return this.apiClient
+     .get(`/service/service/supplier/${supplierId}`)
+     .then((response) => response.data)
+     .catch((error) => {
+        console.error('Erro ao buscar serviços do supplier:', error);
+        throw error;
+      });
+  }
+  
 
 }
