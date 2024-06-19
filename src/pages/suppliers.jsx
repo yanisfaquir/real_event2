@@ -116,7 +116,7 @@ const Suppliers = () => {
   };
 
   return (
-    <div className="mt-20 container mx-auto">
+    <div className="mt-20 container mx-auto px-4">
       <section className="mb-10">
         <p
           className={`flex flex-col pt-20 px-5 text-[4rem] font-bold text-middle-home`}
