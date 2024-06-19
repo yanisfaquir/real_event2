@@ -1136,7 +1136,7 @@ const StartEvent = () => {
                   <label
                     style={{ textAlign: `${alignment ? alignment : 'start'}` }}
                   >
-                    Mechardising
+                    Mechandising
                   </label>
                 </li>
 
