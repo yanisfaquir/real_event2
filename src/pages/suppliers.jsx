@@ -209,7 +209,7 @@ const Suppliers = () => {
             size="medium"
             type="primary"
             onClick={() => setShowResults(true)}
-            text="Seguinte"
+            text="Pesquisar"
           />
         </div>
       )}
@@ -221,7 +221,7 @@ const Suppliers = () => {
       ) : showResults && (
         
         <div>
-                        <p
+        <p
           className={`flex flex-col pt-20 px-5 text-[4rem] font-bold text-middle-home items-right justify-right`}
           style={{ textAlign: `${alignment ? alignment : 'start'}` }}
         >
@@ -310,7 +310,7 @@ const Suppliers = () => {
               </div>
 
               {loadingServices ? (
-                <p className="text-center mt-10">Carregando serviços...</p>
+                <p className="text-center mt-10">Carregando fornecedores...</p>
               ) : selectedSupplierServices ? (
                 Array.isArray(selectedSupplierServices) ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
