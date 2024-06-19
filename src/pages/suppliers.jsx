@@ -313,7 +313,7 @@ const Suppliers = () => {
                 <p className="text-center mt-10">Carregando fornecedores...</p>
               ) : selectedSupplierServices ? (
                 Array.isArray(selectedSupplierServices) ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mr-4 ml-4">
                     {selectedSupplierServices.map((service) => (
                       <div
                         key={service._id}
