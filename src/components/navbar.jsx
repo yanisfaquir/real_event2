@@ -9,9 +9,18 @@ import { useDispatch } from 'react-redux';
 import { setCurrentCartSection } from '@/redux/reducers/cartReducer';
 import { Popover } from 'evergreen-ui';
 import { AccessibilityContext } from '../contexts/acessibility';
+import { useSelector } from 'react-redux';
+import ApiClient from '../../apiClient';
+import { clearUser, logout } from '@/redux/reducers/userReducer';
+import { styled } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
+import InputBase from '@mui/material/InputBase';
+import { alpha } from '@mui/material/styles';
 
 const Navbar = ({ inView }) => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
   const router = useRouter();
   const [visibleDesktop, setVisibleDesktop] = useState(false);
   const cartItems = services.services;
@@ -33,6 +42,67 @@ const Navbar = ({ inView }) => {
     setIsShortcutsOpen(!isShortcutsOpen);
     setIsAcessibilityOpen(false);
   };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(clearUser());
+  };
+
+  const Search = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    transition: 'width 0.3s, margin 0.3s',
+    marginLeft: theme.spacing(1),
+    marginTop: "-4px", 
+    marginRight: "-12px",
+  }));
+
+  const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }));
+  
+  const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    transition: theme.transitions.create('width'),
+    width: '0',
+    '&.expanded': {
+      width: '200px', 
+    },
+    '& .MuiInputBase-input': {
+      padding: theme.spacing(1, 1, 1, 0),
+      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+      color: 'white',
+    },
+  }));;
+
+  const [searchOpen, setSearchOpen] = React.useState(false);
+
+  const handleSearchToggle = () => {
+    setSearchOpen((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const apiInstance = new ApiClient();
+    apiInstance.refreshAccessToken().then((response) => {
+      if (!response) {
+        handleLogout();
+        return;
+      }
+    });
+
+    const handleRouteChange = (url) => {
+      console.log('Rota alterada para:', url);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router, dispatch]);
 
   useEffect(() => {
     if (isAcessibilityOpen) {
@@ -78,7 +148,9 @@ const Navbar = ({ inView }) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navOpen && !event.target.closest('#menu-navbar')) {
-        setNavOpen(false);
+        setTimeout(() => {
+          setNavOpen(false);
+        }, 200);
       }
     };
 
@@ -155,7 +227,7 @@ const Navbar = ({ inView }) => {
                 text={'Ver mais'}
                 size="small"
                 type="secondary"
-                width="100%"
+                width="100"
                 onClick={() => {
                   dispatch(setCurrentCartSection(1));
                   setVisibleDesktop(false);
@@ -249,7 +321,9 @@ const Navbar = ({ inView }) => {
             </ul>
           )}
         </div>
-        <div className={`accessibility-container fixed bottom-[8%] z-10 border-[4px] border-white ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'} rounded-[50px] py-3 shadow-lg`}>
+        <div
+          className={`accessibility-container fixed bottom-[8%] z-10 border-[4px] border-white ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'} rounded-[50px] py-3 shadow-lg`}
+        >
           <li className={`list-none relative min-w-[56px]`}>
             <GlobalButton
               image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/acessibility-icon.svg`}
@@ -390,28 +464,81 @@ const Navbar = ({ inView }) => {
             </div>
           </section>
 
-          <section className="w-1/2 py-2 gap-2 flex justify-center items-center">
+          <section className="w-1/2 pb-2 gap-2 flex justify-center items-center">
             <GlobalButton
-              size="small"
+              size="medium"
               type="custom"
               path="/about"
               text="Sobre"
             />
             <GlobalButton
-              size="small"
+              size="medium"
               type="custom"
-              path="/supplierRegister1"
-              text="Fornecedor"
+              path="/suppliers"
+              text="Fornecedores"
+            />
+            <GlobalButton
+              size="medium"
+              type="custom"
+              path="/services"
+              text="Serviços"
             />
           </section>
 
           <section className="w-1/4 py-2 flex justify-end items-center align-center">
-            <GlobalButton
-              image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/user-white.svg`}
-              path="/login"
-              text="Conecte-se"
-              id="user-navbar"
-            />
+            {/* <div className={`mb-[2px]`}>
+              <GlobalButton
+                image={`${user ? user?.photo : `/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/user-white.svg`}`}
+                path={`${user ? '/profile' : '/login'}`}
+                text={`${user ? user?.name : 'Conecte-se'}`}
+                id="user-navbar"
+                width="40"
+                customClass={`${user?.photo ? 'rounded-button' : ''}`}
+              />
+            </div> */}
+            <div className={`mb-[2px] flex`}>
+            <Search sx={{ marginLeft: searchOpen ? '0' : 'auto' }}>
+                <SearchIconWrapper>
+                  <IconButton size="large" aria-label="search" color="inherit" onClick={handleSearchToggle}>
+                  <SearchIcon sx={{ color: 'white', fontSize: '2rem' }} />
+                  </IconButton>
+                </SearchIconWrapper>
+                <StyledInputBase
+                  className={searchOpen ? 'expanded' : ''}
+                  placeholder="Pesquisar..."
+                  inputProps={{ 'aria-label': 'search' }}
+                  color='white'
+                />
+              </Search>
+
+
+            </div>
+            <div className={`mb-[2px] flex`}>
+              <GlobalButton
+                image={`${user ? user?.photo : `/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/user-white.svg`}`}
+                path={`${user ? '/profile' : '/login'}`}
+                text={`${user ? user.name || user.name_company  : 'Conecte-se'}`}
+                id="user-navbar"
+                width="30"
+                customClass={`${user?.photo ? 'rounded-button' : ''}`}
+              />
+            </div>
+            {user && (
+              <div
+                style={{ position: 'relative', width: '18%', height: '44px' }}
+              >
+                <div style={{ position: 'absolute', right: 0, top: 6 }}>
+                  <GlobalButton
+                    image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/logout-icon.svg`}
+                    text={`Encerrar sessão`}
+                    id="logout-navbar"
+                    onClick={handleLogout}
+                    width="36"
+                  />
+                </div>
+              </div>
+            )}
+
             <div style={{ position: 'relative', width: '18%', height: '44px' }}>
               <div style={{ position: 'absolute', right: 0, top: 6 }}>
                 <GlobalButton
@@ -589,11 +716,23 @@ const Navbar = ({ inView }) => {
           </li>
           <li className="py-4">
             <GlobalButton
-              image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/user-white.svg`}
-              path="/login"
-              text="Conecte-se"
+              image={`${user ? user.photo : `/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/user-white.svg`}`}
+              path={`${user ? '/profile' : '/login'}`}
+              text={`${user ? user.name || user.name_company : 'Conecte-se'}`}
               id="user-navbar"
+              width="40"
+              customClass={`${user?.photo ? 'rounded-button' : ''}`}
             />
+          </li>
+          <li className="py-4">
+            {user && (
+              <GlobalButton
+                text={`Encerrar sessão`}
+                size="large"
+                type="custom"
+                onClick={handleLogout}
+              />
+            )}
           </li>
         </ul>
       </nav>

@@ -10,14 +10,21 @@
     "prettier": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|md)\""
   },
   "dependencies": {
-    "next": "14.1.0",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.15.20",
+    "@mui/material": "^5.15.20",
+    "axios": "^1.7.2",
+    "image-compressor": "^2.0.3",
+    "next": "^14.2.3",
     "next-i18next": "^15.2.0",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.0.1",
     "react-select": "^5.8.0",
+    "redux-persist": "^6.0.0",
     "rxjs": "^7.8.1",
-    "sharp": "^0.33.2",
+    "sharp": "^0.33.4",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
