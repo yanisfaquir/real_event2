@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import ApiClient from '../../apiClient';
+import { AccessibilityContext } from '@/contexts/acessibility';
+import { useContext } from 'react';
+import GlobalButton from '@/components/globalButton';
 
 const ServicesPage = () => {
+  const { alignment, highContrast } = useContext(AccessibilityContext);
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -19,6 +23,7 @@ const ServicesPage = () => {
     currentPage: 1,
     perPage: 20,
   });
+  const [showResults, setShowResults] = useState(false); // State to control showing results
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -44,11 +49,14 @@ const ServicesPage = () => {
         setError('Não foi possível carregar os serviços.');
       } finally {
         setLoading(false);
+        setShowResults(true); // Show results after fetching
       }
     };
 
-    fetchServices();
-  }, [filters, pagination.currentPage]);
+    if (showResults) {
+      fetchServices();
+    }
+  }, [filters, pagination.currentPage, showResults]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,11 +70,26 @@ const ServicesPage = () => {
     setPagination({ ...pagination, currentPage: newPage });
   };
 
-  if (loading) return <p className="text-center mt-10">Carregando serviços...</p>;
-  if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
+  const handleSearch = () => {
+    setShowResults(true); // Show results when search button is clicked
+  };
 
   return (
     <div className="services-container mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+      <section className="mb-10">
+        <p
+          className={`flex flex-col pt-20 px-5 text-[4rem] font-bold text-middle-home`}
+          style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+        >
+          Serviços
+        </p>
+        <p
+          className={`relative max-w-[90vw] px-5 mb-4 text-[1.2rem]`}
+          style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+        >
+          Pode fazer a pesquisa de serviços de acordo com os filtros abaixo.
+        </p>
+      </section>
       {/* Filtros */}
       <div className="mb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="flex flex-col">
@@ -158,12 +181,38 @@ const ServicesPage = () => {
         </div>
       </div>
 
+      {/* Botão de Pesquisa */}
+      {!showResults && (
+        <div className="flex justify-center mb-4">
+          {/* <button
+            onClick={handleSearch}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Pesquisar
+          </button> */}
+                 
+          <GlobalButton
+            size="medium"
+            type="primary"
+            onClick={handleSearch}
+            text="Pesquisar"
+          />
+    
+        </div>
+      )}
+
       {/* Lista de Serviços */}
-      {services.length > 0 ? (
+      {showResults && services.length > 0 ? (
         <>
+          <p
+            className={`flex flex-col pt-20 px-5 text-[4rem] font-bold text-middle-home`}
+            style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+          >
+            Resultados
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {services.map((service) => (
-              <div key={service._id} className="border rounded p-4 shadow cursor-pointer transition duration-300 ease-in-out transform hover:scale-105">
+              <div key={service._id} className="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300 bg-white">
                 <h2 className="text-xl font-bold mb-2">{service.description}</h2>
                 <p className="mb-2"><strong>Preço:</strong> {service.price}</p>
                 <p className="mb-2"><strong>Número de clientes:</strong> {service.num_customers}</p>
@@ -186,26 +235,27 @@ const ServicesPage = () => {
               </div>
             ))}
           </div>
-          <div className="mt-4 flex justify-center">
-            <button
-              onClick={() => handlePageChange(pagination.currentPage - 1)}
-              disabled={pagination.currentPage === 1}
-              className="px-4 py-2 mr-2 bg-gray-200 text-gray-600 rounded"
-            >
-              Anterior
-            </button>
-            <button
-              onClick={() => handlePageChange(pagination.currentPage + 1)}
-              disabled={pagination.currentPage * pagination.perPage >= pagination.total}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Próximo
-            </button>
-          </div>
+          <div className="mt-4 flex justify-between">
+  <button
+    onClick={() => handlePageChange(pagination.currentPage - 1)}
+    disabled={pagination.currentPage === 1}
+    className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
+  >
+    Anterior
+  </button>
+  <button
+    onClick={() => handlePageChange(pagination.currentPage + 1)}
+    disabled={pagination.currentPage * pagination.perPage >= pagination.total}
+    className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
+  >
+    Próximo
+  </button>
+</div>
+
         </>
-      ) : (
-        <p className="text-center mt-10">Nenhum serviço encontrado.</p>
-      )}
+      ) : showResults && services.length === 0 ? (
+        <p className="text-center mt-10">Carregando serviços...</p>
+      ) : null}
     </div>
   );
 };

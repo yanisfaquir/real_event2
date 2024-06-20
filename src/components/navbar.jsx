@@ -12,6 +12,11 @@ import { AccessibilityContext } from '../contexts/acessibility';
 import { useSelector } from 'react-redux';
 import ApiClient from '../../apiClient';
 import { clearUser, logout } from '@/redux/reducers/userReducer';
+import { styled } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
+import InputBase from '@mui/material/InputBase';
+import { alpha } from '@mui/material/styles';
 
 const Navbar = ({ inView }) => {
   const dispatch = useDispatch();
@@ -41,6 +46,42 @@ const Navbar = ({ inView }) => {
   const handleLogout = () => {
     dispatch(logout());
     dispatch(clearUser());
+  };
+
+  const Search = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    transition: 'width 0.3s, margin 0.3s',
+    marginLeft: theme.spacing(1),
+    marginTop: "-4px", 
+    marginRight: "-12px",
+  }));
+
+  const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }));
+  
+  const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    transition: theme.transitions.create('width'),
+    width: '0',
+    '&.expanded': {
+      width: '200px', 
+    },
+    '& .MuiInputBase-input': {
+      padding: theme.spacing(1, 1, 1, 0),
+      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+      color: 'white',
+    },
+  }));;
+
+  const [searchOpen, setSearchOpen] = React.useState(false);
+
+  const handleSearchToggle = () => {
+    setSearchOpen((prev) => !prev);
   };
 
   useEffect(() => {
@@ -456,12 +497,29 @@ const Navbar = ({ inView }) => {
               />
             </div> */}
             <div className={`mb-[2px] flex`}>
+            <Search sx={{ marginLeft: searchOpen ? '0' : 'auto' }}>
+                <SearchIconWrapper>
+                  <IconButton size="large" aria-label="search" color="inherit" onClick={handleSearchToggle}>
+                  <SearchIcon sx={{ color: 'white', fontSize: '2rem' }} />
+                  </IconButton>
+                </SearchIconWrapper>
+                <StyledInputBase
+                  className={searchOpen ? 'expanded' : ''}
+                  placeholder="Pesquisar..."
+                  inputProps={{ 'aria-label': 'search' }}
+                  color='white'
+                />
+              </Search>
+
+
+            </div>
+            <div className={`mb-[2px] flex`}>
               <GlobalButton
                 image={`${user ? user?.photo : `/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/user-white.svg`}`}
                 path={`${user ? '/profile' : '/login'}`}
                 text={`${user ? user.name || user.name_company  : 'Conecte-se'}`}
                 id="user-navbar"
-                width="40"
+                width="30"
                 customClass={`${user?.photo ? 'rounded-button' : ''}`}
               />
             </div>
