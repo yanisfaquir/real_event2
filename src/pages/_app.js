@@ -6,6 +6,10 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from '@/redux/middleware/store';
 import { AccessibilityProvider } from '@/contexts/acessibility';
+import Footer from '../components/footer';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
+
 
 function RealEventApp({ Component, pageProps }) {
   return (
@@ -22,6 +26,7 @@ function RealEventApp({ Component, pageProps }) {
                 )}
               </InView>
               <Component {...pageProps} />
+              <Footer/>
             </div>
           </div>
         </PersistGate>
