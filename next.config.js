@@ -9,7 +9,7 @@ module.exports = {
   images: {
     unoptimized: true,
   },
-  distDir: 'out',
-  output: 'build',
+  // distDir: 'out',
+  // output: 'build',
 };
 

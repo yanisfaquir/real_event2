@@ -5,12 +5,14 @@ import { MiddleSection } from '@/components/homeMiddleSections/middleSection';
 import { useRouter } from 'next/router';
 import { AccessibilityContext } from '@/contexts/acessibility';
 import { Tooltip } from 'react-tooltip';
+import CookieModal from './CookieModal'; // Certifique-se de que o caminho está correto
 
 const HomePage = () => {
   const router = useRouter();
   const [isDesktopOrLaptop, setIsDesktopOrLaptop] = useState(false);
-  const { alignment, highContrast, showImageInfo, fontSize } =
-    useContext(AccessibilityContext);
+  const { alignment, highContrast, showImageInfo, fontSize } = useContext(AccessibilityContext);
+
+  const [showModal, setShowModal] = useState(true); // Inicializa como true para mostrar o modal sempre
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
@@ -23,6 +25,11 @@ const HomePage = () => {
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
+
+  const handleAccept = () => {
+    setShowModal(false);
+  };
+
   const middleData = [
     {
       image: `${showImageInfo ? '/assets/pictures/card-sm-1-home.png' : '/assets/pictures/card-sm-1-home-blue.png'}`,
@@ -46,12 +53,13 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col">
+      {showModal && <CookieModal onAccept={handleAccept} />} {/* Modal de Cookies */}
       <div className="top-0 h-[92vh] z-0 top-section-home">
         {!showImageInfo && (
           <div>
             <h1
-              style={{ textAlign: `${alignment ? alignment : 'center'}`, fontSize: `${fontSize * 56}px`,}}
-              className={`text-white  ${highContrast ? 'bg-black' : 'bg-unset'} relative mx-auto max-w-[800px] top-[20vh] z-10 font-bold`}
+              style={{ textAlign: `${alignment ? alignment : 'center'}`, fontSize: `${fontSize * 56}px`}}
+              className={`text-white ${highContrast ? 'bg-black' : 'bg-unset'} relative mx-auto max-w-[800px] top-[20vh] z-10 font-bold`}
             >
               CONHECE A
             </h1>
