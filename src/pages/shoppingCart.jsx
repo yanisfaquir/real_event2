@@ -646,6 +646,7 @@ const ShoppingCart = () => {
                 <div>
                   <GlobalButton
                     text={'Cancelar'}
+                    
                     size="small"
                     type="secondary"
                     onClick={() => setDialogOpen(false)}
