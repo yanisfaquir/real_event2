@@ -3,6 +3,7 @@ import GlobalButton from '@/components/globalButton';
 import { FaChevronDown } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import Select from 'react-select';
+import { useSelector } from 'react-redux';
 
 const SupplierRegister = () => {
     const [serviceName, setServiceName] = useState('');
@@ -17,6 +18,8 @@ const SupplierRegister = () => {
     const [selectedMultiOption1, setSelectedMultiOption1] = useState([]);
     const [shortText, setShortText] = useState('');
     const [longText, setLongText] = useState('');
+    const serviceType_ = useSelector((state) => state.event.serviceType);
+    const [serviceType, setServiceType] = useState(serviceType_);
 
     const uniqueOptionsDJ = [
         { value: 'Aveiro', label: 'Aveiro' },
@@ -78,7 +81,7 @@ const SupplierRegister = () => {
     const [selectedLocalidade, setSelectedLocalidade] = useState('');
     const [selectedTipoComida, setSelectedTipoComida] = useState('');
     const [selectedPreco, setSelectedPreco] = useState('');
-    const [service, setService] = useState('');
+    // const [service, setService] = useState('');
 
     const router = useRouter();
 
@@ -118,14 +121,16 @@ const SupplierRegister = () => {
             selectedMultiOption1,
             shortText,
             longText,
-            service,
+            // service,
+            serviceType
         });
     };
     useEffect(() => {
 
         if (router.query && router.query.service) {
-            setService(router.query.service);
-            console.log(router.query.service);
+            // setService(router.query.service);
+           
+            // console.log(router.query.service);
         }
     }, [router.query]);
 
@@ -133,10 +138,10 @@ const SupplierRegister = () => {
     return (
         <div className="flex justify-center items-center h-screen mt-10">
             <div className="text-left mt-10 ml-20">
-                <h1 className='font-medium text-3xl mb-4 mt-10'>INFORMAÇÕES - {service} </h1>
+                <h1 className='font-medium text-3xl mb-4 mt-20'>INFORMAÇÕES - {serviceType} </h1>
                 <p className='text-base mb-8'>Queremos saber mais sobre o teu serviço de forma a conseguirmos partilhar com os nossos utilizadores.</p>
 
-                {service === 'Catering' && (
+                {serviceType === 'Catering' && (
 
                     <div>
                         <form onSubmit={handleSubmit} style={{
@@ -231,7 +236,7 @@ const SupplierRegister = () => {
                 )}
 
 
-                {service === 'Merchandising' && (
+                {serviceType === 'Merchandising' && (
 
                     <div>
                         <form onSubmit={handleSubmit} style={{
@@ -320,7 +325,7 @@ const SupplierRegister = () => {
 
 
 
-                {service === 'DJ' && (
+                {serviceType === 'DJ' && (
                     <div>
                         <form onSubmit={handleSubmit} style={{
                             maxWidth: '1200px', margin: '0 auto', padding: '20px', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center'
@@ -394,7 +399,7 @@ const SupplierRegister = () => {
                 )}
 
 
-                {service === 'Espaço' && (
+                {serviceType === 'Espaço' && (
                     <div>
                         <form onSubmit={handleSubmit} style={{
                             maxWidth: '1200px', margin: '0 auto', padding: '20px', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center'
