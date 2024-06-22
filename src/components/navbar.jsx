@@ -497,7 +497,7 @@ const Navbar = ({ inView }) => {
               />
             </div> */}
             <div className={`mb-[2px] flex`}>
-            <Search sx={{ marginLeft: searchOpen ? '0' : 'auto' }}>
+            {/* <Search sx={{ marginLeft: searchOpen ? '0' : 'auto' }}>
                 <SearchIconWrapper>
                   <IconButton size="large" aria-label="search" color="inherit" onClick={handleSearchToggle}>
                   <SearchIcon sx={{ color: 'white', fontSize: '2rem' }} />
@@ -509,7 +509,7 @@ const Navbar = ({ inView }) => {
                   inputProps={{ 'aria-label': 'search' }}
                   color='white'
                 />
-              </Search>
+              </Search> */}
 
 
             </div>
