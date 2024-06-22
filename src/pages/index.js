@@ -5,14 +5,18 @@ import { MiddleSection } from '@/components/homeMiddleSections/middleSection';
 import { useRouter } from 'next/router';
 import { AccessibilityContext } from '@/contexts/acessibility';
 import { Tooltip } from 'react-tooltip';
-import CookieModal from './CookieModal'; // Certifique-se de que o caminho está correto
+import CookieModal from './CookieModal'; 
 
 const HomePage = () => {
   const router = useRouter();
   const [isDesktopOrLaptop, setIsDesktopOrLaptop] = useState(false);
   const { alignment, highContrast, showImageInfo, fontSize } = useContext(AccessibilityContext);
 
-  const [showModal, setShowModal] = useState(true); // Inicializa como true para mostrar o modal sempre
+  const [showCookieModal, setShowCookieModal] = useState(true);
+
+  const handleAcceptCookies = () => {
+    setShowCookieModal(false);
+  };
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
@@ -25,10 +29,6 @@ const HomePage = () => {
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
-
-  const handleAccept = () => {
-    setShowModal(false);
-  };
 
   const middleData = [
     {
@@ -53,7 +53,8 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col">
-      {showModal && <CookieModal onAccept={handleAccept} />} {/* Modal de Cookies */}
+      {showCookieModal && <CookieModal onAccept={handleAcceptCookies} />}
+
       <div className="top-0 h-[92vh] z-0 top-section-home">
         {!showImageInfo && (
           <div>
@@ -191,10 +192,9 @@ const HomePage = () => {
           )}
         </map>
       </div>
+
       <div>
-        <div
-          className={`${highContrast ? 'bg-black' : 'bg-[#ececec]'} middle-home-section py-8`}
-        >
+        <div className={`${highContrast ? 'bg-black' : 'bg-[#ececec]'} middle-home-section py-8`}>
           {router.pathname === '/' && <MiddleSection data={middleData} />}
         </div>
       </div>
