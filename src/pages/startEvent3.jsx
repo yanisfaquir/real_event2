@@ -99,7 +99,8 @@ import React, {
     useEffect(() => {
       if (formRef.current) {
         window.scrollTo({
-          top: formRef.current.offsetTop + formRef.current.offsetHeight,
+       
+          top: formRef.current.offsetHeight,
           behavior: 'smooth',
         });
       }
@@ -245,7 +246,7 @@ import React, {
                   number: prevState.number - 1,
                   text:
                     prevState.number - 1 === 1
-                      ? 'Ir à Página Inicial'
+                      ? 'Ir à Tipos de serviços'
                       : prevState.number - 1 === 2
                         ? 'Retornar à página de localização e data'
                         : 'Retornar à página de tipos de serviço',
@@ -281,11 +282,11 @@ import React, {
                 <Image
                 src={'/assets/pictures/event-type-img.png'}
                 alt="Pessoas felizes confraternizando"
-                width={500}
-                height={80}
+                width={300}
+                height={100}
                 style={{
                     maxWidth: '100%',
-                    height: 'auto',
+                    height: '10%',
                 }}
                 />
             </div>
@@ -298,7 +299,7 @@ import React, {
                 Tipos de eventos
                 </p>
                 <p
-                className="relative max-w-[90vw] mb-8 text-[1.2rem]"
+                className="relative max-w-[90vw] mb-8 text-[1.2rem] ml-8 mt-3" 
                 style={{ textAlign: `${alignment ? alignment : 'start'}` }}
                 >
                 Selecione abaixo qual o evento.
@@ -308,7 +309,7 @@ import React, {
                 <li
                     style={{
                     width: '100%',
-                    height: '120px',
+                    height: '20px',
                     borderRadius: '8px',
                     }}
                     className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
@@ -330,7 +331,7 @@ import React, {
                 <li
                     style={{
                     width: '100%',
-                    height: '120px',
+                    height: '20px',
                     borderRadius: '8px',
                     }}
                     className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
@@ -351,7 +352,7 @@ import React, {
                 <li
                     style={{
                     width: '100%',
-                    height: '120px',
+                    height: '20px',
                     borderRadius: '8px',
                     }}
                     className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
@@ -373,7 +374,7 @@ import React, {
                 <li
                     style={{
                     width: '100%',
-                    height: '120px',
+                    height: '20px',
                     borderRadius: '8px',
                     }}
                     className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
