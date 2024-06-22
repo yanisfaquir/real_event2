@@ -11,8 +11,7 @@ const Profile = () => {
 
   const router = useRouter();
   const dispatch = useDispatch();
-  const { alignment, highContrast, fontSize } =
-    useContext(AccessibilityContext);
+  const { alignment, highContrast, fontSize } = useContext(AccessibilityContext);
   const user = useSelector((state) => state.user.user);
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [httpResponse, setResponseValue] = useState('');
@@ -27,15 +26,10 @@ const Profile = () => {
   const [passwordConfirmError, setConfirmPasswordError] = useState('');
   const [nameError, setNameError] = useState('');
 
-  const [profileImageUrl, setProfileImageUrl] = useState(
-    user ? user.photo : ''
-  );
+  const [profileImageUrl, setProfileImageUrl] = useState(user ? user.photo : '');
   const [formData, setFormData] = useState({
     role: user?.role || '',
-    name:
-      user?.role === 'Fornecedor' || user?.role === 'supplier'
-        ? user?.name_company || ''
-        : user?.name || '',
+    name: user?.role === 'Fornecedor' || user?.role === 'supplier' ? user?.name_company || '' : user?.name || '',
     email: user?.email || '',
     password: user?.password || '',
     contact: user?.contact || '',
@@ -45,10 +39,10 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    if (email != '') {
+    if (email !== '') {
       setEmailError('');
     }
-    if (password != '') {
+    if (password !== '') {
       setPasswordError('');
       setErrorMessage('');
     }
@@ -59,22 +53,16 @@ const Profile = () => {
       case 'email':
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         setIsValidEmail(emailRegex.test(formData.email));
-        setEmailError(
-          !emailRegex.test(formData.email) ? 'Insira um email válido' : ''
-        );
+        setEmailError(!emailRegex.test(formData.email) ? 'Insira um email válido' : '');
         break;
       case 'password':
-        setPasswordError(
-          formData.password.trim() === '' ? 'Campo obrigatório' : ''
-        );
+        setPasswordError(formData.password.trim() === '' ? 'Campo obrigatório' : '');
         break;
       case 'name':
         setNameError(formData.name.trim() === '' ? 'Campo obrigatório' : '');
         break;
       case 'confirmPassword':
-        setConfirmPasswordError(
-          confirmPassword !== formData.password ? 'As senhas não conferem' : ''
-        );
+        setConfirmPasswordError(confirmPassword !== formData.password ? 'As senhas não conferem' : '');
         break;
       default:
         break;
@@ -92,9 +80,9 @@ const Profile = () => {
         className={`date-checkbox ${highContrast ? 'high-contrast' : ''}`}
       />
       <span
-        className={`${highContrast ? 'text-[#FFF000]' : 'text-black'} cursosr-pointer`}
+        className={`${highContrast ? 'text-[#FFF000]' : 'text-black'} cursor-pointer`}
         style={{
-          marginTop: `4px`,
+          marginTop: '4px',
           fontSize: `${fontSize * 20}px`,
           textAlign: `${alignment ? alignment : 'start'}`,
         }}
@@ -108,12 +96,12 @@ const Profile = () => {
     setRole(e.target.value);
     setFormData((prevState) => ({
       ...prevState,
-      role: role == '' || role == 'Utilizador' ? 'user' : 'supplier',
+      role: e.target.value === 'Utilizador' ? 'user' : 'supplier',
     }));
   };
 
   const handleImageUpload = (event) => {
-    const fileArray = event?.target?.files;
+    const fileArray = event.target.files;
     if (!fileArray || !fileArray.length) {
       return;
     }
@@ -132,7 +120,7 @@ const Profile = () => {
       const reader = new FileReader();
 
       reader.onloadend = function () {
-        const img = new Image();
+        const img = new window.Image();
         img.src = reader.result;
 
         img.onload = function () {
@@ -156,13 +144,12 @@ const Profile = () => {
 
       reader.readAsDataURL(file);
     } else {
-      console.log(file.type);
       alert('Por favor, selecione um arquivo JPEG, JPG, BMP ou PNG.');
     }
   };
 
   const handleChange = (event) => {
-    const { name, value } = event?.target;
+    const { name, value } = event.target;
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
@@ -193,7 +180,7 @@ const Profile = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (role == 'Utilizador') {
+    if (role === 'Utilizador') {
       setFormData((prevState) => ({
         ...prevState,
         role: 'user',
@@ -213,16 +200,12 @@ const Profile = () => {
     }
 
     const apiInstance = new ApiClient();
-    if (role == 'Fornecedor') {
+    if (role === 'Fornecedor') {
       const response = apiInstance.registerSupplier(formData);
       console.log(response);
-
-      console.log(formData);
     } else {
       const response = apiInstance.registerUser(formData);
       console.log(response);
-
-      console.log(formData);
     }
   };
 
@@ -231,42 +214,26 @@ const Profile = () => {
       <div className="flex flex-col md:flex-row mt-16 p-6 md:pt-20 bg-cover bg-no-repeat mx-4 md:mt-20 md:mx-20 rounded-lg md:rounded-[40px]">
         <div className="flex flex-col md:flex-row w-full bg-white shadow-lg rounded-[40px]">
           <div className="flex justify-center items-center w-full md:w-1/4 bg-gray-200 rounded-tl-[40px] rounded-bl-[40px] py-12">
-            <div className="relative">
+            <div className="relative text-center">
               {profileImageUrl ? (
-              <>
-              <div className="flex justify-center mt-4 px-4">
-                <Image
-                  src={`/assets/icons/user-${highContrast ? 'white' : 'black'}.svg`}
-                  alt={`Utilizador`}
-                  className="cursor-pointer"
-                  width={80}
-                  height={80}
+                <img
+                  src={profileImageUrl}
+                  alt="Utilizador"
+                  className="cursor-pointer rounded-full w-40 h-40 object-cover mx-auto"
                   onClick={() => document.getElementById('fileInput').click()}
                 />
-              </div>
-              <div className="col-span-1 flex justify-center space-x-4 mt-10">
-                <RoleRadioButton
-                  value="Utilizador"
-                  checked={role === 'Utilizador'}
-                  onChange={handleRoleChange}
-                />
-                <RoleRadioButton
-                  value="Fornecedor"
-                  checked={role === 'Fornecedor'}
-                  onChange={handleRoleChange}
-                />
-              </div>
-            </>
-            
               ) : (
-                <Image
-                  src={`/assets/icons/user-${highContrast ? 'white' : 'black'}.svg`}
-                  alt={`Utilizador`}
-                  className="cursor-pointer"
-                  width={80}
-                  height={80}
-                  onClick={() => document.getElementById('fileInput').click()}
-                />
+                <>
+                  <Image
+                    src={`/assets/icons/user-${highContrast ? 'white' : 'black'}.svg`}
+                    alt="Utilizador"
+                    className="cursor-pointer mx-auto"
+                    width={80}
+                    height={80}
+                    onClick={() => document.getElementById('fileInput').click()}
+                  />
+                  <p className="mt-2 text-center">Carregar imagem</p>
+                </>
               )}
               <input
                 type="file"
@@ -279,20 +246,19 @@ const Profile = () => {
           </div>
 
           <div className="w-full md:w-3/4 p-6 md:p-10">
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* <div className="col-span-1">
-                <RoleRadioButton
-                  value="Utilizador"
-                  checked={role === 'Utilizador'}
-                  onChange={handleRoleChange}
-                />
-                <RoleRadioButton
-                  value="Fornecedor"
-                  checked={role === 'Fornecedor'}
-                  onChange={handleRoleChange}
-                />
-              </div> */}
-
+            <div className="col-span-1 flex justify-center space-x-4 mt-10">
+              <RoleRadioButton
+                value="Utilizador"
+                checked={role === 'Utilizador'}
+                onChange={handleRoleChange}
+              />
+              <RoleRadioButton
+                value="Fornecedor"
+                checked={role === 'Fornecedor'}
+                onChange={handleRoleChange}
+              />
+            </div>
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
               <label
                 className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
                 style={{
@@ -307,9 +273,7 @@ const Profile = () => {
                     name="name"
                     value={formData.name}
                     autoComplete="off"
-                    className={`${
-                      highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'
-                    } w-full`}
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
                     onChange={handleChange}
                     onBlur={() => handleInputBlur('name')}
                     placeholder="Digite aqui"
@@ -340,9 +304,7 @@ const Profile = () => {
                     name="email"
                     value={formData.email}
                     autoComplete="off"
-                    className={`${
-                      highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'
-                    } w-full`}
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
                     onChange={handleChange}
                     onBlur={() => handleInputBlur('email')}
                     placeholder="Digite aqui"
@@ -363,7 +325,7 @@ const Profile = () => {
                 className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
                 style={{
                   textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px`,
+                  fontSize: `${fontSize * 20}px}`,
                 }}
               >
                 Senha:
@@ -373,9 +335,7 @@ const Profile = () => {
                     name="password"
                     value={formData.password}
                     autoComplete="off"
-                    className={`${
-                      highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'
-                    } w-full`}
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
                     onChange={handleChange}
                     onBlur={() => handleInputBlur('password')}
                     placeholder="Digite aqui"
@@ -396,7 +356,7 @@ const Profile = () => {
                 className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
                 style={{
                   textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px`,
+                  fontSize: `${fontSize * 20}px}`,
                 }}
               >
                 Confirmar Senha:
@@ -406,9 +366,7 @@ const Profile = () => {
                     name="confirmPassword"
                     value={confirmPassword}
                     autoComplete="off"
-                    className={`${
-                      highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'
-                    } w-full`}
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     onBlur={() => handleInputBlur('confirmPassword')}
                     placeholder="Digite aqui"
@@ -429,7 +387,7 @@ const Profile = () => {
                 className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
                 style={{
                   textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px`,
+                  fontSize: `${fontSize * 20}px}`,
                 }}
               >
                 Contato:
@@ -439,9 +397,7 @@ const Profile = () => {
                     name="contact"
                     value={formData.contact}
                     autoComplete="off"
-                    className={`${
-                      highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'
-                    } w-full`}
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
                     onChange={handleChange}
                     onBlur={() => handleInputBlur('contact')}
                     placeholder="Digite aqui"
@@ -461,7 +417,7 @@ const Profile = () => {
                 className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
                 style={{
                   textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px`,
+                  fontSize: `${fontSize * 20}px}`,
                 }}
               >
                 Endereço:
@@ -471,9 +427,7 @@ const Profile = () => {
                     name="address"
                     value={formData.address}
                     autoComplete="off"
-                    className={`${
-                      highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'
-                    } w-full`}
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
                     onChange={handleChange}
                     onBlur={() => handleInputBlur('address')}
                     placeholder="Digite aqui"
@@ -493,7 +447,7 @@ const Profile = () => {
                 className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
                 style={{
                   textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px`,
+                  fontSize: `${fontSize * 20}px}`,
                 }}
               >
                 Distrito:
@@ -501,9 +455,7 @@ const Profile = () => {
                   <select
                     name="district"
                     value={formData.district}
-                    className={`${
-                      highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'
-                    } w-full`}
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
                     onChange={handleChange}
                     placeholder="Digite aqui"
                     required
@@ -531,7 +483,7 @@ const Profile = () => {
                 className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
                 style={{
                   textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px`,
+                  fontSize: `${fontSize * 20}px}`,
                 }}
               >
                 Código Postal:
@@ -541,9 +493,7 @@ const Profile = () => {
                     name="postal_code"
                     value={formData.postal_code}
                     autoComplete="off"
-                    className={`${
-                      highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'
-                    } w-full`}
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
                     onChange={handleChange}
                     onBlur={() => handleInputBlur('postal_code')}
                     placeholder="Digite aqui"
@@ -559,10 +509,6 @@ const Profile = () => {
                 </div>
               </label>
 
-              {/* <div className="flex justify-center mt-4">
-                <GlobalButton type="submit">Salvar</GlobalButton>
-              </div> */}
-
               {httpResponse && (
                 <div className="mt-4">
                   <p>{httpResponse}</p>
@@ -571,11 +517,11 @@ const Profile = () => {
             </form>
 
             <div className="flex items-center justify-center mb-5 mt-10">
-                  <GlobalButton
-                    size="medium"
-                    type="primary"
-                    text="Atualizar"
-                  />
+              <GlobalButton
+                size="medium"
+                type="primary"
+                text="Atualizar"
+              />
             </div>
           </div>
         </div>
