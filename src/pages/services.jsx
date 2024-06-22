@@ -77,7 +77,7 @@ const ServicesPage = () => {
   return (
     <div className="services-container mx-auto px-4 sm:px-6 lg:px-8 mt-20">
       <section className="mb-10">
-        <p className={`flex flex-col pt-20 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
+        <p className={`flex flex-col pt-25 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
 
           style={{ textAlign: `${alignment ? alignment : 'start'}` }}
         >
@@ -205,7 +205,8 @@ const ServicesPage = () => {
       {showResults && services.length > 0 ? (
         <>
           <p
-            className={`flex flex-col pt-20 px-5 text-[4rem] font-bold text-middle-home`}
+             className={`flex flex-col pt-25 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
+
             style={{ textAlign: `${alignment ? alignment : 'start'}` }}
           >
             Resultados
