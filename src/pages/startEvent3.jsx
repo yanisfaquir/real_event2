@@ -97,14 +97,14 @@ import React, {
     };
   
     useEffect(() => {
-      if (formRef.current) {
-        window.scrollTo({
-       
-          top: formRef.current.offsetHeight,
-          behavior: 'smooth',
-        });
-      }
-    }, [currentSection]);
+        if (formRef.current) {
+          window.scrollTo({
+         
+            // top: formRef.current.offsetHeight,
+            behavior: 'smooth',
+          });
+        }
+      }, [currentSection]);
   
     
   

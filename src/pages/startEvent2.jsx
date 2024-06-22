@@ -49,7 +49,7 @@ import React, {
   
     const [currentSection2, setCurrentSection2] = useState({
       number: 1,
-      text: 'Ir à Página Inicial',
+      text: 'Ir à Página Informações do Evento',
     });
     const [selectedService, setSelectedService] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState('');
@@ -85,13 +85,14 @@ import React, {
     };
   
     useEffect(() => {
-      if (formRef.current) {
-        window.scrollTo({
-          top: formRef.current.offsetTop + formRef.current.offsetHeight,
-          behavior: 'smooth',
-        });
-      }
-    }, [currentSection2]);
+        if (formRef.current) {
+          window.scrollTo({
+         
+            // top: formRef.current.offsetHeight,
+            behavior: 'smooth',
+          });
+        }
+      }, [currentSection2]);
 
   
     
@@ -210,24 +211,23 @@ import React, {
                 <Image
                   src={'/assets/pictures/service-type-img.png'}
                   alt="Rapaz de óculos segurando papéis e apontando para algo"
-                  width={500}
-                  height={80}
+                  width={300}
+                  height={100}
                   style={{
-                    maxWidth: '100%',
-                    height: 'auto',
+                      maxWidth: '100%',
+                      height: '10%',
                   }}
                 />
               </div>
               <div className="lg:w-1/2 px-16">
-                <p
-                   className={`flex flex-col pt-15 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
-  
-                  style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+              <p
+                className={`flex flex-col pt-20 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
+                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
                 >
-                  Tipos de serviços
+                Tipos de Serviço
                 </p>
                 <p
-                  className={`relative max-w-[90vw] mb-8 text-[1.2rem]`}
+                  className={`relative max-w-[90vw] mb-8 text-[1.2rem] ml-8 mt-3`}
                   style={{ textAlign: `${alignment ? alignment : 'start'}` }}
                 >
                   Selecione abaixo qual dos serviços gostaria de contratar para o
@@ -238,7 +238,7 @@ import React, {
                   <li
                     style={{
                       width: '100%',
-                      height: '120px',
+                      height: '20px',
                       borderRadius: '8px',
                     }}
                     className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
@@ -260,7 +260,7 @@ import React, {
                   <li
                     style={{
                       width: '100%',
-                      height: '120px',
+                      height: '20px',
                       borderRadius: '8px',
                     }}
                     className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
@@ -282,7 +282,7 @@ import React, {
                   <li
                     style={{
                       width: '100%',
-                      height: '120px',
+                      height: '20px',
                       borderRadius: '8px',
                     }}
                     className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
@@ -304,7 +304,7 @@ import React, {
                   <li
                     style={{
                       width: '100%',
-                      height: '120px',
+                      height: '20px',
                       borderRadius: '8px',
                     }}
                     className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}

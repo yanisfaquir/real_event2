@@ -97,13 +97,14 @@ import React, {
     };
   
     useEffect(() => {
-      if (formRef.current) {
-        window.scrollTo({
-          top: formRef.current.offsetTop + formRef.current.offsetHeight,
-          behavior: 'smooth',
-        });
-      }
-    }, [currentSection1]);
+        if (formRef.current) {
+          window.scrollTo({
+         
+            // top: formRef.current.offsetHeight,
+            behavior: 'smooth',
+          });
+        }
+      }, [currentSection1]);
   
     const districtLocations = {
       Aveiro: 'Aveiro',
