@@ -26,7 +26,7 @@ const Registo = () => {
   return (
     <div className='p-9'>
       <div className="min-h-screen flex flex-col md:flex-row mt-8 md:mt-16 p-6 md:p-20 bg-gradient-custom bg-cover bg-no-repeat mx-4 md:my-20 md:mx-20 rounded-lg md:rounded-[40px]">
-        <div className="w-1/2 relative">
+        <div className="w-full md:w-1/2 relative mb-8 md:mb-0">
           <Image
             src="/assets/pictures/registo.png"
             alt="duas pessoas no pc"
@@ -37,7 +37,7 @@ const Registo = () => {
             }} />
         </div>
 
-        <div className="w-1/2 flex justify-center items-center bg-white rounded-[40px] max-w-md md:max-w-lg ml-10">
+        <div className="w-full md:w-1/2 flex justify-center items-center bg-white rounded-[40px] p-6 md:max-w-lg mx-auto shadow-lg">
           <div className="w-full max-w-xs">
             <h1 className="text-center text-4xl font-bold text-gray-700 mb-6">Registo</h1>
             <form className="bg-white px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
@@ -85,7 +85,7 @@ const Registo = () => {
               </div>
               <div className="text-center mt-4">
                 <span className="text-gray-700">Já tem conta? </span>
-                <Link href="/login" className="">Login</Link>
+                <Link href="/login" className="text-customBlue font-bold hover:text-customBlueLight-800 underline">Login</Link>
               </div>
             </form>
           </div>

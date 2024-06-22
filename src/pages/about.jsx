@@ -3,19 +3,52 @@ import React from 'react';
 function AboutUs() {
   return (
     <div className="flex flex-col mt-8 md:mt-16 p-6 md:pt-20 bg-cover bg-no-repeat mx-4 md:mx-20 rounded-lg md:rounded-[40px]">
-      <div className="w-full bg-[#4A7D8B] text-white rounded-t-[40px] py-12 px-4 flex flex-col justify-between shadow-lg">
+      
+      {/* Seção de Boas-vindas */}
+      <div className="w-full bg-[#4A7D8B] text-white rounded-[40px] py-12 px-4 flex flex-col justify-between shadow-lg mb-16">
         <div className="flex justify-center mx-auto z-10">
           <img src="/assets/pictures/logomarca-white.png" alt="Logomarca Realevent" className="relative flex justify-center mx-auto z-10" style={{ maxWidth: '50%', height: 'auto' }} />
         </div>
         <p className="text-center text-xl font-semibold my-4">A RealEvent lhes dá as boas-vindas!</p>
         <p className="px-8 my-10 text-center text-lg leading-relaxed">
-        A RealEvent nasceu para transformar a forma como os eventos corporativos são organizados. Utilizando uma plataforma acessível e uma interface intuitiva, a nossa plataforma permite que os utilizadores requisitem serviços personalizados de maneira a facilitar os aspetos mais confusos na criação dos evento, desde pequenas reuniões até grandes conferências, de forma prática e eficaz.
+          A RealEvent nasceu para transformar a forma como os eventos corporativos são organizados. Utilizando uma plataforma acessível e uma interface intuitiva, a nossa plataforma permite que os utilizadores requisitem serviços personalizados de maneira a facilitar os aspetos mais confusos na criação dos evento, desde pequenas reuniões até grandes conferências, de forma prática e eficaz.
         </p>
       </div>
+      
+      {/* Seção de Missão, Visão e Valores */}
+      <div className="w-full bg-white text-black rounded-[40px] py-12 px-4 flex flex-col justify-between shadow-lg mb-16">
+        <h1 className="text-center font-bold mb-9 pb-4 pt-16 text-5xl">Valores da RealEvent</h1>
+        
+        <div className="w-full flex flex-col items-center mb-16">
+          <div className="mb-8">
+            <h2 className="text-3xl mb-4 text-center font-semibold">Missão</h2>
+            <p className="text-center text-lg leading-relaxed">
+              Fazer do seu evento realidade, de uma forma mais prática através de protocolos estabelecidos com os fornecedores de serviços.
+            </p>
+          </div>
+          <div className="mb-8">
+            <h2 className="text-3xl mb-4 text-center font-semibold">Visão</h2>
+            <p className="text-center text-lg leading-relaxed">
+              Ter uma única plataforma onde consegue ter todos os serviços necessários para organizar um evento.
+            </p>
+          </div>
+          <div className="mb-8">
+            <h2 className="text-3xl mb-4 text-center font-semibold">Valores</h2>
+            <div className="flex justify-center space-x-4">
+              <span className="bg-gray-200 px-4 py-2 rounded-full text-lg">Criatividade</span>
+              <span className="bg-gray-200 px-4 py-2 rounded-full text-lg">Inovação</span>
+              <span className="bg-gray-200 px-4 py-2 rounded-full text-lg">Transparência</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <div className="w-full flex flex-col justify-center items-center bg-white rounded-b-[40px] shadow-lg p-8">
+      {/* Seção de Equipe */}
+      <div className="w-full flex flex-col justify-center items-center bg-white rounded-[40px] shadow-lg p-8 mb-16">
         <h1 className="text-gray-700 text-center font-bold pb-4 pt-16 text-5xl">Conheça a Nossa Equipa</h1>
         <div className="w-full flex flex-col items-center">
+          
+          {/* Equipe de Design */}
           <div className="mb-16">
             <h2 className="text-3xl text-gray-700 mb-8 text-center font-semibold">Design team</h2>
             <div className="flex flex-wrap justify-center">
@@ -36,6 +69,8 @@ function AboutUs() {
               />
             </div>
           </div>
+          
+          {/* Equipe de Desenvolvimento */}
           <div className="mb-16">
             <h2 className="text-3xl text-gray-700 mb-8 text-center font-semibold">Dev team</h2>
             <div className="flex flex-wrap justify-center">
