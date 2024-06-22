@@ -380,7 +380,7 @@ export const AccessibilityProvider = ({ children }) => {
   useHotkeys('ctrl+shift+c', increaseTextSpacing, { enabled: enableShortcut });
   useHotkeys('ctrl+alt+q', toggleHighContrast, { enabled: enableShortcut });
   useHotkeys('ctrl+alt+d', () => Router.push('/'), { enabled: enableShortcut });
-  useHotkeys('ctrl+alt+a', () => Router.push('/startEvent'), {
+  useHotkeys('ctrl+alt+a', () => Router.push('/startEvent1'), {
     enabled: enableShortcut,
   });
   useHotkeys('ctrl+alt+s', () => Router.push('/shopping-cart'), {
