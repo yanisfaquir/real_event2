@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from "next/image";
 
 function Footer() {
   return (
@@ -7,7 +8,7 @@ function Footer() {
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
             <a href="https://flowbite.com/" className="flex items-center">
-              <img src="/assets/pictures/logomarca-preto.png" className="h-8 me-3" alt="FlowBite Logo" />
+              <Image src="/assets/pictures/logomarca-preto.png" className="h-8 me-3" alt="FlowBite Logo" />
             </a>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">

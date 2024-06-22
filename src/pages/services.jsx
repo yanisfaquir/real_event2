@@ -3,6 +3,7 @@ import ApiClient from '../../apiClient';
 import { AccessibilityContext } from '@/contexts/acessibility';
 import { useContext } from 'react';
 import GlobalButton from '@/components/globalButton';
+import Image from 'next/image';
 
 const ServicesPage = () => {
   const { alignment, highContrast } = useContext(AccessibilityContext);
@@ -229,7 +230,7 @@ const ServicesPage = () => {
                   <strong>Fotos:</strong>
                   <div className="grid grid-cols-3 gap-1 mt-2">
                     {service.photo.map((photo, index) => (
-                      <img key={index} src={photo} alt={`Foto ${index}`} className="rounded-lg object-cover h-24 w-full" />
+                      <Image key={index} src={photo} alt={`Foto ${index}`} className="rounded-lg object-cover h-24 w-full" />
                     ))}
                   </div>
                 </div>

@@ -216,7 +216,7 @@ const Profile = () => {
           <div className="flex justify-center items-center w-full md:w-1/4 bg-gray-200 rounded-tl-[40px] rounded-bl-[40px] py-12">
             <div className="relative text-center">
               {profileImageUrl ? (
-                <img
+                <Image
                   src={profileImageUrl}
                   alt="Utilizador"
                   className="cursor-pointer rounded-full w-40 h-40 object-cover mx-auto"
