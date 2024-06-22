@@ -595,7 +595,7 @@ const StartEvent = () => {
           className={`event-form mt-20 lg:mt-16 event-form-1 ${currentSection.number === 1 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
         >
           <p
-            className={`flex flex-col pt-20 px-5 text-[4rem] font-bold text-middle-home`}
+            className={`flex flex-col pt-20 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
             style={{ textAlign: `${alignment ? alignment : 'start'}` }}
           >
             Informações do Evento
@@ -1082,7 +1082,8 @@ const StartEvent = () => {
             </div>
             <div className="lg:w-1/2 px-16">
               <p
-                className={`flex flex-col text-[4rem] font-bold text-middle-home`}
+                 className={`flex flex-col pt-15 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
+
                 style={{ textAlign: `${alignment ? alignment : 'start'}` }}
               >
                 Tipos de serviços
@@ -1205,7 +1206,8 @@ const StartEvent = () => {
             </div>
             <div className="lg:w-1/2 px-16">
               <p
-                className="flex flex-col text-[4rem] font-bold text-middle-home"
+                className={`flex flex-col pt-25 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
+
                 style={{ textAlign: `${alignment ? alignment : 'start'}` }}
               >
                 Tipos de eventos

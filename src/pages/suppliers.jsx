@@ -119,7 +119,7 @@ const Suppliers = () => {
     <div className="mt-20 container mx-auto px-4">
       <section className="mb-10">
         <p
-          className={`flex flex-col pt-20 px-5 text-[4rem] font-bold text-middle-home`}
+          className={`flex flex-col pt-20 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
           style={{ textAlign: `${alignment ? alignment : 'start'}` }}
         >
           Fornecedores
@@ -222,7 +222,8 @@ const Suppliers = () => {
         
         <div>
         <p
-          className={`flex flex-col pt-20 px-5 text-[4rem] font-bold text-middle-home items-right justify-right`}
+          className={`flex flex-col pt-20 px-5 text-[3rem] font-bold text-middle-home items-right justify-right text-gray-900`}
+
           style={{ textAlign: `${alignment ? alignment : 'start'}` }}
         >
           Resultados

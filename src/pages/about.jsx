@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 function AboutUs() {
@@ -7,7 +8,7 @@ function AboutUs() {
       {/* Seção de Boas-vindas */}
       <div className="w-full bg-[#4A7D8B] text-white rounded-[40px] py-12 px-4 flex flex-col justify-between shadow-lg mb-16">
         <div className="flex justify-center mx-auto z-10">
-          <img src="/assets/pictures/logomarca-white.png" alt="Logomarca Realevent" className="relative flex justify-center mx-auto z-10" style={{ maxWidth: '50%', height: 'auto' }} />
+          <Image src="/assets/pictures/logomarca-white.png" alt="Logomarca Realevent" className="relative flex justify-center mx-auto z-10" style={{ maxWidth: '50%', height: 'auto' }} />
         </div>
         <p className="text-center text-xl font-semibold my-4">A RealEvent lhes dá as boas-vindas!</p>
         <p className="px-8 my-10 text-center text-lg leading-relaxed">
@@ -100,7 +101,7 @@ function AboutUs() {
 function TeamMember({ imgSrc, name, roles }) {
   return (
     <div className="text-center m-8">
-      <img src={imgSrc} alt={name} className="w-48 h-48 rounded-full object-cover mx-auto shadow-lg" style={{ filter: 'grayscale(100%)' }} />
+      <Image src={imgSrc} alt={name} className="w-48 h-48 rounded-full object-cover mx-auto shadow-lg" style={{ filter: 'grayscale(100%)' }} />
       <p className="mt-4 text-2xl font-bold">{name}</p>
       {roles.map((role, index) => (
         <p key={index} className="text-gray-600 text-lg">{role}</p>
