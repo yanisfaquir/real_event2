@@ -621,7 +621,7 @@ import React, {
                     Localidade:
                     <div className="flex row" style={{ position: 'relative' }}>
                       <select
-                        value={locationEvent}
+                        value={location ? location : locationEvent}
                         className={`cursor-pointer ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
                         onChange={(e) => {
                           let value = e.target.value;
