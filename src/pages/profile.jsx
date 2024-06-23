@@ -4,14 +4,14 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { AccessibilityContext } from '@/contexts/acessibility';
 import ApiClient from '../../apiClient';
+import Image from 'next/image';
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   const router = useRouter();
   const dispatch = useDispatch();
-  const { alignment, highContrast, fontSize } =
-    useContext(AccessibilityContext);
+  const { alignment, highContrast, fontSize } = useContext(AccessibilityContext);
   const user = useSelector((state) => state.user.user);
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [httpResponse, setResponseValue] = useState('');
@@ -26,15 +26,10 @@ const Profile = () => {
   const [passwordConfirmError, setConfirmPasswordError] = useState('');
   const [nameError, setNameError] = useState('');
 
-  const [profileImageUrl, setProfileImageUrl] = useState(
-    user ? user.photo : ''
-  );
+  const [profileImageUrl, setProfileImageUrl] = useState(user ? user.photo : '');
   const [formData, setFormData] = useState({
     role: user?.role || '',
-    name:
-      user?.role === 'Fornecedor' || user?.role === 'supplier'
-        ? user?.name_company || ''
-        : user?.name || '',
+    name: user?.role === 'Fornecedor' || user?.role === 'supplier' ? user?.name_company || '' : user?.name || '',
     email: user?.email || '',
     password: user?.password || '',
     contact: user?.contact || '',
@@ -44,10 +39,10 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    if (email != '') {
+    if (email !== '') {
       setEmailError('');
     }
-    if (password != '') {
+    if (password !== '') {
       setPasswordError('');
       setErrorMessage('');
     }
@@ -58,22 +53,16 @@ const Profile = () => {
       case 'email':
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         setIsValidEmail(emailRegex.test(formData.email));
-        setEmailError(
-          !emailRegex.test(formData.email) ? 'Insira um email válido' : ''
-        );
+        setEmailError(!emailRegex.test(formData.email) ? 'Insira um email válido' : '');
         break;
       case 'password':
-        setPasswordError(
-          formData.password.trim() === '' ? 'Campo obrigatório' : ''
-        );
+        setPasswordError(formData.password.trim() === '' ? 'Campo obrigatório' : '');
         break;
       case 'name':
         setNameError(formData.name.trim() === '' ? 'Campo obrigatório' : '');
         break;
       case 'confirmPassword':
-        setConfirmPasswordError(
-          confirmPassword !== formData.password ? 'As senhas não conferem' : ''
-        );
+        setConfirmPasswordError(confirmPassword !== formData.password ? 'As senhas não conferem' : '');
         break;
       default:
         break;
@@ -91,9 +80,9 @@ const Profile = () => {
         className={`date-checkbox ${highContrast ? 'high-contrast' : ''}`}
       />
       <span
-        className={`${highContrast ? 'text-[#FFF000]' : 'text-black'} cursosr-pointer`}
+        className={`${highContrast ? 'text-[#FFF000]' : 'text-black'} cursor-pointer`}
         style={{
-          marginTop: `4px`,
+          marginTop: '4px',
           fontSize: `${fontSize * 20}px`,
           textAlign: `${alignment ? alignment : 'start'}`,
         }}
@@ -107,45 +96,12 @@ const Profile = () => {
     setRole(e.target.value);
     setFormData((prevState) => ({
       ...prevState,
-      role: role == '' || role == 'Utilizador' ? 'user' : 'supplier',
+      role: e.target.value === 'Utilizador' ? 'user' : 'supplier',
     }));
   };
 
-  // const handleImageUpload = (event) => {
-  //   const fileArray = event?.target?.files;
-  //   if (!fileArray || !fileArray.length) {
-  //     return;
-  //   }
-
-  //   const file = fileArray[0];
-  //   if (!file) {
-  //     return;
-  //   }
-
-  //   if (/(\jpg|\jpeg|\png|\bmp)$/i.test(file.type)) {
-  //     if (file.size <= 3145728) {
-  //       const reader = new FileReader();
-
-  //       reader.onloadend = function () {
-  //         setProfileImageUrl(reader.result);
-  //         setFormData((prevState) => ({
-  //           ...prevState,
-  //           photo: profileImageUrl,
-  //         }));
-  //       };
-
-  //       reader.readAsDataURL(file);
-  //     } else {
-  //       alert('O arquivo deve ter menos de 3MB.');
-  //     }
-  //   } else {
-  //     console.log(file.type);
-  //     alert('Por favor, selecione um arquivo JPEG, JPG, BMP ou PNG.');
-  //   }
-  // };
-
   const handleImageUpload = (event) => {
-    const fileArray = event?.target?.files;
+    const fileArray = event.target.files;
     if (!fileArray || !fileArray.length) {
       return;
     }
@@ -164,25 +120,20 @@ const Profile = () => {
       const reader = new FileReader();
 
       reader.onloadend = function () {
-        // Create a temporary canvas element
-        const img = new Image();
+        const img = new window.Image();
         img.src = reader.result;
 
         img.onload = function () {
-          // Calculate the scale factor based on the desired output size
           const scaleFactor = Math.min(1, 800 / img.width, 800 / img.height);
 
-          // Create a canvas element and draw the scaled image onto it
           const canvas = document.createElement('canvas');
           canvas.width = img.width * scaleFactor;
           canvas.height = img.height * scaleFactor;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-          // Convert the canvas content to a data URL
-          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8); // 0.8 is the quality factor
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
 
-          // Update the state with the compressed image
           setProfileImageUrl(compressedDataUrl);
           setFormData((prevState) => ({
             ...prevState,
@@ -193,13 +144,12 @@ const Profile = () => {
 
       reader.readAsDataURL(file);
     } else {
-      console.log(file.type);
       alert('Por favor, selecione um arquivo JPEG, JPG, BMP ou PNG.');
     }
   };
 
   const handleChange = (event) => {
-    const { name, value } = event?.target;
+    const { name, value } = event.target;
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
@@ -230,7 +180,7 @@ const Profile = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (role == 'Utilizador') {
+    if (role === 'Utilizador') {
       setFormData((prevState) => ({
         ...prevState,
         role: 'user',
@@ -250,80 +200,65 @@ const Profile = () => {
     }
 
     const apiInstance = new ApiClient();
-    if (role == 'Fornecedor') {
+    if (role === 'Fornecedor') {
       const response = apiInstance.registerSupplier(formData);
       console.log(response);
-
-      console.log(formData);
     } else {
       const response = apiInstance.registerUser(formData);
       console.log(response);
-
-      console.log(formData);
     }
   };
 
   return (
-    <div className="sm:mt-32 md:mt-16">
+    <div className="mt-20 container mx-auto px-4">
       <div className="flex flex-col md:flex-row mt-16 p-6 md:pt-20 bg-cover bg-no-repeat mx-4 md:mt-20 md:mx-20 rounded-lg md:rounded-[40px]">
-        <div
-          className={`${highContrast ? 'bg-black border border-white' : 'bg-white'} text-white rounded-[40px] py-12 px-4 flex flex-col justify-between shadow-lg w-[100%]`}
-        >
-          <div className="flex items-center justify-center flex-col">
-            <form className="px-4 py-8" onSubmit={handleSubmit}>
-              {!user && (
-                <div className="mb-4 mx-auto">
-                  <div className="flex justify-bewteen gap-8">
-                    <RoleRadioButton
-                      value="Utilizador"
-                      checked={role === 'Utilizador'}
-                      onChange={handleRoleChange}
-                    />
-                    <RoleRadioButton
-                      value="Fornecedor"
-                      checked={role === 'Fornecedor'}
-                      onChange={handleRoleChange}
-                    />
-                  </div>
-                </div>
+        <div className="flex flex-col md:flex-row w-full bg-white shadow-lg rounded-[40px]">
+          <div className="flex justify-center items-center w-full md:w-1/4 bg-gray-200 rounded-tl-[40px] rounded-bl-[40px] py-12">
+            <div className="relative text-center">
+              {profileImageUrl ? (
+                <Image
+                  src={profileImageUrl}
+                  alt="Utilizador"
+                  className="cursor-pointer rounded-full w-40 h-40 object-cover mx-auto"
+                  onClick={() => document.getElementById('fileInput').click()}
+                />
+              ) : (
+                <>
+                  <Image
+                    src={`/assets/icons/user-${highContrast ? 'white' : 'black'}.svg`}
+                    alt="Utilizador"
+                    className="cursor-pointer mx-auto"
+                    width={80}
+                    height={80}
+                    onClick={() => document.getElementById('fileInput').click()}
+                  />
+                  <p className="mt-2 text-center">Carregar imagem</p>
+                </>
               )}
               <input
                 type="file"
-                accept=".jpg,.jpeg,.png,.bmp"
-                id="upload-image-input"
+                id="fileInput"
+                accept="image/*"
                 onChange={handleImageUpload}
-                style={{ visibility: 'hidden' }}
+                className="hidden"
               />
-              <div className={`relative pb-8`}>
-                {profileImageUrl && (
-                  <img
-                    src={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/edit-icon.svg`}
-                    alt="Substituir imagem atual"
-                    width={24}
-                    height={24}
-                    onClick={() =>
-                      document.getElementById('upload-image-input').click()
-                    }
-                    className={`absolute top-0 right-0 cursor-pointer z-10`}
-                  />
-                )}
+            </div>
+          </div>
 
-                <GlobalButton
-                  image={
-                    profileImageUrl
-                      ? profileImageUrl
-                      : `/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/add-icon.svg`
-                  }
-                  onClick={() =>
-                    document.getElementById('upload-image-input').click()
-                  }
-                  width="100"
-                  text="Adicionar Imagem de Perfil"
-                  id="add-profile-image"
-                  customClass={`${profileImageUrl ? 'rounded-button' : ''}`}
-                />
-              </div>
-
+          <div className="w-full md:w-3/4 p-6 md:p-10">
+            <div className="col-span-1 flex justify-center space-x-4 mt-10">
+              <RoleRadioButton
+                value="Utilizador"
+                checked={role === 'Utilizador'}
+                onChange={handleRoleChange}
+              />
+              <RoleRadioButton
+                value="Fornecedor"
+                checked={role === 'Fornecedor'}
+                onChange={handleRoleChange}
+              />
+            </div>
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
               <label
                 className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
                 style={{
@@ -331,203 +266,14 @@ const Profile = () => {
                   fontSize: `${fontSize * 20}px`,
                 }}
               >
-                {role == 'Utilizador' ? 'Email' : 'Email Fornecedor'}:
-                <div className="flex row" style={{ position: 'relative' }}>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    autoComplete="off"
-                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
-                    onChange={handleChange}
-                    onBlur={() => handleInputBlur('email')}
-                    placeholder="Digite aqui"
-                    required
-                    style={{
-                      padding: '10px',
-                      borderRadius: '5px',
-                      border: '1px solid #ccc',
-                      marginTop: '4px',
-                      paddingRight: '30px',
-                      width: '320px',
-                    }}
-                  />
-                </div>
-                {!isValidEmail && !emailError && (
-                  <p
-                    aria-live="polite"
-                    className={` ${'text-red-600'}`}
-                    style={{
-                      fontSize: `${fontSize * 12}px`,
-                      marginTop: '4px',
-                      textAlign: `${alignment ? alignment : 'start'}`,
-                    }}
-                  >
-                    Insira um email válido
-                  </p>
-                )}
-                {errorMessage && (
-                  <p
-                    aria-live="polite"
-                    className={` ${'text-red-600'}`}
-                    style={{
-                      fontSize: `${fontSize * 12}px`,
-                      marginTop: '4px',
-                      textAlign: `${alignment ? alignment : 'start'}`,
-                    }}
-                  >
-                    {httpResponse || errorMessage}
-                  </p>
-                )}
-                <p
-                  aria-live="polite"
-                  className={` ${
-                    emailError ? 'visible text-red-600' : 'invisible'
-                  }`}
-                  style={{
-                    marginTop: `${emailError ? '4px' : ''}`,
-                    fontSize: `${fontSize * 12}px`,
-                    textAlign: `${alignment ? alignment : 'start'}`,
-                  }}
-                >
-                  Campo obrigatório
-                </p>
-              </label>
-
-              <label
-                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
-                style={{
-                  textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px`,
-                }}
-              >
-                Senha:
-                <div className="flex row" style={{ position: 'relative' }}>
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    autoComplete="new-password"
-                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
-                    onChange={handleChange}
-                    onBlur={() => handleInputBlur('password')}
-                    placeholder="********"
-                    required
-                    style={{
-                      padding: '10px',
-                      borderRadius: '5px',
-                      border: '1px solid #ccc',
-                      marginTop: '4px',
-                      paddingRight: '30px',
-                      width: '320px',
-                    }}
-                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
-                  />
-                </div>
-                {!errorMessage && !passwordError && (
-                  <p
-                    aria-live="polite"
-                    style={{
-                      marginTop: `4px`,
-                      fontSize: `${fontSize * 12}px`,
-                      textAlign: `${alignment ? alignment : 'start'}`,
-                      width: '320px',
-                    }}
-                  >
-                    Deve ter pelo menos 8 caracteres, incluindo 1 letra
-                    maiúscula, 1 letra minúscula e 1 número
-                  </p>
-                )}
-                {errorMessage && (
-                  <p
-                    aria-live="polite"
-                    className={` ${'text-red-600'}`}
-                    style={{
-                      fontSize: `${fontSize * 12}px`,
-                      marginTop: '4px',
-                      textAlign: `${alignment ? alignment : 'start'}`,
-                    }}
-                  >
-                    {httpResponse || errorMessage}
-                  </p>
-                )}
-                <p
-                  aria-live="polite"
-                  className={` ${
-                    passwordError ? 'visible text-red-600' : 'invisible'
-                  }`}
-                  style={{
-                    marginTop: `${passwordError ? '4px' : ''}`,
-                    fontSize: `${fontSize * 12}px`,
-                    textAlign: `${alignment ? alignment : 'start'}`,
-                  }}
-                >
-                  Campo obrigatório
-                </p>
-              </label>
-
-              <label
-                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold mb-4`}
-                style={{
-                  textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px`,
-                }}
-              >
-                Confirmar Senha:
-                <div className="flex row" style={{ position: 'relative' }}>
-                  <input
-                    type="password"
-                    name="confirmPassword"
-                    value={confirmPassword}
-                    autoComplete="new-password"
-                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    onBlur={() => handleInputBlur('confirmPassword')}
-                    placeholder="********"
-                    required
-                    style={{
-                      padding: '10px',
-                      borderRadius: '5px',
-                      border: '1px solid #ccc',
-                      marginTop: '4px',
-                      paddingRight: '30px',
-                      width: '320px',
-                    }}
-                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
-                  />
-                </div>
-                <p
-                  className={` ${'text-red-600'} ${
-                    passwordConfirmError ? 'visible text-red-600' : 'invisible'
-                  }`}
-                  aria-live="polite"
-                  style={{
-                    marginTop: `4px`,
-                    fontSize: `${fontSize * 12}px`,
-                    textAlign: `${alignment ? alignment : 'start'}`,
-                    width: '320px',
-                  }}
-                >
-                  As senhas não conferem
-                </p>
-              </label>
-
-              <label
-                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
-                style={{
-                  textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px`,
-                }}
-              >
-                {role == 'Utilizador' ? 'Nome' : 'Nome Fornecedor'}:
+                Nome:
                 <div className="flex row" style={{ position: 'relative' }}>
                   <input
                     type="text"
                     name="name"
                     value={formData.name}
-                    id={`input-rgister-name`}
                     autoComplete="off"
-                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
                     onChange={handleChange}
                     onBlur={() => handleInputBlur('name')}
                     placeholder="Digite aqui"
@@ -538,24 +284,10 @@ const Profile = () => {
                       border: '1px solid #ccc',
                       marginTop: '4px',
                       paddingRight: '30px',
-                      width: '320px',
                     }}
                   />
                 </div>
-                <p
-                  className={` ${'text-red-600'} ${
-                    nameError ? 'visible text-red-600' : 'invisible'
-                  }`}
-                  aria-live="polite"
-                  style={{
-                    marginTop: `4px`,
-                    fontSize: `${fontSize * 12}px`,
-                    textAlign: `${alignment ? alignment : 'start'}`,
-                    width: '320px',
-                  }}
-                >
-                  Campo obrigatório
-                </p>
+                {nameError && <p className="text-red-500">{nameError}</p>}
               </label>
 
               <label
@@ -565,17 +297,17 @@ const Profile = () => {
                   fontSize: `${fontSize * 20}px`,
                 }}
               >
-                {role == 'Utilizador' ? 'Contato' : 'Contato Fornecedor'}:
+                Email:
                 <div className="flex row" style={{ position: 'relative' }}>
                   <input
-                    type="tel"
-                    value={formData.contact}
-                    onChange={handleChange}
-                    name="contact"
-                    id="input-contact"
+                    type="email"
+                    name="email"
+                    value={formData.email}
                     autoComplete="off"
-                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
-                    placeholder="+351 9xx xxx xxx"
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
+                    onChange={handleChange}
+                    onBlur={() => handleInputBlur('email')}
+                    placeholder="Digite aqui"
                     required
                     style={{
                       padding: '10px',
@@ -583,7 +315,99 @@ const Profile = () => {
                       border: '1px solid #ccc',
                       marginTop: '4px',
                       paddingRight: '30px',
-                      width: '320px',
+                    }}
+                  />
+                </div>
+                {emailError && <p className="text-red-500">{emailError}</p>}
+              </label>
+
+              <label
+                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
+                style={{
+                  textAlign: `${alignment ? alignment : 'start'}`,
+                  fontSize: `${fontSize * 20}px}`,
+                }}
+              >
+                Senha:
+                <div className="flex row" style={{ position: 'relative' }}>
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    autoComplete="off"
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
+                    onChange={handleChange}
+                    onBlur={() => handleInputBlur('password')}
+                    placeholder="Digite aqui"
+                    required
+                    style={{
+                      padding: '10px',
+                      borderRadius: '5px',
+                      border: '1px solid #ccc',
+                      marginTop: '4px',
+                      paddingRight: '30px',
+                    }}
+                  />
+                </div>
+                {passwordError && <p className="text-red-500">{passwordError}</p>}
+              </label>
+
+              <label
+                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
+                style={{
+                  textAlign: `${alignment ? alignment : 'start'}`,
+                  fontSize: `${fontSize * 20}px}`,
+                }}
+              >
+                Confirmar Senha:
+                <div className="flex row" style={{ position: 'relative' }}>
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    value={confirmPassword}
+                    autoComplete="off"
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onBlur={() => handleInputBlur('confirmPassword')}
+                    placeholder="Digite aqui"
+                    required
+                    style={{
+                      padding: '10px',
+                      borderRadius: '5px',
+                      border: '1px solid #ccc',
+                      marginTop: '4px',
+                      paddingRight: '30px',
+                    }}
+                  />
+                </div>
+                {passwordConfirmError && <p className="text-red-500">{passwordConfirmError}</p>}
+              </label>
+
+              <label
+                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
+                style={{
+                  textAlign: `${alignment ? alignment : 'start'}`,
+                  fontSize: `${fontSize * 20}px}`,
+                }}
+              >
+                Contato:
+                <div className="flex row" style={{ position: 'relative' }}>
+                  <input
+                    type="text"
+                    name="contact"
+                    value={formData.contact}
+                    autoComplete="off"
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
+                    onChange={handleChange}
+                    onBlur={() => handleInputBlur('contact')}
+                    placeholder="Digite aqui"
+                    required
+                    style={{
+                      padding: '10px',
+                      borderRadius: '5px',
+                      border: '1px solid #ccc',
+                      marginTop: '4px',
+                      paddingRight: '30px',
                     }}
                   />
                 </div>
@@ -593,54 +417,47 @@ const Profile = () => {
                 className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
                 style={{
                   textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px`,
+                  fontSize: `${fontSize * 20}px}`,
+                }}
+              >
+                Endereço:
+                <div className="flex row" style={{ position: 'relative' }}>
+                  <input
+                    type="text"
+                    name="address"
+                    value={formData.address}
+                    autoComplete="off"
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
+                    onChange={handleChange}
+                    onBlur={() => handleInputBlur('address')}
+                    placeholder="Digite aqui"
+                    required
+                    style={{
+                      padding: '10px',
+                      borderRadius: '5px',
+                      border: '1px solid #ccc',
+                      marginTop: '4px',
+                      paddingRight: '30px',
+                    }}
+                  />
+                </div>
+              </label>
+
+              <label
+                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
+                style={{
+                  textAlign: `${alignment ? alignment : 'start'}`,
+                  fontSize: `${fontSize * 20}px}`,
                 }}
               >
                 Distrito:
                 <div className="flex row" style={{ position: 'relative' }}>
                   <select
-                    name="address"
-                    value={formData.address || ''}
+                    name="district"
+                    value={formData.district}
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
                     onChange={handleChange}
-                    id="input-address"
-                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
-                    style={{
-                      padding: '10px',
-                      borderRadius: '5px',
-                      border: '1px solid #ccc',
-                      marginTop: '4px',
-                      paddingRight: '30px',
-                      width: '320px',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <option value="">Selecione um distrito</option>
-                    {Object.entries(districtLocations).map(([key, value]) => (
-                      <option key={key} value={key}>
-                        {value}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </label>
-              <label
-                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
-                style={{
-                  textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px`,
-                }}
-              >
-                Código Postal:
-                <div className="flex row" style={{ position: 'relative' }}>
-                  <input
-                    type="number"
-                    value={formData.postal_code}
-                    onChange={handleChange}
-                    name="postal_code"
-                    id="input-postal_code"
-                    autoComplete="off"
-                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
-                    placeholder="+351 9xx xxx xxx"
+                    placeholder="Digite aqui"
                     required
                     style={{
                       padding: '10px',
@@ -648,18 +465,64 @@ const Profile = () => {
                       border: '1px solid #ccc',
                       marginTop: '4px',
                       paddingRight: '30px',
-                      width: '320px',
+                    }}
+                  >
+                    <option value="" disabled>
+                      Selecione um distrito
+                    </option>
+                    {Object.keys(districtLocations).map((district) => (
+                      <option key={district} value={districtLocations[district]}>
+                        {district}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </label>
+
+              <label
+                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
+                style={{
+                  textAlign: `${alignment ? alignment : 'start'}`,
+                  fontSize: `${fontSize * 20}px}`,
+                }}
+              >
+                Código Postal:
+                <div className="flex row" style={{ position: 'relative' }}>
+                  <input
+                    type="text"
+                    name="postal_code"
+                    value={formData.postal_code}
+                    autoComplete="off"
+                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
+                    onChange={handleChange}
+                    onBlur={() => handleInputBlur('postal_code')}
+                    placeholder="Digite aqui"
+                    required
+                    style={{
+                      padding: '10px',
+                      borderRadius: '5px',
+                      border: '1px solid #ccc',
+                      marginTop: '4px',
+                      paddingRight: '30px',
                     }}
                   />
                 </div>
               </label>
+
+              {httpResponse && (
+                <div className="mt-4">
+                  <p>{httpResponse}</p>
+                </div>
+              )}
+            </form>
+
+            <div className="flex items-center justify-center mb-5 mt-10">
               <GlobalButton
                 size="medium"
                 type="primary"
-                onClick={handleSubmit}
-                text="Criar conta"
+                text="Atualizar"
               />
-            </form>
+            </div>
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import ApiClient from '../../apiClient';
 import { AccessibilityContext } from '@/contexts/acessibility';
 import { useContext } from 'react';
 import GlobalButton from '@/components/globalButton';
+import Image from 'next/image';
 
 const ServicesPage = () => {
   const { alignment, highContrast } = useContext(AccessibilityContext);
@@ -77,8 +78,8 @@ const ServicesPage = () => {
   return (
     <div className="services-container mx-auto px-4 sm:px-6 lg:px-8 mt-20">
       <section className="mb-10">
-        <p
-          className={`flex flex-col pt-20 px-5 text-[4rem] font-bold text-middle-home`}
+        <p className={`flex flex-col pt-25 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
+
           style={{ textAlign: `${alignment ? alignment : 'start'}` }}
         >
           Serviços
@@ -205,7 +206,8 @@ const ServicesPage = () => {
       {showResults && services.length > 0 ? (
         <>
           <p
-            className={`flex flex-col pt-20 px-5 text-[4rem] font-bold text-middle-home`}
+             className={`flex flex-col pt-25 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
+
             style={{ textAlign: `${alignment ? alignment : 'start'}` }}
           >
             Resultados
@@ -228,7 +230,7 @@ const ServicesPage = () => {
                   <strong>Fotos:</strong>
                   <div className="grid grid-cols-3 gap-1 mt-2">
                     {service.photo.map((photo, index) => (
-                      <img key={index} src={photo} alt={`Foto ${index}`} className="rounded-lg object-cover h-24 w-full" />
+                      <Image key={index} src={photo} alt={`Foto ${index}`} className="rounded-lg object-cover h-24 w-full" />
                     ))}
                   </div>
                 </div>

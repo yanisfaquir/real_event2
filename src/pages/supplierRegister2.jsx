@@ -1,12 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import GlobalButton from '@/components/globalButton';
 import { FaChevronDown } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import Select from 'react-select';
+import { AccessibilityContext } from '@/contexts/acessibility';
+import { useSelector } from 'react-redux';
 
 const SupplierRegister = () => {
+    const { alignment, highContrast } = useContext(AccessibilityContext);
     const [serviceName, setServiceName] = useState('');
+    const [postalCode, setPostalCode] = useState('');
+    const [capacity, setCapacity] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    
     const [isOpenLocalidade, setIsOpenLocalidade] = useState(false);
     const [isOpenTipoComida, setIsOpenTipoComida] = useState(false);
     const [isOpenPreco, setIsOpenPreco] = useState(false);
@@ -17,6 +24,8 @@ const SupplierRegister = () => {
     const [selectedMultiOption1, setSelectedMultiOption1] = useState([]);
     const [shortText, setShortText] = useState('');
     const [longText, setLongText] = useState('');
+    const serviceType_ = useSelector((state) => state.event.serviceType);
+    const [serviceType, setServiceType] = useState(serviceType_);
 
     const uniqueOptionsDJ = [
         { value: 'Aveiro', label: 'Aveiro' },
@@ -78,7 +87,7 @@ const SupplierRegister = () => {
     const [selectedLocalidade, setSelectedLocalidade] = useState('');
     const [selectedTipoComida, setSelectedTipoComida] = useState('');
     const [selectedPreco, setSelectedPreco] = useState('');
-    const [service, setService] = useState('');
+    // const [service, setService] = useState('');
 
     const router = useRouter();
 
@@ -111,387 +120,225 @@ const SupplierRegister = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (isButtonDisabled) return;
         console.log({
             serviceName,
+            postalCode,
+            capacity,
             selectedUniqueOptionDJ,
             uniqueOptionsCatering,
             selectedMultiOption1,
             shortText,
             longText,
-            service,
+            serviceType
         });
     };
-    useEffect(() => {
 
+    useEffect(() => {
         if (router.query && router.query.service) {
-            setService(router.query.service);
-            console.log(router.query.service);
+            setServiceType(router.query.service);
         }
     }, [router.query]);
 
+    useEffect(() => {
+        const allFieldsFilled = serviceName && postalCode && capacity;
+        setIsButtonDisabled(!allFieldsFilled);
+    }, [serviceName, postalCode, capacity]);
 
     return (
-        <div className="flex justify-center items-center h-screen mt-10">
-            <div className="text-left mt-10 ml-20">
-                <h1 className='font-medium text-3xl mb-4 mt-10'>INFORMAÇÕES - {service} </h1>
-                <p className='text-base mb-8'>Queremos saber mais sobre o teu serviço de forma a conseguirmos partilhar com os nossos utilizadores.</p>
-
-                {service === 'Catering' && (
-
-                    <div>
-                        <form onSubmit={handleSubmit} style={{
-                            maxWidth: '1200px', margin: '0 auto', padding: '20px', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center'
-                        }}>
-                            {/* Linha 1 */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Nome do Serviço:</label>
-                                    <input
-                                        type="text"
-                                        value={serviceName}
-                                        onChange={(e) => setServiceName(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </div>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Tipo de Refeições:</label>
-                                    <input
-                                        type="text"
-                                        value={shortText}
-                                        onChange={(e) => setShortText(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </div>
-
-                            </div>
-                            {/* Linha 2 */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Localização:</label>
-                                    <Select
-                                        options={uniqueOptionsDJ}
-                                        value={selectedUniqueOptionDJ}
-                                        onChange={setSelectedUniqueOptionDJ}
-                                    />
-                                </div>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Tipo de comida:</label>
-                                    <Select
-                                        options={uniqueOptionsCatering}
-                                        value={selectedUniqueOptionsCatering}
-                                        onChange={setSelectedUniqueOptionsCatering}
-                                    />
-                                </div>
-                            </div>
-                            {/* Linha 3 */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Capacidade mínima de pessoas:</label>
-                                    <input
-                                        type="text"
-                                        value={shortText}
-                                        onChange={(e) => setShortText(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </div>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Capacidade máxima de pessoas:</label>
-                                    <input
-                                        type="text"
-                                        value={shortText}
-                                        onChange={(e) => setShortText(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </div>
-                            </div>
-                            {/* Linha 2 */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
-                     
-                                <div style={{ width: '100%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Preço do menu</label>
-                                    <input
-                                        type="text"
-                                        value={shortText}
-                                        onChange={(e) => setShortText(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </div>
-                            </div>
-                            {/* Linha 4 */}
-                            <div style={{ width: '100%', marginBottom: '20px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Breve descrição dos menu:</label>
-                                <textarea
-                                    value={longText}
-                                    onChange={(e) => setLongText(e.target.value)}
-                                    style={{ width: '100%', height: '100px', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', resize: 'vertical' }}
-                                ></textarea>
-                            </div>
-                        </form>
+        <div className="mt-20 container mx-auto px-4">
+            <section className="mb-10">
+                <p
+                    className={`flex flex-col pt-20 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                >
+                    INFORMAÇÕES - {serviceType}
+                </p>
+                <p
+                    className={`relative max-w-[90vw] px-5 mb-4 text-[1.2rem]`}
+                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                >
+                    Queremos saber mais sobre o teu serviço de forma a conseguirmos partilhar com os nossos utilizadores.
+                </p>
+            </section>
+               
+            {serviceType === 'Catering' && (
+                <form onSubmit={handleSubmit} className="mb-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="flex flex-col">
+                        <label className="mb-1">Nome do serviço:</label>
+                        <input
+                            type="text"
+                            value={serviceName}
+                            onChange={(e) => setServiceName(e.target.value)}
+                            className="p-2 border rounded"
+                        />
                     </div>
-                )}
-
-
-                {service === 'Merchandising' && (
-
-                    <div>
-                        <form onSubmit={handleSubmit} style={{
-                            maxWidth: '1200px', margin: '0 auto', padding: '20px', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center'
-                        }}>
-                            {/* Linha 1 */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
-                                <div style={{ width: '100%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Nome do Serviço:</label>
-                                    <input
-                                        type="text"
-                                        value={serviceName}
-                                        onChange={(e) => setServiceName(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </div>
-                            </div>
-                            {/* Linha 2 */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Localização:</label>
-                                    <Select
-                                        options={uniqueOptionsDJ}
-                                        value={selectedUniqueOptionDJ}
-                                        onChange={setSelectedUniqueOptionDJ}
-                                    />
-                                </div>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Produtos disponíveis:</label>
-                                    <Select
-                                        isMulti
-                                        options={objMerchandising}
-                                        value={selectedObjMerchandising}
-                                        onChange={setSelectedObjMerchandising}
-                                    />
-                                </div>
-                            </div>
-                            {/*{selectedMultiOption1.length > 0 && (
-                                
-                            )} */} 
-                            {/* Linha 3 */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Capacidade mínima por produto:</label>
-                                    <input
-                                        type="text"
-                                        value={shortText}
-                                        onChange={(e) => setShortText(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </div>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Capacidade máxima por produto:</label>
-                                    <input
-                                        type="text"
-                                        value={shortText}
-                                        onChange={(e) => setShortText(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </div>
-                            </div>
-                            {/* Linha 2 */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
-                                <div style={{ width: '100%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Métodos de entrega disponiveis:</label>
-                                    <Select
-                                        isMulti
-                                        options={metodoEntrega}
-                                        value={selectedMetodoEntrega}
-                                        onChange={setSelectedMetodoEntrega}
-                                    />
-                                </div>
-                            </div>
-                            {/* Linha 4 */}
-                            <div style={{ width: '100%', marginBottom: '20px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Breve descrição dos menus:</label>
-                                <textarea
-                                    value={longText}
-                                    onChange={(e) => setLongText(e.target.value)}
-                                    style={{ width: '100%', height: '100px', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', resize: 'vertical' }}
-                                ></textarea>
-                            </div>
-                        </form>
+                    <div className="flex flex-col">
+                        <label className="mb-1">Código Postal:</label>
+                        <input
+                            type="text"
+                            value={postalCode}
+                            onChange={(e) => setPostalCode(e.target.value)}
+                            className="p-2 border rounded"
+                        />
                     </div>
-                )}
-
-
-
-                {service === 'DJ' && (
-                    <div>
-                        <form onSubmit={handleSubmit} style={{
-                            maxWidth: '1200px', margin: '0 auto', padding: '20px', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center'
-                        }}>
-                            {/* Linha 1 */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Nome do Serviço:</label>
-                                    <input
-                                        type="text"
-                                        value={serviceName}
-                                        onChange={(e) => setServiceName(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </div>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Tipo de música:</label>
-                                    <input
-                                        type="text"
-                                        value={shortText}
-                                        onChange={(e) => setShortText(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </div>
-
-                            </div>
-                            {/* Linha 2 */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Localização:</label>
-                                    <Select
-                                        options={uniqueOptionsDJ}
-                                        value={selectedUniqueOptionDJ}
-                                        onChange={setSelectedUniqueOptionDJ}
-                                    />
-                                </div>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Equipamentos disponíveis:</label>
-                                    <Select
-                                        isMulti
-                                        options={multiOptionsDJ}
-                                        value={selectedMultiOption1}
-                                        onChange={setSelectedMultiOption1}
-                                    />
-                                </div>
-                            </div>
-                            {/* Linha 3 */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
-
-                                <div style={{ width: '100%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Preço por hora:</label>
-                                    <input
-                                        type="text"
-                                        value={shortText}
-                                        onChange={(e) => setShortText(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </div>
-                            </div>
-                            {/* Linha 4 */}
-                            <div style={{ width: '100%', marginBottom: '20px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Breve descrição:</label>
-                                <textarea
-                                    value={longText}
-                                    onChange={(e) => setLongText(e.target.value)}
-                                    style={{ width: '100%', height: '100px', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', resize: 'vertical' }}
-                                ></textarea>
-                            </div>
-                        </form>
+                    <div className="flex flex-col">
+                        <label className="mb-1">Capacidade de pessoas:</label>
+                        <select
+                            value={capacity}
+                            onChange={(e) => setCapacity(e.target.value)}
+                            className="p-2 border rounded"
+                        >
+                            <option value="">Todos</option>
+                            <option value="10-50">10-50</option>
+                            <option value="51-100">51-100</option>
+                            <option value="101-200">101-200</option>
+                            <option value="200+">200+</option>
+                        </select>
                     </div>
-                )}
+                </form>
+            )}
 
-
-                {service === 'Espaço' && (
-                    <div>
-                        <form onSubmit={handleSubmit} style={{
-                            maxWidth: '1200px', margin: '0 auto', padding: '20px', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center'
-                        }}>
-                            {/* Linha 1 */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Nome do Serviço:</label>
-                                    <input
-                                        type="text"
-                                        value={serviceName}
-                                        onChange={(e) => setServiceName(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </div>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Tipo de espaço:</label>
-                                    <input
-                                        type="text"
-                                        value={shortText}
-                                        onChange={(e) => setShortText(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </div>
-
-                            </div>
-                            {/* Linha 2 */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Localização:</label>
-                                    <Select
-                                        options={uniqueOptionsDJ}
-                                        value={selectedUniqueOptionDJ}
-                                        onChange={setSelectedUniqueOptionDJ}
-                                    />
-                                </div>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Equipamentos disponíveis:</label>
-                                    <Select
-                                        isMulti
-                                        options={multiOptionsDJ}
-                                        value={selectedMultiOption1}
-                                        onChange={setSelectedMultiOption1}
-                                    />
-                                </div>
-                            </div>
-                            {/* Linha 3 */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Capacidade máxima de pessoas:</label>
-                                    <input
-                                        type="text"
-                                        value={shortText}
-                                        onChange={(e) => setShortText(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </div>
-                                <div style={{ width: '48%' }}>
-                                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Preço por dia:</label>
-                                    <input
-                                        type="text"
-                                        value={shortText}
-                                        onChange={(e) => setShortText(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                    />
-                                </div>
-                            </div>
-                            {/* Linha 4 */}
-                            <div style={{ width: '100%', marginBottom: '20px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Breve descrição:</label>
-                                <textarea
-                                    value={longText}
-                                    onChange={(e) => setLongText(e.target.value)}
-                                    style={{ width: '100%', height: '100px', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', resize: 'vertical' }}
-                                ></textarea>
-                            </div>
-                        </form>
+            {serviceType === 'Merchandising' && (
+                <form onSubmit={handleSubmit} className="mb-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="flex flex-col">
+                        <label className="mb-1">Nome do serviço:</label>
+                        <input
+                            type="text"
+                            value={serviceName}
+                            onChange={(e) => setServiceName(e.target.value)}
+                            className="p-2 border rounded"
+                        />
                     </div>
+                    <div className="flex flex-col">
+                        <label className="mb-1">Código Postal:</label>
+                        <input
+                            type="text"
+                            value={postalCode}
+                            onChange={(e) => setPostalCode(e.target.value)}
+                            className="p-2 border rounded"
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="mb-1">Capacidade de pessoas:</label>
+                        <select
+                            value={capacity}
+                            onChange={(e) => setCapacity(e.target.value)}
+                            className="p-2 border rounded"
+                        >
+                            <option value="">Todos</option>
+                            <option value="10-50">10-50</option>
+                            <option value="51-100">51-100</option>
+                            <option value="101-200">101-200</option>
+                            <option value="200+">200+</option>
+                        </select>
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="mb-1">Escolha um tipo de comida:</label>
+                        <Select
+                            isOpen={isOpenTipoComida}
+                            onToggle={handleToggleDropdownTipoComida}
+                            value={selectedTipoComida}
+                            onChange={handleSelectTipoComida}
+                            options={tipoComida.map((comida) => ({
+                                value: comida,
+                                label: comida,
+                            }))}
+                            className="p-2 border rounded"
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="mb-1">Escolha um preço:</label>
+                        <Select
+                            isOpen={isOpenPreco}
+                            onToggle={handleToggleDropdownPreco}
+                            value={selectedPreco}
+                            onChange={handleSelectPreco}
+                            options={precoCatering.map((preco) => ({
+                                value: preco,
+                                label: preco,
+                            }))}
+                            className="p-2 border rounded"
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="mb-1">Método de entrega:</label>
+                        <Select
+                            value={selectedMetodoEntrega}
+                            onChange={(selectedOption) => setSelectedMetodoEntrega(selectedOption)}
+                            options={metodoEntrega}
+                            className="p-2 border rounded"
+                        />
+                    </div>
+                </form>
+            )}
 
-                )}
+            {serviceType === 'DJ' && (
+                <form onSubmit={handleSubmit} className="mb-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="flex flex-col">
+                        <label className="mb-1">Nome do serviço:</label>
+                        <input
+                            type="text"
+                            value={serviceName}
+                            onChange={(e) => setServiceName(e.target.value)}
+                            className="p-2 border rounded"
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="mb-1">Código Postal:</label>
+                        <input
+                            type="text"
+                            value={postalCode}
+                            onChange={(e) => setPostalCode(e.target.value)}
+                            className="p-2 border rounded"
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="mb-1">Capacidade de pessoas:</label>
+                        <select
+                            value={capacity}
+                            onChange={(e) => setCapacity(e.target.value)}
+                            className="p-2 border rounded"
+                        >
+                            <option value="">Todos</option>
+                            <option value="10-50">10-50</option>
+                            <option value="51-100">51-100</option>
+                            <option value="101-200">101-200</option>
+                            <option value="200+">200+</option>
+                        </select>
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="mb-1">Localidade:</label>
+                        <Select
+                            value={selectedUniqueOptionDJ}
+                            onChange={(selectedOption) => setSelectedUniqueOptionDJ(selectedOption)}
+                            options={uniqueOptionsDJ}
+                            className="p-2 border rounded"
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="mb-1">Equipamento:</label>
+                        <Select
+                            isMulti
+                            value={selectedMultiOption1}
+                            onChange={(selectedOptions) => setSelectedMultiOption1(selectedOptions)}
+                            options={multiOptionsDJ}
+                            className="p-2 border rounded"
+                        />
+                    </div>
+                </form>
+            )}
 
+            {errorMessage && <p className="text-red-500 text-xs italic mb-4">{errorMessage}</p>}
 
-
-                {errorMessage && <p className="text-red-500 text-xs italic mb-4">{errorMessage}</p>}
-
-                <div className='flex justify-center mr-10'>
-                    <GlobalButton
-                        size="small"
-                        type="primary"
-                        onClick={handleSubmit}
-                        text="Seguinte"
-                    />
-
-
-
-                </div>
-
+            <div className='flex justify-center mr-10 mb-10'>
+                <GlobalButton
+                    size="medium"
+                    type="primary"
+                    disabled={isButtonDisabled}
+                    // path="/supplierRegister3"
+                    text="Submeter"
+                />
             </div>
         </div>
     );
