@@ -222,7 +222,11 @@ import React, {
               <div className="lg:w-1/2 px-16">
               <p
                 className={`flex flex-col pt-20 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
-                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+                style={{
+                  textAlign: alignment ? alignment : 'start',
+                  color: highContrast ? 'white' : 'unset'
+                }}
+                
                 >
                 Tipos de Serviço
                 </p>
