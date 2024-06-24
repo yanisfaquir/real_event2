@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ApiClient from '../../apiClient';
 import { AccessibilityContext } from '@/contexts/acessibility';
-import { useContext } from 'react';
 import GlobalButton from '@/components/globalButton';
 import Image from 'next/image';
-
+import Link from 'next/link'; // Importar o Link
+import { Tooltip } from 'react-tooltip';
 const ServicesPage = () => {
   const { alignment, highContrast } = useContext(AccessibilityContext);
   const [services, setServices] = useState([]);
@@ -76,16 +76,46 @@ const ServicesPage = () => {
   };
 
   return (
-    <div className="services-container mx-auto px-4 sm:px-6 lg:px-8 mt-20">
-      <section className="mb-10">
-        <p className={`flex flex-col pt-25 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
+    <div className="services-container mx-auto pt-10 px-4 sm:px-6 lg:px-8 mt-20">
+      <div className="relative mb-16">
+        <Tooltip
+          anchorSelect="#chevron-left-services"
+          place="right"
+          style={{ fontSize: '1.2em' }}
+        >
+          Voltar
+        </Tooltip>
+        <Link
+          href="/"
+          style={{
+            cursor: 'pointer',
+            zIndex: '9',
+            position: 'absolute',
+            
+            left: '1%',
+          }}
+        >
+          <Image
+            src={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/chevron-left-green.svg`}
+            id="chevron-left-services"
+            alt="chevron-left"
+            width={80}
+            height={80}
+            style={{
+              maxWidth: '100%',
+              height: 'auto',
+            }}
+          />
+        </Link>
+      </div>
 
-style={{
-  textAlign: alignment ? alignment : 'start',
-  color: highContrast ? 'white' : 'unset'
-}}
-
-
+      <section className="mb-10 ">
+        <p
+          className={`flex flex-col  pt-25 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
+          style={{
+            textAlign: alignment ? alignment : 'start',
+            color: highContrast ? 'white' : 'unset'
+          }}
         >
           Serviços
         </p>
@@ -190,20 +220,12 @@ style={{
       {/* Botão de Pesquisa */}
       {!showResults && (
         <div className="flex justify-center mb-4">
-          {/* <button
-            onClick={handleSearch}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Pesquisar
-          </button> */}
-                 
           <GlobalButton
             size="medium"
             type="primary"
             onClick={handleSearch}
             text="Pesquisar"
           />
-    
         </div>
       )}
 
@@ -211,58 +233,48 @@ style={{
       {showResults && services.length > 0 ? (
         <>
           <p
-             className={`flex flex-col pt-25 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
-
+            className={`flex flex-col pt-25 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
             style={{ textAlign: `${alignment ? alignment : 'start'}` }}
           >
             Resultados
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {services.map((service) => (
-              <div key={service._id} className="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300 bg-white">
-                <h2 className="text-xl font-bold mb-2">{service.description}</h2>
-                <p className="mb-2"><strong>Preço:</strong> {service.price}</p>
-                <p className="mb-2"><strong>Número de clientes:</strong> {service.num_customers}</p>
-                <div className="mb-2">
-                  <strong>Disponibilidade:</strong>
-                  <ul className="list-disc ml-4">
-                    <li><strong>Datas:</strong> {service.availability.dates.join(', ')}</li>
-                    <li><strong>Dias da semana:</strong> {service.availability.weekdays.join(', ')}</li>
-                    <li><strong>Horário de início:</strong> {service.availability.start_time}</li>
-                  </ul>
-                </div>
-                <div className="mb-2">
-                  <strong>Fotos:</strong>
-                  <div className="grid grid-cols-3 gap-1 mt-2">
-                    {service.photo.map((photo, index) => (
-                      <Image key={index} src={photo} alt={`Foto ${index}`} className="rounded-lg object-cover h-24 w-full" />
-                    ))}
-                  </div>
-                </div>
+              <div key={service.id} className="p-4 border rounded">
+                <h3 className="text-xl font-bold">{service.name}</h3>
+                <p>{service.description}</p>
+                <p>Preço: R${service.price}</p>
+                <p>Clientes: {service.customers}</p>
+                <p>Tipo: {service.type}</p>
+                <p>Datas Disponíveis: {service.availableDates}</p>
+                <p>Dias da Semana Disponíveis: {service.availableWeekdays}</p>
               </div>
             ))}
           </div>
-          <div className="mt-4 flex justify-between">
-  <button
-    onClick={() => handlePageChange(pagination.currentPage - 1)}
-    disabled={pagination.currentPage === 1}
-    className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
-  >
-    Anterior
-  </button>
-  <button
-    onClick={() => handlePageChange(pagination.currentPage + 1)}
-    disabled={pagination.currentPage * pagination.perPage >= pagination.total}
-    className="px-4 py-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
-  >
-    Próximo
-  </button>
-</div>
-
+          <div className="flex justify-center mt-4">
+            {pagination.currentPage > 1 && (
+              <button
+                className="px-4 py-2 mr-2 bg-gray-300 rounded"
+                onClick={() => handlePageChange(pagination.currentPage - 1)}
+              >
+                Anterior
+              </button>
+            )}
+            {services.length === pagination.perPage && (
+              <button
+                className="px-4 py-2 bg-gray-300 rounded"
+                onClick={() => handlePageChange(pagination.currentPage + 1)}
+              >
+                Próximo
+              </button>
+            )}
+          </div>
         </>
-      ) : showResults && services.length === 0 ? (
-        <p className="text-center mt-10">Carregando serviços...</p>
-      ) : null}
+      ) : (
+        showResults && <p>Nenhum serviço encontrado.</p>
+      )}
+
+      {error && <p className="text-red-500">{error}</p>}
     </div>
   );
 };
