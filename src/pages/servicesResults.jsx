@@ -10,6 +10,16 @@ const UseServiceResults = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
+  const selectedService = useSelector((state) => state.serviceResult.selectedService);
+  const supplierId = useSelector((state) => state.serviceResult.supplierId);
+  const title = useSelector((state) => state.serviceResult.title);
+  const description = useSelector((state) => state.serviceResult.description);
+  const price = useSelector((state) => state.serviceResult.price);
+  const address = useSelector((state) => state.serviceResult.address);
+  const num_customers = useSelector((state) => state.serviceResult.num_customers);
+  const photo = useSelector((state) => state.serviceResult.photo);
+  const status = useSelector((state) => state.serviceResult.status);
+
   const serviceType = useSelector((state) => state.serviceResult.serviceType);
   const filtroPreco = useSelector((state) => state.serviceResult.filters.preco);
   const filtroTipoEspaco = useSelector((state) => state.serviceResult.filters.tipoEspaco);
@@ -130,7 +140,8 @@ const UseServiceResults = () => {
               onClick={() => handleServiceClick(quintaItem)}
             >
               {quintaItem.img}
-              <p className="py-2 font-medium">{quintaItem.nome}</p>
+              
+              <p className="py-2 font-medium">{quintaItem.nome}{quintaItem.title}</p>
               <p className="py-2 text-sm">{quintaItem.local} - {quintaItem.tipoEspaco} </p>
               <div className="flex items-center justify-start">
                 <CiStar className="mr-4" />
