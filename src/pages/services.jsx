@@ -80,7 +80,12 @@ const ServicesPage = () => {
       <section className="mb-10">
         <p className={`flex flex-col pt-25 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
 
-          style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+style={{
+  textAlign: alignment ? alignment : 'start',
+  color: highContrast ? 'white' : 'unset'
+}}
+
+
         >
           Serviços
         </p>
