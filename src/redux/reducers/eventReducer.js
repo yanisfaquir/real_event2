@@ -4,7 +4,6 @@ const eventSlice = createSlice({
  name: 'event',
  initialState: {
     location: '',
-    mapImageUrl: null,
     startDate: '',
     startTime: '',
     endDate: '',
@@ -18,13 +17,10 @@ const eventSlice = createSlice({
     setLocation: (state, action) => {
       state.location = action.payload;
     },
-    setMapImageUrl: (state, action) => {
-      state.mapImageUrl = action.payload;
-    },
     setStartActionDate: (state, action) => {
       const date = new Date(action.payload);
       if (!isNaN(date.getTime())) {
-        state.startDate = date.toISOString();
+        state.startDate = action.payload
       } else {
         console.error('String inválida para data');
       }
@@ -32,7 +28,7 @@ const eventSlice = createSlice({
     setStartActionTime: (state, action) => {
       const date = new Date(action.payload);
       if (!isNaN(date.getTime())) {
-        state.startTime = date.toISOString();
+        state.startTime = action.payload
       } else {
         console.error('String inválida para hora');
       }
@@ -43,7 +39,7 @@ const eventSlice = createSlice({
     setEndActionDate: (state, action) => {
       const date = new Date(action.payload);
       if (!isNaN(date.getTime())) {
-        state.endDate = date.toISOString();
+        state.endDate = action.payload
       } else {
         console.error('String inválida para data');
       }
@@ -51,7 +47,7 @@ const eventSlice = createSlice({
     setEndActionTime: (state, action) => {
       const date = new Date(action.payload);
       if (!isNaN(date.getTime())) {
-        state.endTime = date.toISOString();
+        state.endTime = action.payload
       } else {
         console.error('String inválida para hora');
       }
@@ -70,7 +66,6 @@ const eventSlice = createSlice({
 
 export const {
  setLocation,
- setMapImageUrl,
  setStartActionDate,
  setStartActionTime,
  setEndActionDate,

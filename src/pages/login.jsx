@@ -6,6 +6,7 @@ import ApiClient from '../../apiClient';
 import { AccessibilityContext } from '@/contexts/acessibility';
 import { login } from '../redux/reducers/userReducer';
 import { useDispatch } from 'react-redux';
+import Link from 'next/link';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -378,7 +379,7 @@ const LoginPage = () => {
                 >
                   Ainda não tem uma conta?{' '}
                 </span>
-                <a
+                <Link
                   href="/profile"
                   className={`${highContrast ? 'text-[#fff000]' : 'text-customBlue'} font-bold hover:text-customBlueLight-800 underline`}
                   style={{
@@ -387,7 +388,7 @@ const LoginPage = () => {
                   }}
                 >
                   Cadastre-se
-                </a>
+                </Link>
               </div>
             </form>
           </div>

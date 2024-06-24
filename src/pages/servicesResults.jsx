@@ -156,7 +156,7 @@ const UseServiceResults = () => {
             <div
               key={index}
               className="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300 bg-white cursor-pointer"
-              onClick={() => openModal(quintaItem)}
+              // onClick={() => openModal(quintaItem)}
             >
               {quintaItem.img}
               <p className="py-2 font-medium">{quintaItem.nome}</p>

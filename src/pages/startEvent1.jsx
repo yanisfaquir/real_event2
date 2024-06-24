@@ -12,16 +12,13 @@ import { parse, isBefore, endOfDay } from 'date-fns';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   setLocation,
-  setMapImageUrl,
   setStartActionDate,
   setStartActionTime,
   setEndActionTime,
   setEndActionDate,
   setActionSameDay,
   setStartEnd,
-  setActionServiceType,
-  setActionEventType,
-} from '../redux/actions/eventActions';
+} from '../redux/reducers/eventReducer';
 import GlobalButton from '@/components/globalButton';
 import { Tooltip } from 'react-tooltip';
 import Link from 'next/link';
@@ -38,8 +35,7 @@ const StartEvent = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const location = useSelector((state) => state.event.location);
-  const mapImageUrl = useSelector((state) => state.event.mapImageUrl);
-
+const startEvent = useSelector((state) => state.event)
   const [startDate, setStartDate] = useState(null);
 
   const [startTime, setStartTime] = useState(null);
@@ -57,7 +53,7 @@ const StartEvent = () => {
   const [locationEvent, setEventLocation] = useState('');
   const [altLocation, setAltLocation] = useState('');
   const [isStreaming, setIsStreaming] = useState({});
-  const [currentSection, setCurrentSection] = useState({
+  const [currentSection1, setCurrentSection1] = useState({
     number: 1,
     text: 'Ir à Página Inicial',
   });
@@ -80,6 +76,14 @@ const StartEvent = () => {
     dispatch(setActionSameDay(sameDay));
   }, []);
 
+  useEffect(() => {
+    setEventLocation(startEvent.location);
+    setStartDate(new Date(startEvent.startDate * 1000));
+    setEndDate(startEvent.endDate ? new Date(startEvent.endDate * 1000): 0);
+    setStartTime(new Date(startEvent.startTime * 1000));
+    setEndTime(new Date(startEvent.endTime * 1000));
+  }, [startEvent]);
+
   const handleEventChange = (event) => {
     setSelectedEvent(event.target.value);
   };
@@ -97,13 +101,14 @@ const StartEvent = () => {
   };
 
   useEffect(() => {
-    if (formRef.current) {
-      window.scrollTo({
-        top: formRef.current.offsetTop + formRef.current.offsetHeight,
-        behavior: 'smooth',
-      });
-    }
-  }, [currentSection]);
+      if (formRef.current) {
+        window.scrollTo({
+       
+          // top: formRef.current.offsetHeight,
+          behavior: 'smooth',
+        });
+      }
+    }, [currentSection1]);
 
   const districtLocations = {
     Aveiro: 'Aveiro',
@@ -125,40 +130,6 @@ const StartEvent = () => {
     'Vila Real': 'Vila Real',
     Viseu: 'Viseu',
   };
-
-  // const handleLocationSearch = async () => {
-  //   dispatch(setLocation(locationEvent));
-  //   try {
-  //     const response = await fetch(
-  //       `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationEvent)}`
-  //     );
-  //     const data = await response.json();
-  //     if (data.length > 0) {
-  //       setAltLocation(data[0].display_name);
-  //       const { lat, lon } = data[0];
-  //       setCoordenadas({ lat: parseFloat(lat), lng: parseFloat(lon) });
-  //       dispatch(
-  //         setMapImageUrl(
-  //           `https://www.openstreetmap.org/export/embed.html?bbox=${parseFloat(lon) - 0.01}%2C${parseFloat(lat) - 0.01}%2C${parseFloat(lon) + 0.01}%2C${parseFloat(lat) + 0.01}&layer=mapnik&marker=${parseFloat(lat)}%2C${parseFloat(lon)}`
-  //         )
-  //       );
-  //       setError(null);
-  //     } else {
-  //       setErrors((prevErrors) => ({
-  //         ...prevErrors,
-  //         localizacao: 'Localidade não encontrada',
-  //       }));
-
-  //       dispatch(setMapImageUrl(null));
-  //       dispatch(setLocation(null));
-  //     }
-  //   } catch (error) {
-  //     setErrors((prevErrors) => ({
-  //       ...prevErrors,
-  //       coordenadas: 'Erro ao buscar coordenadas',
-  //     }));
-  //   }
-  // };
 
   const handleSpeechRecognition = (field, id) => {
     try {
@@ -276,12 +247,13 @@ const StartEvent = () => {
   };
 
   const handleSubmit = (e) => {
-    switch (currentSection.number) {
+    switch (currentSection1.number) {
       case 1:
         if (endTime.getTime() < startTime.getTime() + 60 * 60 * 1000) {
           setError(
             'O horário de término deve ser pelo menos uma hora após o horário de início'
           );
+         
           return;
         }
 
@@ -307,7 +279,6 @@ const StartEvent = () => {
         const unixEndTimestamp = Math.floor(
           combinedEndDateTime.getTime() / 1000
         );
-
         dispatch(setStartActionDate(unixStartTimestamp));
         !sameDay ? dispatch(setEndActionDate(unixEndTimestamp)) : '';
         dispatch(setStartActionTime(unixStartTimestamp));
@@ -317,21 +288,14 @@ const StartEvent = () => {
         );
 
         dispatch(setLocation(location));
-        dispatch(setMapImageUrl(mapImageUrl));
         break;
-      case 2:
-        dispatch(setActionServiceType(selectedService));
-        break;
-      case 3:
-        dispatch(setActionEventType(selectedEvent));
-        router.push('/servicesResults');
-        break;
+
       default:
         console.error('Seção desconhecida');
         break;
     }
 
-    setCurrentSection((prevState) => ({
+    setCurrentSection1((prevState) => ({
       number: prevState.number + 1,
       text:
         prevState.number + 1 === 2
@@ -490,7 +454,7 @@ const StartEvent = () => {
 
   useEffect(() => {
     const isValid = () => {
-      switch (currentSection.number) {
+      switch (currentSection1.number) {
         case 1:
           return (
             locationEvent &&
@@ -518,7 +482,7 @@ const StartEvent = () => {
     endTime,
     selectedService,
     selectedEvent,
-    currentSection.number,
+    currentSection1.number,
   ]);
 
   return (
@@ -526,14 +490,14 @@ const StartEvent = () => {
       <div className="-mb-20 row p-4 relative">
         <div className="lg:block hidden">
           <Tooltip
-            anchorSelect={`#chevron-left-home-${currentSection.number}`}
+            anchorSelect={`#chevron-left-home-${currentSection1.number}`}
             place="right"
             style={{ fontSize: '1.2em' }}
           >
-            {`${currentSection.text}`}
+            {`${currentSection1.text}`}
           </Tooltip>
         </div>
-        {currentSection.number === 1 ? (
+        {currentSection1.number === 1 ? (
           <Link
             href="/"
             style={{
@@ -547,8 +511,8 @@ const StartEvent = () => {
             <Image
               src={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/chevron-left-green.svg`}
               path="/"
-              text={`${currentSection.text}`}
-              id={`chevron-left-home-${currentSection.number}`}
+              text={`${currentSection1.text}`}
+              id={`chevron-left-home-${currentSection1.number}`}
               alt="chevron-left"
               width={80}
               height={80}
@@ -562,7 +526,7 @@ const StartEvent = () => {
           <Image
             src={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/chevron-left-green.svg`}
             onClick={() =>
-              setCurrentSection((prevState) => ({
+              setCurrentSection1((prevState) => ({
                 number: prevState.number - 1,
                 text:
                   prevState.number - 1 === 1
@@ -572,8 +536,8 @@ const StartEvent = () => {
                       : 'Retornar à página de tipos de serviço',
               }))
             }
-            text={currentSection.text}
-            id={`chevron-left-home-${currentSection.number}`}
+            text={currentSection1.text}
+            id={`chevron-left-home-${currentSection1.number}`}
             alt="chevron-left"
             width={80}
             height={80}
@@ -592,7 +556,7 @@ const StartEvent = () => {
 
       <form onSubmit={handleSubmit}>
         <section
-          className={`event-form mt-20 lg:mt-16 event-form-1 ${currentSection.number === 1 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
+          className={`event-form mt-20 lg:mt-16 event-form-1 ${currentSection1.number === 1 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
         >
           <p
             className={`flex flex-col pt-20 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
@@ -625,7 +589,7 @@ const StartEvent = () => {
                   Localidade:
                   <div className="flex row" style={{ position: 'relative' }}>
                     <select
-                      value={locationEvent}
+                      value={location ? location : locationEvent}
                       className={`cursor-pointer ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
                       onChange={(e) => {
                         let value = e.target.value;
@@ -660,58 +624,6 @@ const StartEvent = () => {
                         </option>
                       ))}
                     </select>
-                    {/* <input
-                      type="text"
-                      value={locationEvent}
-                      className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
-                      onChange={(e) => {
-                        let value = e.target.value;
-                        value = value.replace(/\s+/g, ' ');
-                        value = value.replace(/^\s+/, '');
-                        if (value == '') {
-                          setLocationTouched(true);
-                        } else {
-                          setErrors((prevErrors) => ({
-                            ...prevErrors,
-                            localizacao: null,
-                          }));
-                        }
-                        setEventLocation(value);
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          handleLocationSearch();
-                        }
-                      }}
-                      placeholder="Digite aqui"
-                      onFocus={() => {
-                        if (locationEvent) setLocationTouched(false);
-                      }}
-                      onBlur={() => setLocationTouched(true)}
-                      required
-                      style={{
-                        padding: '10px',
-                        borderRadius: '5px',
-                        border: '1px solid #ccc',
-                        marginTop: '5px',
-                        paddingRight: '30px',
-                        width: '100%',
-                      }}
-                    />
-                    <MicrophoneIcon
-                      handleSpeechRecognition={handleSpeechRecognition}
-                      isStreaming={isStreaming['micLocation']}
-                      id="micLocation"
-                      field="location"
-                      right="68"
-                    />
-                    <GlobalButton
-                      image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/search-green.svg`}
-                      text="Localizar"
-                      type="button"
-                      id="search-location"
-                      onClick={handleLocationSearch}
-                    /> */}
                   </div>
                 </label>
                 <p
@@ -733,40 +645,6 @@ const StartEvent = () => {
                 >
                   Campo obrigatório
                 </p>
-                {/* <div className="flex flex-col justify-center items-center">
-                  {errors?.localizacao ? (
-                    <p
-                      aria-live="polite"
-                      style={{
-                        color: 'ff0000',
-                        marginTop: '-24px',
-                        marginLeft: '-72px',
-                        textAlign: `${alignment ? alignment : 'start'}`,
-                      }}
-                      className={`max-w-[320px] text-red-600`}
-                    >
-                      {errors.localizacao}
-                    </p>
-                  ) : mapImageUrl && altLocation ? (
-                    <div alt={`Mapa mostrando ao centro ${altLocation}`}>
-                      <div
-                        style={{
-                          textAlign: `${alignment ? alignment : 'center'}`,
-                        }}
-                        className={`max-w-[400px]`}
-                      >
-                        {altLocation}{' '}
-                      </div>
-                      <iframe
-                        width="100%"
-                        height="120"
-                        src={mapImageUrl}
-                        style={{ border: 0 }}
-                        tabIndex={-1}
-                      ></iframe>
-                    </div>
-                  ) : null}
-                </div> */}
               </div>
             </div>
             <div className="p-4 w-full lg:w-1/3 min-h-[180px] lg:border-r border-b lg:border-b-0 border-gray-500 relative flex flex-col justify-center align-center">
@@ -798,12 +676,7 @@ const StartEvent = () => {
                       required
                       placeholderText="Digite aqui"
                     />
-                    <MicrophoneIcon
-                      handleSpeechRecognition={handleSpeechRecognition}
-                      isStreaming={isStreaming['micStartDate']}
-                      id="micStartDate"
-                      field="startDate"
-                    />
+
                   </div>
                 </label>
                 <p
@@ -870,12 +743,7 @@ const StartEvent = () => {
                         className={`datePicker ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
                         placeholderText="Digite aqui"
                       />
-                      <MicrophoneIcon
-                        handleSpeechRecognition={handleSpeechRecognition}
-                        isStreaming={isStreaming['micEndDate']}
-                        id="micEndDate"
-                        field="endDate"
-                      />
+
                     </div>
                   </label>
                   <p
@@ -946,12 +814,7 @@ const StartEvent = () => {
                       }}
                       onBlur={() => setStartTimeTouched(true)}
                     />
-                    <MicrophoneIcon
-                      handleSpeechRecognition={handleSpeechRecognition}
-                      isStreaming={isStreaming['micStartTime']}
-                      id="micStartTime"
-                      field="startTime"
-                    />
+
                   </div>
                 </label>
                 <p
@@ -1023,12 +886,7 @@ const StartEvent = () => {
                       }
                       maxTime={new Date().setHours(23, 59, 59, 999)}
                     />
-                    <MicrophoneIcon
-                      handleSpeechRecognition={handleSpeechRecognition}
-                      isStreaming={isStreaming['micEndTime']}
-                      id="micEndTime"
-                      field="endTime"
-                    />
+
                   </div>
                 </label>
                 <p
@@ -1063,265 +921,19 @@ const StartEvent = () => {
             </div>
           </section>
         </section>
-
-        <section
-          className={`event-form mt-20 lg:mt-12 event-form-2 ${currentSection.number === 2 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
-        >
-          <div className="flex flex-col lg:flex-row items-end align-end mt-10">
-            <div className="lg:w-1/2 px-16 py-8 hidden lg:block ms-24">
-              <Image
-                src={'/assets/pictures/service-type-img.png'}
-                alt="Rapaz de óculos segurando papéis e apontando para algo"
-                width={500}
-                height={80}
-                style={{
-                  maxWidth: '100%',
-                  height: 'auto',
-                }}
-              />
-            </div>
-            <div className="lg:w-1/2 px-16">
-              <p
-                 className={`flex flex-col pt-15 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
-
-                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
-              >
-                Tipos de serviços
-              </p>
-              <p
-                className={`relative max-w-[90vw] mb-8 text-[1.2rem]`}
-                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
-              >
-                Selecione abaixo qual dos serviços gostaria de contratar para o
-                seu evento.
-              </p>
-
-              <ul ref={formRef} className=" text-[1.2rem]">
-                <li
-                  style={{
-                    width: '100%',
-                    height: '120px',
-                    borderRadius: '8px',
-                  }}
-                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
-                >
-                  <input
-                    type="checkbox"
-                    value="Catering"
-                    checked={selectedService.includes('Catering')}
-                    onChange={handleServiceChange}
-                    className={`mx-2 w-[1rem] date-checkbox cursor-pointer ${highContrast ? 'high-contrast' : ''}`}
-                  />
-                  <label
-                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
-                  >
-                    Catering
-                  </label>
-                </li>
-
-                <li
-                  style={{
-                    width: '100%',
-                    height: '120px',
-                    borderRadius: '8px',
-                  }}
-                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
-                >
-                  <input
-                    type="checkbox"
-                    value="Mechardising"
-                    checked={selectedService.includes('Mechardising')}
-                    onChange={handleServiceChange}
-                    className={`mx-2 w-[1rem] date-checkbox cursor-pointer ${highContrast ? 'high-contrast' : ''}`}
-                  />
-                  <label
-                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
-                  >
-                    Mechandising
-                  </label>
-                </li>
-
-                <li
-                  style={{
-                    width: '100%',
-                    height: '120px',
-                    borderRadius: '8px',
-                  }}
-                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
-                >
-                  <input
-                    type="checkbox"
-                    value="Espaço"
-                    checked={selectedService.includes('Espaço')}
-                    onChange={handleServiceChange}
-                    className={`mx-2 w-[1rem] date-checkbox cursor-pointer ${highContrast ? 'high-contrast' : ''}`}
-                  />
-                  <label
-                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
-                  >
-                    Espaço
-                  </label>
-                </li>
-
-                <li
-                  style={{
-                    width: '100%',
-                    height: '120px',
-                    borderRadius: '8px',
-                  }}
-                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
-                >
-                  <input
-                    type="checkbox"
-                    value="DJ"
-                    checked={selectedService.includes('DJ')}
-                    onChange={handleServiceChange}
-                    className={`mx-2 w-[1rem] date-checkbox cursor-pointer ${highContrast ? 'high-contrast' : ''}`}
-                  />
-                  <label
-                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
-                  >
-                    DJ e Som
-                  </label>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </section>
-        <section
-          className={`event-form event-form-3 ${currentSection.number === 3 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
-        >
-          <div className="flex flex-col lg:flex-row-reverse items-end align-end mt-10">
-            <div className="lg:w-1/2 px-16 py-8 hidden ms-24 lg:block">
-              <Image
-                src={'/assets/pictures/event-type-img.png'}
-                alt="Pessoas felizes confraternizando"
-                width={500}
-                height={80}
-                style={{
-                  maxWidth: '100%',
-                  height: 'auto',
-                }}
-              />
-            </div>
-            <div className="lg:w-1/2 px-16">
-              <p
-                className={`flex flex-col pt-25 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
-
-                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
-              >
-                Tipos de eventos
-              </p>
-              <p
-                className="relative max-w-[90vw] mb-8 text-[1.2rem]"
-                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
-              >
-                Selecione abaixo qual o evento.
-              </p>
-
-              <ul className=" text-[1.2rem]" ref={formRef}>
-                <li
-                  style={{
-                    width: '100%',
-                    height: '120px',
-                    borderRadius: '8px',
-                  }}
-                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
-                >
-                  <input
-                    type="radio"
-                    value="Jantar"
-                    checked={selectedEvent === 'Jantar'}
-                    onChange={handleEventChange}
-                    className={`mx-2 ${highContrast ? 'high-contrast' : ''}`}
-                  />
-                  <label
-                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
-                  >
-                    Jantar
-                  </label>
-                </li>
-
-                <li
-                  style={{
-                    width: '100%',
-                    height: '120px',
-                    borderRadius: '8px',
-                  }}
-                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
-                >
-                  <input
-                    type="radio"
-                    value="Cocktail"
-                    checked={selectedEvent === 'Cocktail'}
-                    onChange={handleEventChange}
-                    className={`mx-2 ${highContrast ? 'high-contrast' : ''}`}
-                  />
-                  <label
-                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
-                  >
-                    Cocktail
-                  </label>
-                </li>
-                <li
-                  style={{
-                    width: '100%',
-                    height: '120px',
-                    borderRadius: '8px',
-                  }}
-                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
-                >
-                  <input
-                    type="radio"
-                    value="Aniversario"
-                    checked={selectedEvent === 'Aniversario'}
-                    onChange={handleEventChange}
-                    className={`mx-2 ${highContrast ? 'high-contrast' : ''}`}
-                  />
-                  <label
-                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
-                  >
-                    Aniversário Empresa
-                  </label>
-                </li>
-
-                <li
-                  style={{
-                    width: '100%',
-                    height: '120px',
-                    borderRadius: '8px',
-                  }}
-                  className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2`}
-                >
-                  <input
-                    type="radio"
-                    value="Bootcamp"
-                    checked={selectedEvent === 'Bootcamp'}
-                    onChange={handleEventChange}
-                    className={`mx-2 ${highContrast ? 'high-contrast' : ''}`}
-                  />
-                  <label
-                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
-                  >
-                    Bootcamp
-                  </label>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {router.pathname === '/startEvent' && (
-          <div className={`flex justify-center p-8`}>
-            <GlobalButton
-              size="large"
-              type="primary"
-              onClick={handleSubmit}
-              text="Seguinte"
-              disabled={isButtonDisabled}
-            />
-          </div>
-        )}
+        {/* {router.pathname === '/startEvent1' && ( */}
+        <div className={`flex justify-center p-8`}>
+          <GlobalButton
+            size="large"
+            type="primary"
+            onClick={handleSubmit}
+            text="Seguinte"
+            path="/startEvent2"
+            disabled={isButtonDisabled}
+          />
+        </div>
+      {/* )} */}
+ 
       </form>
     </div>
   );
