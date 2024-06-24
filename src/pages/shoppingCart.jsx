@@ -594,9 +594,30 @@ const ShoppingCart = () => {
               <GlobalButton
                 size="medium"
                 type="primary"
-                text="Seguinte"
-                width="40%"
-                onClick={handleCartSectionClick}
+
+                text="CHECKOUT"
+                width="100%"
+                onClick={async () => {
+                  try {
+                    const response = await fetch('http://localhost:3500/shoppingCart/create-checkout-session', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                      // Se precisar enviar algum dado no corpo da requisição, descomente a linha abaixo
+                      // body: JSON.stringify({ /* dados aqui */ })
+                    });
+                    
+                    if (!response.ok) {
+                      throw new Error('Erro ao criar a sessão de checkout');
+                    }
+
+                    const { url } = await response.json();
+                    window.location.href = url;
+                  } catch (error) {
+                    console.error('Erro ao redirecionar para o checkout:', error);
+                  }
+                }}
               />
             </div>
           ) : (
