@@ -12,8 +12,7 @@ const Profile = () => {
 
   const router = useRouter();
   const dispatch = useDispatch();
-  const { alignment, highContrast, fontSize } =
-    useContext(AccessibilityContext);
+  const { alignment, highContrast, fontSize } = useContext(AccessibilityContext);
   const user = useSelector((state) => state.user.user);
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [httpResponse, setResponseValue] = useState('');
@@ -30,15 +29,10 @@ const Profile = () => {
   const [emptyServiceMessage, setEmptyServiceMessage] = useState('');
   const [loadingServices, setLoadingServices] = useState(false);
 
-  const [profileImageUrl, setProfileImageUrl] = useState(
-    user ? user.photo : ''
-  );
+  const [profileImageUrl, setProfileImageUrl] = useState(user ? user.photo : '');
   const [formData, setFormData] = useState({
     role: user?.role || '',
-    name:
-      user?.role === 'Fornecedor' || user?.role === 'supplier'
-        ? user?.name_company || ''
-        : user?.name || '',
+    name: user?.role === 'Fornecedor' || user?.role === 'supplier' ? user?.name_company || '' : user?.name || '',
     email: user?.email || '',
     password: user?.password || '',
     contact: user?.contact || '',
@@ -73,9 +67,7 @@ const Profile = () => {
       setEmptyServiceMessage('');
     } catch (error) {
       setLoadingServices(false);
-      setEmptyServiceMessage(
-        'Você ainda não possui serviços cadastrados. Inicie agora seu primeiro serviço clicando abaixo em Criar Serviço'
-      );
+      setEmptyServiceMessage('Você ainda não possui serviços cadastrados. Inicie agora seu primeiro serviço clicando abaixo em Criar Serviço');
     } finally {
       setLoadingServices(false);
     }
@@ -86,22 +78,16 @@ const Profile = () => {
       case 'email':
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         setIsValidEmail(emailRegex.test(formData.email));
-        setEmailError(
-          !emailRegex.test(formData.email) ? 'Insira um email válido' : ''
-        );
+        setEmailError(!emailRegex.test(formData.email) ? 'Insira um email válido' : '');
         break;
       case 'password':
-        setPasswordError(
-          formData.password.trim() === '' ? 'Campo obrigatório' : ''
-        );
+        setPasswordError(formData.password.trim() === '' ? 'Campo obrigatório' : '');
         break;
       case 'name':
         setNameError(formData.name.trim() === '' ? 'Campo obrigatório' : '');
         break;
       case 'confirmPassword':
-        setConfirmPasswordError(
-          confirmPassword !== formData.password ? 'As senhas não conferem' : ''
-        );
+        setConfirmPasswordError(confirmPassword !== formData.password ? 'As senhas não conferem' : '');
         break;
       default:
         break;
@@ -260,28 +246,16 @@ const Profile = () => {
   const handleUpdateUser = async (apiInstance) => {
     try {
       const currentUser = await apiInstance.getUserById(user._id);
-      if (
-        (currentUser && formData.password == '') ||
-        formData.confirmPassword == ''
-      ) {
+      if ((currentUser && formData.password == '') || formData.confirmPassword == '') {
         delete formData.password;
         console.log(formData);
-        const response = await apiInstance.updateUser(
-          currentUser.data.data._id,
-          formData
-        );
+        const response = await apiInstance.updateUser(currentUser.data.data._id, formData);
         if (response.status == 200) {
           dispatch(login(response.data));
         }
       }
-      if (
-        currentUser &&
-        currentUser.data.data.password === formData.currentPassword
-      ) {
-        const response = await apiInstance.updateUser(
-          currentUser.data.data._id,
-          formData
-        );
+      if (currentUser && currentUser.data.data.password === formData.currentPassword) {
+        const response = await apiInstance.updateUser(currentUser.data.data._id, formData);
         if (response.status == 200) {
           dispatch(login(response.data));
         }
@@ -294,28 +268,16 @@ const Profile = () => {
   const handleUpdateSupplier = async (apiInstance) => {
     try {
       const currentSupplier = await apiInstance.getSupplierById(user._id);
-      if (
-        (currentSupplier && formData.password == '') ||
-        formData.confirmPassword == ''
-      ) {
+      if ((currentSupplier && formData.password == '') || formData.confirmPassword == '') {
         delete formData.password;
         console.log(formData);
-        const response = await apiInstance.updateSupplier(
-          currentSupplier.data.data._id,
-          formData
-        );
+        const response = await apiInstance.updateSupplier(currentSupplier.data.data._id, formData);
         if (response.status == 200) {
           dispatch(login(response.data));
         }
       }
-      if (
-        currentSupplier &&
-        currentSupplier.data.data.password === formData.currentPassword
-      ) {
-        const response = await apiInstance.updateSupplier(
-          currentSupplier.data.data._id,
-          formData
-        );
+      if (currentSupplier && currentSupplier.data.data.password === formData.currentPassword) {
+        const response = await apiInstance.updateSupplier(currentSupplier.data.data._id, formData);
         if (response.status == 200) {
           dispatch(login(response.data));
         }
@@ -326,362 +288,318 @@ const Profile = () => {
   };
 
   return (
-    <div className="mt-20 container mx-auto px-4 md:h-[80vh] h-fullscreen">
-      <div className="flex flex-col md:flex-row mt-16 p-6 md:pt-20 bg-cover bg-no-repeat mx-4 md:mt-20 md:mx-20 rounded-lg md:rounded-[40px]">
-        <div
-          className={`flex flex-col md:flex-row w-full  ${highContrast ? 'bg-black' : 'bg-white'} shadow-lg rounded-[40px]`}
-        >
-          <div
-            className={`flex justify-center items-center w-full md:w-1/4 ${highContrast ? 'bg-gray-400' : 'bg-gray-200'}  rounded-tl-[40px] rounded-bl-[40px] py-12`}
-          >
-            <div className="relative text-center">
-              {profileImageUrl ? (
-                <>
-                  <Image
-                    src={profileImageUrl}
-                    alt="Utilizador"
-                    width={80}
-                    height={80}
-                    className="cursor-pointer rounded-full w-40 h-40 object-cover mx-auto"
-                    onClick={() => document.getElementById('fileInput').click()}
-                  />
-                  <h1
-                    className={`mt-2 bold ${highContrast ? 'text-white' : 'text-black'}`}
-                  >
-                    {user?.role == 'user' ? 'Utilizador' : 'Fornecedor'}
-                  </h1>
+    <div className="flex flex-col min-h-screen">
+      <div className="container mx-auto px-4 py-20 flex-grow">
+        <div className="flex flex-col md:flex-row mt-16 p-6 bg-cover bg-no-repeat mx-4 md:mt-20 md:mx-20 rounded-lg md:rounded-[40px] shadow-lg">
+          <div className={`flex flex-col md:flex-row w-full ${highContrast ? 'bg-black' : 'bg-white'} rounded-[40px]`}>
+            <div className={`flex justify-center items-center w-full md:w-1/4 ${highContrast ? 'bg-gray-400' : 'bg-gray-200'} rounded-tl-[40px] rounded-bl-[40px] py-12`}>
+              <div className="relative text-center">
+                {profileImageUrl ? (
+                  <>
+                    <Image
+                      src={profileImageUrl}
+                      alt="Utilizador"
+                      width={80}
+                      height={80}
+                      className="cursor-pointer rounded-full w-40 h-40 object-cover mx-auto"
+                      onClick={() => document.getElementById('fileInput').click()}
+                    />
+                    <h1 className={`mt-2 bold ${highContrast ? 'text-white' : 'text-black'}`}>
+                      {user?.role == 'user' ? 'Utilizador' : 'Fornecedor'}
+                    </h1>
 
-                  {loadingServices ? (
-                    <p className="text-center mt-10 px-4">Carregando dados...</p>
-                  ) : (
-                    emptyServiceMessage !== '' && (
-                      <>
-                        <h1 className="my-2 bold text-red-600 px-4">
-                          {emptyServiceMessage}
-                        </h1>
-                        <GlobalButton
-                          size="medium"
-                          type="primary"
-                          path="/supplierRegister1"
-                          text={'Criar Serviço'}
-                        />
-                      </>
-                    )
-                  )}
-                </>
-              ) : (
-                <>
-                  <Image
-                    src={`/assets/icons/user-${highContrast ? 'white' : 'black'}.svg`}
-                    alt="Utilizador"
-                    className="cursor-pointer mx-auto"
-                    width={80}
-                    height={80}
-                    onClick={() => document.getElementById('fileInput').click()}
-                  />
-                  <p className="mt-2 text-center">Carregar imagem</p>
-                </>
-              )}
-              <input
-                type="file"
-                id="fileInput"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
+                    {loadingServices ? (
+                      <p className="text-center mt-10 px-4">Carregando dados...</p>
+                    ) : (
+                      emptyServiceMessage !== '' && (
+                        <>
+                          <h1 className="my-2 bold text-red-600 px-4">{emptyServiceMessage}</h1>
+                          <GlobalButton size="medium" type="primary" path="/supplierRegister1" text={'Criar Serviço'} />
+                        </>
+                      )
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Image
+                      src={`/assets/icons/user-${highContrast ? 'white' : 'black'}.svg`}
+                      alt="Utilizador"
+                      className="cursor-pointer mx-auto"
+                      width={80}
+                      height={80}
+                      onClick={() => document.getElementById('fileInput').click()}
+                    />
+                    <p className="mt-2 text-center">Carregar imagem</p>
+                  </>
+                )}
+                <input type="file" id="fileInput" accept="image/*" onChange={handleImageUpload} className="hidden" />
+              </div>
             </div>
-          </div>
 
-          <div className="w-full md:w-3/4 p-6 md:p-10">
-            {user == null && (
-              <div className="col-span-1 flex justify-center space-x-4 mt-10">
-                <RoleRadioButton
-                  value="Utilizador"
-                  checked={role === 'Utilizador'}
-                  onChange={handleRoleChange}
-                />
-                <RoleRadioButton
-                  value="Fornecedor"
-                  checked={role === 'Fornecedor'}
-                  onChange={handleRoleChange}
-                />
-              </div>
-            )}
-            <form
-              onSubmit={handleSubmit}
-              className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10"
-            >
-              <label
-                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
-                style={{
-                  textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px`,
-                }}
-              >
-                Nome:
-                <div className="flex row" style={{ position: 'relative' }}>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    autoComplete="off"
-                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
-                    onChange={handleChange}
-                    onBlur={() => handleInputBlur('name')}
-                    placeholder="Digite aqui"
-                    required
-                    style={{
-                      padding: '10px',
-                      borderRadius: '5px',
-                      border: '1px solid #ccc',
-                      marginTop: '4px',
-                      paddingRight: '30px',
-                    }}
-                  />
-                </div>
-                {nameError && <p className="text-red-500">{nameError}</p>}
-              </label>
-
-              <label
-                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
-                style={{
-                  textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px`,
-                }}
-              >
-                Email:
-                <div className="flex row" style={{ position: 'relative' }}>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    autoComplete="off"
-                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
-                    onChange={handleChange}
-                    onBlur={() => handleInputBlur('email')}
-                    placeholder="Digite aqui"
-                    required
-                    style={{
-                      padding: '10px',
-                      borderRadius: '5px',
-                      border: '1px solid #ccc',
-                      marginTop: '4px',
-                      paddingRight: '30px',
-                    }}
-                  />
-                </div>
-                {emailError && <p className="text-red-500">{emailError}</p>}
-              </label>
-
-              <label
-                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
-                style={{
-                  textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px}`,
-                }}
-              >
-                {user == null ? 'Senha' : 'Nova Senha'}
-                <div className="flex row" style={{ position: 'relative' }}>
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    autoComplete="off"
-                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
-                    onChange={handleChange}
-                    onBlur={() => handleInputBlur('password')}
-                    placeholder="Digite aqui"
-                    required
-                    style={{
-                      padding: '10px',
-                      borderRadius: '5px',
-                      border: '1px solid #ccc',
-                      marginTop: '4px',
-                      paddingRight: '30px',
-                    }}
-                  />
-                </div>
-                {passwordError && (
-                  <p className="text-red-500">{passwordError}</p>
-                )}
-              </label>
-
-              <label
-                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
-                style={{
-                  textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px}`,
-                }}
-              >
-                {user == null ? 'Confirmar Senha' : 'Confirmar Nova Senha'}
-                <div className="flex row" style={{ position: 'relative' }}>
-                  <input
-                    type="password"
-                    name="confirmPassword"
-                    value={confirmPassword}
-                    autoComplete="off"
-                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    onBlur={() => handleInputBlur('confirmPassword')}
-                    placeholder="Digite aqui"
-                    required
-                    style={{
-                      padding: '10px',
-                      borderRadius: '5px',
-                      border: '1px solid #ccc',
-                      marginTop: '4px',
-                      paddingRight: '30px',
-                    }}
-                  />
-                </div>
-                {passwordConfirmError && (
-                  <p className="text-red-500">{passwordConfirmError}</p>
-                )}
-              </label>
-
-              <label
-                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
-                style={{
-                  textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px}`,
-                }}
-              >
-                Contato:
-                <div className="flex row" style={{ position: 'relative' }}>
-                  <input
-                    type="text"
-                    name="contact"
-                    value={formData.contact}
-                    autoComplete="off"
-                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
-                    onChange={handleChange}
-                    onBlur={() => handleInputBlur('contact')}
-                    placeholder="Digite aqui"
-                    required
-                    style={{
-                      padding: '10px',
-                      borderRadius: '5px',
-                      border: '1px solid #ccc',
-                      marginTop: '4px',
-                      paddingRight: '30px',
-                    }}
-                  />
-                </div>
-              </label>
-
-              <label
-                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
-                style={{
-                  textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px}`,
-                }}
-              >
-                Endereço:
-                <div className="flex row" style={{ position: 'relative' }}>
-                  <input
-                    type="text"
-                    name="address"
-                    value={formData.address}
-                    autoComplete="off"
-                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
-                    onChange={handleChange}
-                    onBlur={() => handleInputBlur('address')}
-                    placeholder="Digite aqui"
-                    required
-                    style={{
-                      padding: '10px',
-                      borderRadius: '5px',
-                      border: '1px solid #ccc',
-                      marginTop: '4px',
-                      paddingRight: '30px',
-                    }}
-                  />
-                </div>
-              </label>
-
-              <label
-                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
-                style={{
-                  textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px}`,
-                }}
-              >
-                Distrito:
-                <div className="flex row" style={{ position: 'relative' }}>
-                  <select
-                    name="district"
-                    value={formData.district}
-                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
-                    onChange={handleChange}
-                    placeholder="Digite aqui"
-                    required
-                    style={{
-                      padding: '10px',
-                      borderRadius: '5px',
-                      border: '1px solid #ccc',
-                      marginTop: '4px',
-                      paddingRight: '30px',
-                    }}
-                  >
-                    <option value="" disabled>
-                      Selecione um distrito
-                    </option>
-                    {Object.keys(districtLocations).map((district) => (
-                      <option
-                        key={district}
-                        value={districtLocations[district]}
-                      >
-                        {district}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </label>
-
-              <label
-                className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
-                style={{
-                  textAlign: `${alignment ? alignment : 'start'}`,
-                  fontSize: `${fontSize * 20}px}`,
-                }}
-              >
-                Código Postal:
-                <div className="flex row" style={{ position: 'relative' }}>
-                  <input
-                    type="text"
-                    name="postal_code"
-                    value={formData.postal_code}
-                    autoComplete="off"
-                    className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
-                    onChange={handleChange}
-                    onBlur={() => handleInputBlur('postal_code')}
-                    placeholder="Digite aqui"
-                    required
-                    style={{
-                      padding: '10px',
-                      borderRadius: '5px',
-                      border: '1px solid #ccc',
-                      marginTop: '4px',
-                      paddingRight: '30px',
-                    }}
-                  />
-                </div>
-              </label>
-
-              {httpResponse && (
-                <div className="mt-4">
-                  <p>{httpResponse}</p>
+            <div className="w-full md:w-3/4 p-6 md:p-10">
+              {user == null && (
+                <div className="col-span-1 flex justify-center space-x-4 mt-10">
+                  <RoleRadioButton value="Utilizador" checked={role === 'Utilizador'} onChange={handleRoleChange} />
+                  <RoleRadioButton value="Fornecedor" checked={role === 'Fornecedor'} onChange={handleRoleChange} />
                 </div>
               )}
-              <div className="flex items-center justify-center mx-auto mb-5 mt-10">
-                <GlobalButton
-                  size="medium"
-                  type="primary"
-                  onClick={handleSubmit}
-                  text={user == null ? 'Criar Conta' : 'Atualizar Conta'}
-                />
-              </div>
-            </form>
+              <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
+                <label
+                  className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
+                  style={{
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                    fontSize: `${fontSize * 20}px`,
+                  }}
+                >
+                  Nome:
+                  <div className="flex row" style={{ position: 'relative' }}>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      autoComplete="off"
+                      className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
+                      onChange={handleChange}
+                      onBlur={() => handleInputBlur('name')}
+                      placeholder="Digite aqui"
+                      required
+                      style={{
+                        padding: '10px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        marginTop: '4px',
+                        paddingRight: '30px',
+                      }}
+                    />
+                  </div>
+                  {nameError && <p className="text-red-500">{nameError}</p>}
+                </label>
+
+                <label
+                  className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
+                  style={{
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                    fontSize: `${fontSize * 20}px`,
+                  }}
+                >
+                  Email:
+                  <div className="flex row" style={{ position: 'relative' }}>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      autoComplete="off"
+                      className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
+                      onChange={handleChange}
+                      onBlur={() => handleInputBlur('email')}
+                      placeholder="Digite aqui"
+                      required
+                      style={{
+                        padding: '10px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        marginTop: '4px',
+                        paddingRight: '30px',
+                      }}
+                    />
+                  </div>
+                  {emailError && <p className="text-red-500">{emailError}</p>}
+                </label>
+
+                <label
+                  className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
+                  style={{
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                    fontSize: `${fontSize * 20}px}`,
+                  }}
+                >
+                  {user == null ? 'Senha' : 'Nova Senha'}
+                  <div className="flex row" style={{ position: 'relative' }}>
+                    <input
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      autoComplete="off"
+                      className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
+                      onChange={handleChange}
+                      onBlur={() => handleInputBlur('password')}
+                      placeholder="Digite aqui"
+                      required
+                      style={{
+                        padding: '10px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        marginTop: '4px',
+                        paddingRight: '30px',
+                      }}
+                    />
+                  </div>
+                  {passwordError && <p className="text-red-500">{passwordError}</p>}
+                </label>
+
+                <label
+                  className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
+                  style={{
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                    fontSize: `${fontSize * 20}px}`,
+                  }}
+                >
+                  {user == null ? 'Confirmar Senha' : 'Confirmar Nova Senha'}
+                  <div className="flex row" style={{ position: 'relative' }}>
+                    <input
+                      type="password"
+                      name="confirmPassword"
+                      value={confirmPassword}
+                      autoComplete="off"
+                      className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      onBlur={() => handleInputBlur('confirmPassword')}
+                      placeholder="Digite aqui"
+                      required
+                      style={{
+                        padding: '10px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        marginTop: '4px',
+                        paddingRight: '30px',
+                      }}
+                    />
+                  </div>
+                  {passwordConfirmError && <p className="text-red-500">{passwordConfirmError}</p>}
+                </label>
+
+                <label
+                  className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
+                  style={{
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                    fontSize: `${fontSize * 20}px}`,
+                  }}
+                >
+                  Contato:
+                  <div className="flex row" style={{ position: 'relative' }}>
+                    <input
+                      type="text"
+                      name="contact"
+                      value={formData.contact}
+                      autoComplete="off"
+                      className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
+                      onChange={handleChange}
+                      onBlur={() => handleInputBlur('contact')}
+                      placeholder="Digite aqui"
+                      required
+                      style={{
+                        padding: '10px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        marginTop: '4px',
+                        paddingRight: '30px',
+                      }}
+                    />
+                  </div>
+                </label>
+
+                <label
+                  className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
+                  style={{
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                    fontSize: `${fontSize * 20}px}`,
+                  }}
+                >
+                  Endereço:
+                  <div className="flex row" style={{ position: 'relative' }}>
+                    <input
+                      type="text"
+                      name="address"
+                      value={formData.address}
+                      autoComplete="off"
+                      className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
+                      onChange={handleChange}
+                      onBlur={() => handleInputBlur('address')}
+                      placeholder="Digite aqui"
+                      required
+                      style={{
+                        padding: '10px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        marginTop: '4px',
+                        paddingRight: '30px',
+                      }}
+                    />
+                  </div>
+                </label>
+
+                <label
+                  className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
+                  style={{
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                    fontSize: `${fontSize * 20}px}`,
+                  }}
+                >
+                  Distrito:
+                  <div className="flex row" style={{ position: 'relative' }}>
+                    <select
+                      name="district"
+                      value={formData.district}
+                      className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
+                      onChange={handleChange}
+                      placeholder="Digite aqui"
+                      required
+                      style={{
+                        padding: '10px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        marginTop: '4px',
+                        paddingRight: '30px',
+                      }}
+                    >
+                      <option value="" disabled>Selecione um distrito</option>
+                      {Object.keys(districtLocations).map((district) => (
+                        <option key={district} value={districtLocations[district]}>{district}</option>
+                      ))}
+                    </select>
+                  </div>
+                </label>
+
+                <label
+                  className={`text-${highContrast ? '[#FFF000]' : 'black'} font-bold`}
+                  style={{
+                    textAlign: `${alignment ? alignment : 'start'}`,
+                    fontSize: `${fontSize * 20}px}`,
+                  }}
+                >
+                  Código Postal:
+                  <div className="flex row" style={{ position: 'relative' }}>
+                    <input
+                      type="text"
+                      name="postal_code"
+                      value={formData.postal_code}
+                      autoComplete="off"
+                      className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'} w-full`}
+                      onChange={handleChange}
+                      onBlur={() => handleInputBlur('postal_code')}
+                      placeholder="Digite aqui"
+                      required
+                      style={{
+                        padding: '10px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        marginTop: '4px',
+                        paddingRight: '30px',
+                      }}
+                    />
+                  </div>
+                </label>
+
+                {httpResponse && (
+                  <div className="mt-4">
+                    <p>{httpResponse}</p>
+                  </div>
+                )}
+                <div className="flex items-center justify-center mx-auto mb-5 mt-10">
+                  <GlobalButton size="medium" type="primary" onClick={handleSubmit} text={user == null ? 'Criar Conta' : 'Atualizar Conta'} />
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
