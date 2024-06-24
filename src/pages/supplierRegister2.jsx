@@ -54,7 +54,7 @@ const SupplierRegister = () => {
       title,
       description,
       price,
-      clientCount,
+      num_customers: clientCount,
       address: selectedAddress,
       photos,
       serviceType,
