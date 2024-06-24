@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import ApiClient from '../../apiClient';
 import { AccessibilityContext } from '@/contexts/acessibility';
 import GlobalButton from '@/components/globalButton';
+import { Tooltip } from 'react-tooltip';
 
 const Suppliers = () => {
   const { alignment, highContrast } = useContext(AccessibilityContext);
@@ -117,10 +120,45 @@ const Suppliers = () => {
 
   return (
     <div className="mt-20 container mx-auto px-4">
+      <div className="relative mb-16">
+        <Tooltip
+          anchorSelect="#chevron-left-home-1"
+          place="right"
+          style={{ fontSize: '1.2em' }}
+        >
+          Voltar à Página Inicial
+        </Tooltip>
+        <Link
+          href="/"
+          style={{
+            cursor: 'pointer',
+            zIndex: '9',
+            position: 'absolute',
+            left: '1%',
+            top: '1.2rem',
+          }}
+        >
+          <Image
+            src={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/chevron-left-green.svg`}
+            id="chevron-left-home-1"
+            alt="chevron-left"
+            width={80}
+            height={80}
+            style={{
+              maxWidth: '100%',
+              height: 'auto',
+            }}
+          />
+        </Link>
+      </div>
       <section className="mb-10">
         <p
           className={`flex flex-col pt-20 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
-          style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+          style={{
+            textAlign: alignment ? alignment : 'start',
+            color: highContrast ? 'white' : 'unset'
+          }}
+          
         >
           Fornecedores
         </p>
@@ -234,33 +272,39 @@ const Suppliers = () => {
                 {suppliers.map((supplier) => (
                   <div
                     key={supplier._id}
-                    className="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300 bg-white cursor-pointer"
-                    onClick={() => openModal(supplier)}
+                    className="p-4 border rounded shadow hover:shadow-lg transition-shadow duration-300"
                   >
-                    <h2 className="text-xl font-bold mb-2">{supplier.name_company}</h2>
-                    <p className="mb-2">Distrito: {supplier.address}</p>
-                    <p className="mb-2">Código Postal: {supplier.postal_code}</p>
-                    <p className="mb-2">Clientes: {supplier.num_customers}</p>
-                    <p className="mb-2">
-                      Selo de Popularidade: {supplier.popularity_seal ? 'Sim' : 'Não'}
-                    </p>
+                    <h2 className="text-xl font-bold">{supplier.name_company}</h2>
+                    <p>Endereço: {supplier.address}</p>
+                    <p>Código Postal: {supplier.postal_code}</p>
+                    <p>Estrelas: {supplier.stars}</p>
+                    <p>Selo de Popularidade: {supplier.popularity_seal ? 'Sim' : 'Não'}</p>
+                    <button
+                      className="mt-2 text-blue-500 underline"
+                      onClick={() => openModal(supplier)}
+                    >
+                      Ver Serviços
+                    </button>
                   </div>
                 ))}
               </div>
-              <div className="flex justify-between mt-10">
+
+              <div className="mt-8 flex justify-center space-x-4">
                 <button
+                  className={`px-4 py-2 border rounded ${pagination.offset === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 text-white'
+                    }`}
                   onClick={() => handlePageChange(-1)}
                   disabled={pagination.offset === 0}
-                  className="p-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
                 >
                   Anterior
                 </button>
                 <button
+                  className={`px-4 py-2 border rounded ${pagination.offset + pagination.limit >= pagination.total ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 text-white'
+                    }`}
                   onClick={() => handlePageChange(1)}
                   disabled={pagination.offset + pagination.limit >= pagination.total}
-                  className="p-2 bg-gray-300 text-gray-700 rounded disabled:opacity-50"
                 >
-                  Próximo
+                  Próxima
                 </button>
               </div>
             </div>
@@ -270,95 +314,30 @@ const Suppliers = () => {
         </div>
       )}
 
+      {/* Modal de Serviços */}
       {showModal && selectedSupplier && (
-        <div
-          className="fixed z-10 inset-0 overflow-y-auto"
-          aria-labelledby="modal-title"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-4 rounded shadow-lg w-11/12 md:w-3/4 lg:w-1/2 relative">
+            <button
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+              onClick={closeModal}
             >
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <h3
-                  className="text-lg leading-6 font-bold text-gray-900"
-                  id="modal-title"
-                >
-                  Detalhes do Fornecedor
-                </h3>
-                <div className="mt-2">
-                  <p className='mb-2' >Nome da Empresa: {selectedSupplier.name_company}</p>
-                  <p className='mb-2'>Distrito: {selectedSupplier.address}</p>
-                  <p className='mb-2'> Código Postal: {selectedSupplier.postal_code}</p>
-                  <p className='mb-2'>Clientes: {selectedSupplier.num_customers}</p>
-                  <p>
-                    Selo de Popularidade:{' '}
-                    {selectedSupplier.popularity_seal ? 'Sim' : 'Não'}
-                  </p>
-                </div>
-              </div>
-
-              {loadingServices ? (
-                <p className="text-center mt-10">Carregando fornecedores...</p>
-              ) : selectedSupplierServices ? (
-                Array.isArray(selectedSupplierServices) ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mr-4 ml-4">
-                    {selectedSupplierServices.map((service) => (
-                      <div
-                        key={service._id}
-                        className="border rounded p-4 shadow cursor-pointer"
-                      >
-                        <div>
-                          <strong>Description:</strong> {service?.description}
-                        </div>
-                        <div>
-                          <strong>Price:</strong> {service?.price}
-                        </div>
-                        <div>
-                          <strong>Customers:</strong> {service?.num_customers}
-                        </div>
-                        <div>
-                          <strong>Availability:</strong>
-                        </div>
-                        <ul>
-                          <li>
-                            <strong>Dates:</strong>{' '}
-                            {service?.availability?.dates.join(', ')}
-                          </li>
-                          <li>
-                            <strong>Weekdays:</strong>{' '}
-                            {service?.availability?.weekdays.join(', ')}
-                          </li>
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
+              &times;
+            </button>
+            <h2 className="text-2xl font-bold mb-4">Serviços de {selectedSupplier.name_company}</h2>
+            {loadingServices ? (
+              <p>Carregando serviços...</p>
+            ) : (
+              <ul>
+                {Array.isArray(selectedSupplierServices) ? (
+                  selectedSupplierServices.map((service, index) => (
+                    <li key={index}>{service.name_service}</li>
+                  ))
                 ) : (
-                  <p className="text-center mt-10">{selectedSupplierServices}</p>
-                )
-              ) : null}
-
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse flex items-center justify-center">
-                <GlobalButton
-                  size="small"
-                  type="primary"
-                  onClick={closeModal}
-                  text="Fechar"
-                />
-              </div>
-            </div>
+                  <p>{selectedSupplierServices}</p>
+                )}
+              </ul>
+            )}
           </div>
         </div>
       )}
