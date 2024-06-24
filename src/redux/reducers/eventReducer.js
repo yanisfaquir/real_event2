@@ -20,7 +20,7 @@ const eventSlice = createSlice({
     setStartActionDate: (state, action) => {
       const date = new Date(action.payload);
       if (!isNaN(date.getTime())) {
-        state.startDate = action.payload
+        state.startDate = action.payload;
       } else {
         console.error('String inválida para data');
       }
@@ -28,7 +28,7 @@ const eventSlice = createSlice({
     setStartActionTime: (state, action) => {
       const date = new Date(action.payload);
       if (!isNaN(date.getTime())) {
-        state.startTime = action.payload
+        state.startTime = action.payload;
       } else {
         console.error('String inválida para hora');
       }
@@ -39,7 +39,7 @@ const eventSlice = createSlice({
     setEndActionDate: (state, action) => {
       const date = new Date(action.payload);
       if (!isNaN(date.getTime())) {
-        state.endDate = action.payload
+        state.endDate = action.payload;
       } else {
         console.error('String inválida para data');
       }
@@ -47,7 +47,7 @@ const eventSlice = createSlice({
     setEndActionTime: (state, action) => {
       const date = new Date(action.payload);
       if (!isNaN(date.getTime())) {
-        state.endTime = action.payload
+        state.endTime = action.payload;
       } else {
         console.error('String inválida para hora');
       }
