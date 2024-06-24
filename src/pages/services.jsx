@@ -234,8 +234,8 @@ style={{
                 <div className="mb-2">
                   <strong>Fotos:</strong>
                   <div className="grid grid-cols-3 gap-1 mt-2">
-                    {service.photo.map((photo, index) => (
-                      <Image key={index} src={photo} alt={`Foto ${index}`} className="rounded-lg object-cover h-24 w-full" />
+                    {service.photos.map((photo, index) => (
+                      <Image key={index} src={photo} alt={`Foto ${index}`} width={80} height={80} className="rounded-lg object-cover h-24 w-full" />
                     ))}
                   </div>
                 </div>
