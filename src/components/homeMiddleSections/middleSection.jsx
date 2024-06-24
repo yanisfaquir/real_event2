@@ -19,22 +19,25 @@ export const MiddleSection = ({ data }) => {
           >
             <h1
               tabIndex={0}
-              className={`absolute w-[88%] -mt-4 flex justify-start flex-col ${highContrast ? 'bg-black' : 'bg-unset'} px-8 top-20 left-50 transform -translate-x-50 z-8 text-[4.4rem] font-bold`}
+              className={`absolute w-[88%] -mt-4 flex justify-start flex-col ${highContrast ? 'bg-black' : 'bg-unset'} px-8 top-20 left-50 transform -translate-x-50 z-8 text-4xl md:text-6xl font-bold`}
               style={{ textAlign: `${alignment ? alignment : 'start'}` }}
             >
               {!showImageInfo && (
                 <>
+                <p className={`mb-2`}>
+
                  {index + 1}
+                </p>
                  <p
                     tabIndex={-1}
-                    className={`${highContrast ? 'bg-black' : 'bg-unset'} text-[2rem] font-bold max-w-[400px]`}
+                    className={`${highContrast ? 'bg-black' : 'bg-unset'} text-4xl md:text-6xl font-bold max-w-[400px]`}
                     style={{ textAlign: `${alignment ? alignment : 'start'}` }}
                  >
                     {item.title}
                  </p>
                  <p
                     tabIndex={-1}
-                    className={`${highContrast ? 'bg-black' : 'bg-unset'} absolute z-8 top-60 -mt-4 text-[1.3rem] max-w-[88%]`}
+                    className={`${highContrast ? 'bg-black' : 'bg-unset'} absolute z-8 top-60 mt-8 text-xl md:text-2xl max-w-[88%]`}
                     style={{ textAlign: `${alignment ? alignment : 'start'}` }}
                  >
                     {item.text}

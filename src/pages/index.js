@@ -5,12 +5,18 @@ import { MiddleSection } from '@/components/homeMiddleSections/middleSection';
 import { useRouter } from 'next/router';
 import { AccessibilityContext } from '@/contexts/acessibility';
 import { Tooltip } from 'react-tooltip';
+import CookieModal from './CookieModal'; 
 
 const HomePage = () => {
   const router = useRouter();
   const [isDesktopOrLaptop, setIsDesktopOrLaptop] = useState(false);
-  const { alignment, highContrast, showImageInfo } =
-    useContext(AccessibilityContext);
+  const { alignment, highContrast, showImageInfo, fontSize } = useContext(AccessibilityContext);
+
+  const [showCookieModal, setShowCookieModal] = useState(true);
+
+  const handleAcceptCookies = () => {
+    setShowCookieModal(false);
+  };
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
@@ -23,11 +29,12 @@ const HomePage = () => {
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
+
   const middleData = [
     {
       image: `${showImageInfo ? '/assets/pictures/card-sm-1-home.png' : '/assets/pictures/card-sm-1-home-blue.png'}`,
-      title: 'Encontre o serviço que precisas',
-      text: 'Crie um evento e explore o nosso site para encontrar o serviço perfeito para o seu evento.',
+      title: 'Encontre o serviço ideal',
+      text: 'Crie um evento e explore o nosso site para encontrar o serviço para o seu evento.',
       alt: 'Mulher loira mexendo no celular de frente para um laptop',
     },
     {
@@ -46,12 +53,14 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col">
+      {showCookieModal && <CookieModal onAccept={handleAcceptCookies} />}
+
       <div className="top-0 h-[92vh] z-0 top-section-home">
         {!showImageInfo && (
           <div>
             <h1
-              style={{ textAlign: `${alignment ? alignment : 'center'}` }}
-              className={`text-white  ${highContrast ? 'bg-black' : 'bg-unset'} relative mx-auto max-w-[850px] top-[24vh] z-10 text-[4rem] font-bold`}
+              style={{ textAlign: `${alignment ? alignment : 'center'}`, fontSize: `${fontSize * 56}px`}}
+              className={`text-white ${highContrast ? 'bg-black' : 'bg-unset'} relative mx-auto max-w-[800px] top-[20vh] z-10 font-bold`}
             >
               CONHECE A
             </h1>
@@ -68,17 +77,17 @@ const HomePage = () => {
               }}
             />
             <h2
-              style={{ textAlign: `${alignment ? alignment : 'center'}` }}
-              className={`text-white ${highContrast ? 'bg-black' : 'bg-unset'} relative mx-auto max-w-[850px] top-[24vh] z-10 text-[1.5rem]`}
+              style={{ textAlign: `${alignment ? alignment : 'center'}`, fontSize: `${fontSize * 24}px`}}
+              className={`text-white ${highContrast ? 'bg-black' : 'bg-unset'} relative mx-auto max-w-[850px] top-[24vh] z-10`}
             >
-              Torne realidade o evento da sua empresa! Aqui tu encontras tudo
-              aquilo que precisas para realizar workshops, conferências ou até
-              mesmo um convívios.
+              Torne realidade o evento da sua empresa! Aqui você encontra tudo
+              aquilo que precisa para realizar workshops, conferências ou até
+              mesmo um convívio.
             </h2>
             <ul
               className={`text-white relative mx-auto flex justify-center max-w-[400px] top-[32vh] z-10 ${highContrast ? 'bg-black' : 'bg-unset'}`}
             >
-              {!router.pathname.includes('/startEvent') && (
+              {!router.pathname.includes('/startEvent1') && (
                 <li
                   className="mx-2 rounded-[50px] md:grid-cols-12 lg:grid-cols-6"
                   style={{
@@ -88,7 +97,7 @@ const HomePage = () => {
                   <GlobalButton
                     size={isDesktopOrLaptop ? 'large' : 'medium'}
                     type="custom"
-                    path="/startEvent"
+                    path="/startEvent1"
                     text="Iniciar"
                   />
                 </li>
@@ -183,10 +192,9 @@ const HomePage = () => {
           )}
         </map>
       </div>
+
       <div>
-        <div
-          className={`${highContrast ? 'bg-black' : 'bg-[#ececec]'} middle-home-section py-8`}
-        >
+        <div className={`${highContrast ? 'bg-black' : 'bg-[#ececec]'} middle-home-section py-8`}>
           {router.pathname === '/' && <MiddleSection data={middleData} />}
         </div>
       </div>

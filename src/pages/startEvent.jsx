@@ -120,45 +120,45 @@ const StartEvent = () => {
     Porto: 'Porto',
     'São João da Madeira': 'São João da Madeira',
     'São Roque': 'São Roque',
-    Setubal: 'Setubal',
+    Setubal: 'Setúbal',
     'Viana do Castelo': 'Viana do Castelo',
     'Vila Real': 'Vila Real',
     Viseu: 'Viseu',
   };
 
-  const handleLocationSearch = async () => {
-    dispatch(setLocation(locationEvent));
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationEvent)}`
-      );
-      const data = await response.json();
-      if (data.length > 0) {
-        setAltLocation(data[0].display_name);
-        const { lat, lon } = data[0];
-        setCoordenadas({ lat: parseFloat(lat), lng: parseFloat(lon) });
-        dispatch(
-          setMapImageUrl(
-            `https://www.openstreetmap.org/export/embed.html?bbox=${parseFloat(lon) - 0.01}%2C${parseFloat(lat) - 0.01}%2C${parseFloat(lon) + 0.01}%2C${parseFloat(lat) + 0.01}&layer=mapnik&marker=${parseFloat(lat)}%2C${parseFloat(lon)}`
-          )
-        );
-        setError(null);
-      } else {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          localizacao: 'Localidade não encontrada',
-        }));
+  // const handleLocationSearch = async () => {
+  //   dispatch(setLocation(locationEvent));
+  //   try {
+  //     const response = await fetch(
+  //       `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationEvent)}`
+  //     );
+  //     const data = await response.json();
+  //     if (data.length > 0) {
+  //       setAltLocation(data[0].display_name);
+  //       const { lat, lon } = data[0];
+  //       setCoordenadas({ lat: parseFloat(lat), lng: parseFloat(lon) });
+  //       dispatch(
+  //         setMapImageUrl(
+  //           `https://www.openstreetmap.org/export/embed.html?bbox=${parseFloat(lon) - 0.01}%2C${parseFloat(lat) - 0.01}%2C${parseFloat(lon) + 0.01}%2C${parseFloat(lat) + 0.01}&layer=mapnik&marker=${parseFloat(lat)}%2C${parseFloat(lon)}`
+  //         )
+  //       );
+  //       setError(null);
+  //     } else {
+  //       setErrors((prevErrors) => ({
+  //         ...prevErrors,
+  //         localizacao: 'Localidade não encontrada',
+  //       }));
 
-        dispatch(setMapImageUrl(null));
-        dispatch(setLocation(null));
-      }
-    } catch (error) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        coordenadas: 'Erro ao buscar coordenadas',
-      }));
-    }
-  };
+  //       dispatch(setMapImageUrl(null));
+  //       dispatch(setLocation(null));
+  //     }
+  //   } catch (error) {
+  //     setErrors((prevErrors) => ({
+  //       ...prevErrors,
+  //       coordenadas: 'Erro ao buscar coordenadas',
+  //     }));
+  //   }
+  // };
 
   const handleSpeechRecognition = (field, id) => {
     try {
@@ -493,7 +493,7 @@ const StartEvent = () => {
       switch (currentSection.number) {
         case 1:
           return (
-            altLocation &&
+            locationEvent &&
             startDate &&
             startTime &&
             (sameDay || endDate) &&
@@ -595,7 +595,7 @@ const StartEvent = () => {
           className={`event-form mt-20 lg:mt-16 event-form-1 ${currentSection.number === 1 ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'}`}
         >
           <p
-            className={`flex flex-col pt-20 px-5 text-[4rem] font-bold text-middle-home`}
+            className={`flex flex-col pt-20 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
             style={{ textAlign: `${alignment ? alignment : 'start'}` }}
           >
             Informações do Evento
@@ -624,7 +624,7 @@ const StartEvent = () => {
                 >
                   Localidade:
                   <div className="flex row" style={{ position: 'relative' }}>
-                    {/* <select
+                    <select
                       value={locationEvent}
                       className={`cursor-pointer ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
                       onChange={(e) => {
@@ -638,6 +638,7 @@ const StartEvent = () => {
                           }));
                         }
                         setEventLocation(value);
+                        dispatch(setLocation(value));
                       }}
                       onFocus={() => {
                         if (locationEvent) setLocationTouched(false);
@@ -658,8 +659,8 @@ const StartEvent = () => {
                           {value}
                         </option>
                       ))}
-                    </select> */}
-                    <input
+                    </select>
+                    {/* <input
                       type="text"
                       value={locationEvent}
                       className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
@@ -710,7 +711,7 @@ const StartEvent = () => {
                       type="button"
                       id="search-location"
                       onClick={handleLocationSearch}
-                    />
+                    /> */}
                   </div>
                 </label>
                 <p
@@ -732,7 +733,7 @@ const StartEvent = () => {
                 >
                   Campo obrigatório
                 </p>
-                <div className="flex flex-col justify-center items-center">
+                {/* <div className="flex flex-col justify-center items-center">
                   {errors?.localizacao ? (
                     <p
                       aria-live="polite"
@@ -765,7 +766,7 @@ const StartEvent = () => {
                       ></iframe>
                     </div>
                   ) : null}
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="p-4 w-full lg:w-1/3 min-h-[180px] lg:border-r border-b lg:border-b-0 border-gray-500 relative flex flex-col justify-center align-center">
@@ -1081,7 +1082,8 @@ const StartEvent = () => {
             </div>
             <div className="lg:w-1/2 px-16">
               <p
-                className={`flex flex-col text-[4rem] font-bold text-middle-home`}
+                 className={`flex flex-col pt-15 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
+
                 style={{ textAlign: `${alignment ? alignment : 'start'}` }}
               >
                 Tipos de serviços
@@ -1135,7 +1137,7 @@ const StartEvent = () => {
                   <label
                     style={{ textAlign: `${alignment ? alignment : 'start'}` }}
                   >
-                    Mechardising
+                    Mechandising
                   </label>
                 </li>
 
@@ -1204,7 +1206,8 @@ const StartEvent = () => {
             </div>
             <div className="lg:w-1/2 px-16">
               <p
-                className="flex flex-col text-[4rem] font-bold text-middle-home"
+                className={`flex flex-col pt-25 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
+
                 style={{ textAlign: `${alignment ? alignment : 'start'}` }}
               >
                 Tipos de eventos

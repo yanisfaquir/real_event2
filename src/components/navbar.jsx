@@ -9,9 +9,18 @@ import { useDispatch } from 'react-redux';
 import { setCurrentCartSection } from '@/redux/reducers/cartReducer';
 import { Popover } from 'evergreen-ui';
 import { AccessibilityContext } from '../contexts/acessibility';
+import { useSelector } from 'react-redux';
+import ApiClient from '../../apiClient';
+import { clearUser, logout } from '@/redux/reducers/userReducer';
+import { styled } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
+import InputBase from '@mui/material/InputBase';
+import { alpha } from '@mui/material/styles';
 
 const Navbar = ({ inView }) => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
   const router = useRouter();
   const [visibleDesktop, setVisibleDesktop] = useState(false);
   const cartItems = services.services;
@@ -33,6 +42,71 @@ const Navbar = ({ inView }) => {
     setIsShortcutsOpen(!isShortcutsOpen);
     setIsAcessibilityOpen(false);
   };
+
+  const handleLogout = () => {
+    document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    dispatch(logout());
+    dispatch(clearUser());
+
+    window.location.reload();
+  };
+
+  const Search = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    transition: 'width 0.3s, margin 0.3s',
+    marginLeft: theme.spacing(1),
+    marginTop: "-4px", 
+    marginRight: "-12px",
+  }));
+
+  const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }));
+  
+  const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    transition: theme.transitions.create('width'),
+    width: '0',
+    '&.expanded': {
+      width: '200px', 
+    },
+    '& .MuiInputBase-input': {
+      padding: theme.spacing(1, 1, 1, 0),
+      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+      color: 'white',
+    },
+  }));;
+
+  const [searchOpen, setSearchOpen] = React.useState(false);
+
+  const handleSearchToggle = () => {
+    setSearchOpen((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const apiInstance = new ApiClient();
+    // apiInstance.refreshAccessToken().then((response) => {
+    //   if (!response) {
+    //     handleLogout();
+    //     return;
+    //   }
+    // });
+
+    const handleRouteChange = (url) => {
+      console.log('Rota alterada para:', url);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router, dispatch]);
 
   useEffect(() => {
     if (isAcessibilityOpen) {
@@ -78,7 +152,9 @@ const Navbar = ({ inView }) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navOpen && !event.target.closest('#menu-navbar')) {
-        setNavOpen(false);
+        setTimeout(() => {
+          setNavOpen(false);
+        }, 200);
       }
     };
 
@@ -155,7 +231,7 @@ const Navbar = ({ inView }) => {
                 text={'Ver mais'}
                 size="small"
                 type="secondary"
-                width="100%"
+                width="100"
                 onClick={() => {
                   dispatch(setCurrentCartSection(1));
                   setVisibleDesktop(false);
@@ -249,7 +325,9 @@ const Navbar = ({ inView }) => {
             </ul>
           )}
         </div>
-        <div className={`accessibility-container fixed bottom-[8%] z-10 border-[4px] border-white ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'} rounded-[50px] py-3 shadow-lg`}>
+        <div
+          className={`accessibility-container fixed bottom-[8%] z-10 border-[4px] border-white ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'} rounded-[50px] py-3 shadow-lg`}
+        >
           <li className={`list-none relative min-w-[56px]`}>
             <GlobalButton
               image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/acessibility-icon.svg`}
@@ -346,7 +424,7 @@ const Navbar = ({ inView }) => {
                 />
               </li>
               {isWindows && (
-                <li className="list-none relative mt-2 min-w-[56px] shortcut-button">
+                <li className="list-none relative mt-2 min-w-[46px] shortcut-button">
                   <GlobalButton
                     image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/shortcut-icon.svg`}
                     text={
@@ -372,27 +450,25 @@ const Navbar = ({ inView }) => {
         </div>
       </div>
       <nav
-        className={`desktop-navbar fixed z-10 top-0 left-1/2 transform -translate-x-1/2 mt-5 border-4 border-white ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'} rounded-[50px] pb-2 px-[2rem] h-[76px] ${
+        className={`desktop-navbar fixed z-10 top-0 left-1/2 transform -translate-x-1/2 mt-5 border-4 border-white ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'} rounded-[50px] pb-2 px-[2rem] h-[60px] ${
           inView
             ? ''
-            : `desktop-navbar-scrolled fixed z-10 w-[100vw] mt-[0px] mx-[0px] px-[0rem] border-none border-bottom-2 border-transparent rounded-none px-[2rem] h-[72px] ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'}`
+            : `desktop-navbar-scrolled fixed z-10 w-[100vw] mt-[0px] mx-[0px] px-[0rem] border-none border-bottom-2 border-transparent rounded-none px-[2rem] h-[55px] ${highContrast ? 'bg-black' : 'bg-[#4A7D8B]'}`
         }`}
       >
         <div className="flex justify-between items-center">
           <section className="w-1/4 py-2 flex items-center">
             <div className="-mt-2">
-              <li className="list-none relative min-w-[56px]">
-                <GlobalButton
-                  image="/assets/icons/logorealevent.png"
-                  path="/"
-                  text={`Ir à Página inicial`}
-                  id="logo-navbar"
-                />
-              </li>
+              <GlobalButton
+                image="/assets/icons/realevent-icon.png"
+                path="/"
+                text={`Ir à Página inicial`}
+                id="logo-navbar"
+              />
             </div>
           </section>
 
-          <section className="w-1/2 py-2 gap-2 flex justify-center items-center">
+          <section className="w-1/2 pb-2 gap-2 flex justify-center items-center">
             <GlobalButton
               size="medium"
               type="custom"
@@ -402,30 +478,73 @@ const Navbar = ({ inView }) => {
             <GlobalButton
               size="medium"
               type="custom"
-              path="/supplierRegister1"
-              text="Fornecedor"
+              path="/suppliers"
+              text="Fornecedores"
+            />
+            <GlobalButton
+              size="medium"
+              type="custom"
+              path="/services"
+              text="Serviços"
             />
           </section>
 
           <section className="w-1/4 py-2 flex justify-end items-center align-center">
-            <GlobalButton
-              image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/user-white.svg`}
-              path="/login"
-              text="Conecte-se"
-              id="user-navbar"
-            />
-            <div style={{ position: 'relative', width: '24%', height: '44px' }}>
-              <div style={{ position: 'absolute', right: 0, top: 6 }}>
-                <GlobalButton
-                  image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/star-icon-white.svg`}
-                  path="/favorites"
-                  text="Ver favoritos"
-                  id="star-navbar"
+            {/* <div className={`mb-[2px]`}>
+              <GlobalButton
+                image={`${user ? user?.photo : `/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/user-white.svg`}`}
+                path={`${user ? '/profile' : '/login'}`}
+                text={`${user ? user?.name : 'Conecte-se'}`}
+                id="user-navbar"
+                width="40"
+                customClass={`${user?.photo ? 'rounded-button' : ''}`}
+              />
+            </div> */}
+            <div className={`mb-[2px] flex`}>
+            {/* <Search sx={{ marginLeft: searchOpen ? '0' : 'auto' }}>
+                <SearchIconWrapper>
+                  <IconButton size="large" aria-label="search" color="inherit" onClick={handleSearchToggle}>
+                  <SearchIcon sx={{ color: 'white', fontSize: '2rem' }} />
+                  </IconButton>
+                </SearchIconWrapper>
+                <StyledInputBase
+                  className={searchOpen ? 'expanded' : ''}
+                  placeholder="Pesquisar..."
+                  inputProps={{ 'aria-label': 'search' }}
+                  color='white'
                 />
-              </div>
+              </Search> */}
+
+
             </div>
-            <div style={{ position: 'relative', width: '24%', height: '44px' }}>
-              {router.pathname !== '/shopping-cart' ? (
+            <div className={`mb-[2px] flex`}>
+              <GlobalButton
+                image={`${user ? user?.photo : `/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/user-white.svg`}`}
+                path={`${user ? '/profile' : '/login'}`}
+                text={`${user ? user.name || user.name_company  : 'Conecte-se'}`}
+                id="user-navbar"
+                width="30"
+                customClass={`${user?.photo ? 'rounded-button' : ''}`}
+              />
+            </div>
+            {user && (
+              <div
+                style={{ position: 'relative', width: '18%', height: '44px' }}
+              >
+                <div style={{ position: 'absolute', right: 0, top: 6 }}>
+                  <GlobalButton
+                    image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/logout-icon.svg`}
+                    text={`Encerrar sessão`}
+                    id="logout-navbar"
+                    onClick={handleLogout}
+                    width="36"
+                  />
+                </div>
+              </div>
+            )}
+
+            <div style={{ position: 'relative', width: '18%', height: '44px' }}>
+              {/* {router.pathname !== '/shopping-cart' ? (
                 <Popover
                   content={cartPopoverContent}
                   title={
@@ -456,7 +575,7 @@ const Navbar = ({ inView }) => {
                     />
                   </div>
                 </Popover>
-              ) : (
+              ) : ( */}
                 <div style={{ position: 'absolute', right: 0, top: 6 }}>
                   <GlobalButton
                     image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/bag-white.svg`}
@@ -479,7 +598,7 @@ const Navbar = ({ inView }) => {
                     }}
                   />
                 </div>
-              )}
+              {/* )} */}
             </div>
           </section>
         </div>
@@ -490,7 +609,7 @@ const Navbar = ({ inView }) => {
       >
         <ul className="flex justify-between items-center mt-2">
           <li className="-me-3 -mt-1">
-            {router.pathname !== '/shopping-cart' ? (
+            {/* {router.pathname !== '/shopping-cart' ? (
               <Popover
                 content={cartPopoverContent}
                 title={<strong className="text-[1.2rem]">Seu carrinho</strong>}
@@ -515,7 +634,7 @@ const Navbar = ({ inView }) => {
                   />
                 </div>
               </Popover>
-            ) : (
+            ) : ( */}
               <div style={{ position: 'relative', left: 0, top: 0 }}>
                 <GlobalButton
                   image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/bag-white.svg`}
@@ -527,7 +646,7 @@ const Navbar = ({ inView }) => {
                   id={router.pathname === '/shopping-cart' ? 'bag-navbar' : ''}
                 />
               </div>
-            )}
+            {/* )} */}
           </li>
           <li className="-mt-1 ms-1 w-1/2 py-2 flex justify-center items-center">
             <Link href="/">
@@ -577,25 +696,37 @@ const Navbar = ({ inView }) => {
             <GlobalButton
               size="large"
               type="custom"
-              path="/supplier"
-              text="Fornecedor"
+              path="/suppliers"
+              text="Fornecedores"
             />
           </li>
           <li className="py-4">
             <GlobalButton
               size="large"
               type="custom"
-              path="/favorites"
-              text="Favoritos"
+              path="/services"
+              text="Serviços"
             />
           </li>
           <li className="py-4">
             <GlobalButton
-              image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/user-white.svg`}
-              path="/login"
-              text="Conecte-se"
+              image={`${user ? user.photo : `/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/user-white.svg`}`}
+              path={`${user ? '/profile' : '/login'}`}
+              text={`${user ? user.name || user.name_company : 'Conecte-se'}`}
               id="user-navbar"
+              width="40"
+              customClass={`${user?.photo ? 'rounded-button' : ''}`}
             />
+          </li>
+          <li className="py-4">
+            {user && (
+              <GlobalButton
+                text={`Encerrar sessão`}
+                size="large"
+                type="custom"
+                onClick={handleLogout}
+              />
+            )}
           </li>
         </ul>
       </nav>

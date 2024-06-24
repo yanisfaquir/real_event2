@@ -15,12 +15,13 @@ const GlobalButton = ({
   id,
   width,
   disabled = false,
+  customClass = '',
 }) => {
   const { highContrast } = useContext(AccessibilityContext);
   const buttonSizes = {
-    small: 'py-1 px-2 text-[1.25rem] min-w-32',
-    medium: 'py-2 px-3 text-[1.5rem] min-w-40',
-    large: 'py-3 px-4 text-[1.75rem] min-w-48',
+    small: 'py-1 px-2 text-1xl min-w-32',
+    medium: 'py-2 px-3 text-2xl min-w-40',
+    large: 'py-3 px-3 text-3xl min-w-44',
     custom: 'py-4 px-4',
   };
 
@@ -31,7 +32,7 @@ const GlobalButton = ({
     custom: `${highContrast ? 'bg-black text-[#fff000] hover:bg-[#878787]' : 'bg-transparent text-white hover:bg-[#f2EBEB]/[.3]'}`,
   };
 
-  const buttonStyle = `rounded-[50px] focus:outline-none font-bold transition-all object-cover transition duration-300 ${width ? `w-[${width}]` : ''} ${buttonSizes[size]} ${buttonColors[type]} ${disabled ? 'filter contrast-50 cursor-not-allowed' : ''}`;
+  const buttonStyle = `rounded-[50px] focus:outline-none font-bold transition-all object-cover transition duration-300 ${width ? `w-[${width}%]` : ''} ${buttonSizes[size]} ${buttonColors[type]} ${disabled ? 'filter contrast-50 cursor-not-allowed' : ''}`;
 
   const handleClick = (event) => {
     if (!disabled && onClick) {
@@ -59,7 +60,7 @@ const GlobalButton = ({
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         aria-label={text}
-        className="transition duration-300 hover:scale-125 mx-4"
+        className={`transition duration-300 hover:scale-125 mx-4 ${customClass ? customClass : ''}`}
         id={id}
         type="button"
       >
@@ -68,22 +69,24 @@ const GlobalButton = ({
             <Image
               src={image}
               alt={text}
-              width={32}
-              height={32}
+              width={width ? width : 26}
+              height={26}
               style={{
-                maxWidth: "100%",
-                height: "auto"
+                maxWidth: `${customClass ? '' : '100%'}`,
+                height: `${customClass ? `${width}px` : 'auto'}`,
+                width: `${customClass ? `${width}px` : ''}`,
               }} />
           </Link>
         ) : (
           <Image
             src={image}
             alt={text}
-            width={32}
-            height={32}
+            width={width ? width : 26}
+            height={26}
             style={{
-              maxWidth: "100%",
-              height: "auto"
+              maxWidth: `${customClass ? '' : '100%'}`,
+              height: `${customClass ? `${width}px` : 'auto'}`,
+              width: `${customClass ? `${width}px` : ''}`,
             }} />
         )}
       </button>

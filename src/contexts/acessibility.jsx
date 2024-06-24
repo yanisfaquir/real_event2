@@ -11,6 +11,26 @@ export const AccessibilityProvider = ({ children }) => {
   const [highContrast, setHighContrast] = useState(false);
   const [showImageInfo, setShowImageInfo] = useState(false);
 
+  const [fontSize, setFontSize] = useState(1);
+  const [isMaxReached, setIsMaxReached] = useState(false);
+  const [isMinReached, setIsMinReached] = useState(false);
+
+  const increaseFontSize = () => {
+    if (fontSize < 1.36) {
+      setFontSize(prevFontSize => prevFontSize + 0.08);
+    } else {
+      setIsMaxReached(true);
+    }
+  };
+
+  const decreaseFontSize = () => {
+    if (fontSize > 0.7) {
+      setFontSize(prevFontSize => prevFontSize - 0.08);
+    } else {
+      setIsMinReached(true);
+    }
+  };
+
   const resetStyles = () => {
     setAlignment(null);
     const images = document.querySelectorAll('.image-info');
@@ -28,11 +48,25 @@ export const AccessibilityProvider = ({ children }) => {
     });
     setHighContrast(false);
     setShowImageInfo(false);
+    setIsMinReached(false);
+    setIsMaxReached(false);
+    setFontSize(1);
     elements.forEach((element) => {
       element.style.backgroundColor = '';
       element.style.color = '';
       element.style.borderColor = '';
     });
+  };
+
+  const changeFontSize = (currentFontSize, step, fontSizes) => {
+    const currentIndex = fontSizes.indexOf(currentFontSize);
+    const newIndex = currentIndex + step;
+  
+    if (newIndex >= 0 && newIndex < fontSizes.length) {
+      return fontSizes[newIndex];
+    } else {
+      return currentFontSize;
+    }
   };
 
   const toggleImageInfo = () => {
@@ -247,47 +281,47 @@ export const AccessibilityProvider = ({ children }) => {
     setLineSpacingClickCount((prevCount) => prevCount + 1);
   };
 
-  const increaseFontSize = () => {
-    const scaleFactor = 1.08;
-    const maxScaleFactor = Math.pow(scaleFactor, 3);
+  // const increaseFontSize = () => {
+  //   const scaleFactor = 1.08;
+  //   const maxScaleFactor = Math.pow(scaleFactor, 3);
 
-    textElements.forEach((element) => {
-      const originalFontSize = originalFontSizes.get(element);
-      const currentFontSize = parseFloat(
-        window.getComputedStyle(element).fontSize
-      );
-      let newFontSize;
+  //   textElements.forEach((element) => {
+  //     const originalFontSize = originalFontSizes.get(element);
+  //     const currentFontSize = parseFloat(
+  //       window.getComputedStyle(element).fontSize
+  //     );
+  //     let newFontSize;
 
-      if (currentFontSize < originalFontSize * maxScaleFactor) {
-        newFontSize = currentFontSize * scaleFactor;
-      } else {
-        newFontSize = originalFontSize;
-      }
+  //     if (currentFontSize < originalFontSize * maxScaleFactor) {
+  //       newFontSize = currentFontSize * scaleFactor;
+  //     } else {
+  //       newFontSize = originalFontSize;
+  //     }
 
-      element.style.fontSize = `${newFontSize}px`;
-    });
-  };
+  //     element.style.fontSize = `${newFontSize}px`;
+  //   });
+  // };
 
-  const decreaseFontSize = () => {
-    const scaleFactor = 0.92;
-    const minScaleFactor = Math.pow(scaleFactor, 3);
+  // const decreaseFontSize = () => {
+  //   const scaleFactor = 0.92;
+  //   const minScaleFactor = Math.pow(scaleFactor, 3);
 
-    textElements.forEach((element) => {
-      const originalFontSize = originalFontSizes.get(element);
-      const currentFontSize = parseFloat(
-        window.getComputedStyle(element).fontSize
-      );
-      let newFontSize;
+  //   textElements.forEach((element) => {
+  //     const originalFontSize = originalFontSizes.get(element);
+  //     const currentFontSize = parseFloat(
+  //       window.getComputedStyle(element).fontSize
+  //     );
+  //     let newFontSize;
 
-      if (currentFontSize > originalFontSize * minScaleFactor) {
-        newFontSize = currentFontSize * scaleFactor;
-      } else {
-        newFontSize = originalFontSize;
-      }
+  //     if (currentFontSize > originalFontSize * minScaleFactor) {
+  //       newFontSize = currentFontSize * scaleFactor;
+  //     } else {
+  //       newFontSize = originalFontSize;
+  //     }
 
-      element.style.fontSize = `${newFontSize}px`;
-    });
-  };
+  //     element.style.fontSize = `${newFontSize}px`;
+  //   });
+  // };
 
   const getNextAlignment = () => {
     const currentIndex = alignments.indexOf(alignment);
@@ -346,7 +380,7 @@ export const AccessibilityProvider = ({ children }) => {
   useHotkeys('ctrl+shift+c', increaseTextSpacing, { enabled: enableShortcut });
   useHotkeys('ctrl+alt+q', toggleHighContrast, { enabled: enableShortcut });
   useHotkeys('ctrl+alt+d', () => Router.push('/'), { enabled: enableShortcut });
-  useHotkeys('ctrl+alt+a', () => Router.push('/startEvent'), {
+  useHotkeys('ctrl+alt+a', () => Router.push('/startEvent1'), {
     enabled: enableShortcut,
   });
   useHotkeys('ctrl+alt+s', () => Router.push('/shopping-cart'), {
@@ -379,6 +413,7 @@ export const AccessibilityProvider = ({ children }) => {
         highContrast,
         toggleImageInfo,
         showImageInfo,
+        fontSize,isMaxReached, isMinReached
       }}
     >
       {children}
