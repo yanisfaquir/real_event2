@@ -1,14 +1,49 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link'; // Importar o Link
 import { AccessibilityContext } from '@/contexts/acessibility';
+import { Tooltip } from 'react-tooltip';
 
 function AboutUs() {
   const { alignment, highContrast, fontSize } = useContext(AccessibilityContext);
+  const [currentSection, setCurrentSection] = useState({
+    number: 2,
+    text: 'Ir à Página Inicial',
+  });
 
   return (
-    <div className={`flex flex-col mt-8 md:mt-16 p-6 md:pt-20 mx-4 md:mx-20 rounded-lg md:rounded-[40px] ${highContrast ? 'bg-black text-white' : 'bg-transparent text-black'}`}>
-      
-      {/* Seção de Boas-vindas */}
+    <div className={`flex flex-col mt-8 md:mt-10 p-6 md:pt-20 mx-4 md:mx-20 rounded-lg md:rounded-[40px] ${highContrast ? 'bg-black text-white' : 'bg-transparent text-black'}`}>
+      <div className="relative mb-16">
+        <Tooltip
+          anchorSelect={`#chevron-left-home-${currentSection.number}`}
+          place="right"
+          style={{ fontSize: '1.2em' }}
+        >
+          {`${currentSection.text}`}
+        </Tooltip>
+        <Link
+          href="/"
+          style={{
+            cursor: 'pointer',
+            zIndex: '9',
+            position: 'absolute',
+            left: '1%',
+          }}
+        >
+          <Image
+            src={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/chevron-left-green.svg`}
+            id={`chevron-left-home-${currentSection.number}`}
+            alt="chevron-left"
+            width={80}
+            height={80}
+            style={{
+              maxWidth: '100%',
+              height: 'auto',
+            }}
+          />
+        </Link>
+      </div>
+
       <div className={`w-full ${highContrast ? 'bg-gray-800' : 'bg-[#4A7D8B]'} text-white rounded-[40px] py-12 px-4 flex flex-col justify-between shadow-lg mb-16`}>
         <div className="flex justify-center mx-auto z-10">
           <Image 
@@ -25,8 +60,7 @@ function AboutUs() {
           A RealEvent nasceu para transformar a forma como os eventos corporativos são organizados. Utilizando uma plataforma acessível e uma interface intuitiva, a nossa plataforma permite que os utilizadores requisitem serviços personalizados de maneira a facilitar os aspetos mais confusos na criação dos evento, desde pequenas reuniões até grandes conferências, de forma prática e eficaz.
         </p>
       </div>
-      
-      {/* Seção de Missão, Visão e Valores */}
+     
       <div className={`w-full ${highContrast ? 'bg-gray-700 text-white' : 'bg-white text-black'} rounded-[40px] py-12 px-4 flex flex-col justify-between shadow-lg mb-16`}>
         <h1 className="text-center font-bold mb-9 pb-4 pt-16 text-5xl" style={{ fontSize: `${fontSize * 40}px` }}>Valores da RealEvent</h1>
         
@@ -54,12 +88,9 @@ function AboutUs() {
         </div>
       </div>
 
-      {/* Seção de Equipe */}
       <div className={`w-full flex flex-col justify-center items-center ${highContrast ? 'bg-gray-700 text-white' : 'bg-white text-black'} rounded-[40px] shadow-lg p-8 mb-16`}>
         <h1 className="text-center font-bold pb-4 pt-16 text-5xl" style={{ fontSize: `${fontSize * 40}px` }}>Conheça a Nossa Equipa</h1>
         <div className="w-full flex flex-col items-center">
-          
-          {/* Equipe de Design */}
           <div className="mb-16">
             <h2 className="text-3xl text-center font-semibold mb-8" style={{ fontSize: `${fontSize * 24}px` }}>Design team</h2>
             <div className="flex flex-wrap justify-center">
@@ -84,7 +115,6 @@ function AboutUs() {
             </div>
           </div>
           
-          {/* Equipe de Desenvolvimento */}
           <div className="mb-16">
             <h2 className="text-3xl text-center font-semibold mb-8" style={{ fontSize: `${fontSize * 24}px` }}>Dev team</h2>
             <div className="flex flex-wrap justify-center">
