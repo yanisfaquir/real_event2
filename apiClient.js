@@ -353,12 +353,29 @@ export default class ApiClient {
 
   // Método para criar um novo serviço
   createService(serviceData) {
+    const accessToken = getCookie('accessToken');
+    
     return this.apiClient
-      .post('/service/create', serviceData)
-      .then((response) => response.data)
+      .post('/service/create', serviceData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        showResponseDialog(
+          'Registo Concluído',
+          'Serviço cadastrado com sucesso!',
+          'success'
+        );
+        return response.data;
+      })
       .catch((error) => {
-        console.error('Erro ao criar serviço:', error);
-        throw error;
+        showResponseDialog(
+          error.response.data.message,
+          error.response.data.data,
+          'error'
+        );
       });
   }
 
