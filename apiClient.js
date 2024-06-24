@@ -461,7 +461,7 @@ export default class ApiClient {
   getShoppingCartById(id) {
     return this.apiClient
       .get(`/shoppingCart/getShoppingCart/${id}`)
-      .then((response) => response.data)
+      .then((response) => response)
       .catch((error) => {
         console.error('Erro ao buscar carrinho:', error);
         throw error;
@@ -483,10 +483,21 @@ export default class ApiClient {
   createShoppingCart(cartData) {
     return this.apiClient
       .post('/shoppingCart/createShoppingCart', cartData)
-      .then((response) => response.data)
+      .then((response) => {
+        console.log(response);
+        showResponseDialog(
+          'Inserido com sucesso',
+          'Item inserido com sucesso!',
+          'success'
+        );
+        return response.data;
+      })
       .catch((error) => {
-        console.error('Erro ao criar carrinho:', error);
-        throw error;
+        showResponseDialog(
+          error.response.data.message,
+          error.response.data.data,
+          'error'
+        );
       });
   }
 
@@ -594,7 +605,7 @@ export default class ApiClient {
   getAllShoppingCarts() {
     return this.apiClient
       .get('/shoppingCart/getAllShoppingCarts')
-      .then((response) => response.data)
+      .then((response) => response)
       .catch((error) => {
         console.error('Erro ao buscar todos os carrinhos:', error);
         throw error;

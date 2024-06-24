@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Dialog } from 'evergreen-ui';
 import { setCurrentCartSection } from '@/redux/reducers/cartReducer';
 import { AccessibilityContext } from '@/contexts/acessibility';
+import ApiClient from '../../apiClient';
 
 const ShoppingCart = () => {
   const dispatch = useDispatch();
@@ -28,8 +29,27 @@ const ShoppingCart = () => {
   );
   const [selectedPaymentId, setSelectedPaymentId] = useState(null);
 
+  const [carts, setCarts] = useState([]);
+
   const { highContrast, alignment, showImageInfo } =
     useContext(AccessibilityContext);
+
+  useEffect(() => {
+    getCart();
+  }, []);
+
+  const getCart = async () => {
+    const apiInstance = new ApiClient();
+
+    try {
+      const response = await apiInstance.getShoppingCartById('66791046cf96ae5ec06ca095');
+      setCarts(response.data);
+
+      console.log(response.data, carts);
+    } catch (error) {
+      console.error('Erro ao buscar o carrinho:', error);
+    }
+  };
 
   const handleCartSectionClick = () => {
     setCurrentSection((prevState) => ({
@@ -150,15 +170,15 @@ const ShoppingCart = () => {
   return (
     <div className="flex flex-col mt-8 md:mt-16 p-6 md:pt-20 bg-cover bg-no-repeat mx-4 md:mx-20 rounded-lg md:rounded-[40px]">
       <div className="w-full bg-[#ffffff] text-white rounded-t-[40px] py-12 px-4 flex flex-col justify-between shadow-lg">
-          <p
-            className={`flex flex-col pt-10 px-5 ml-8 text-[2rem] font-bold text-middle-home text-gray-900`}
-            style={{ textAlign: `${alignment ? alignment : 'start'}` }}
-          >
-            Meu carrinho
-          </p>
+        <p
+          className={`flex flex-col pt-10 px-5 ml-8 text-[2rem] font-bold text-middle-home text-gray-900`}
+          style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+        >
+          Meu carrinho
+        </p>
 
         <ul className="flex flex-col justify-center items-center w-[100%]">
-          {cartItems.map((item, index) => {
+          {carts == [] ? '' : carts?.items?.map((item, index) => {
             total += item.price;
             return (
               <li
@@ -177,18 +197,6 @@ const ShoppingCart = () => {
                   <div
                     className={`flex justify-start items-center w-[100%] ${isDesktopOrLaptop ? '' : 'flex-col'}`}
                   >
-                    <Image
-                      alt={item.name}
-                      src={item.image}
-                      width={100}
-                      height={100}
-                      className="rounded-[12px] mx-4"
-                      style={{
-                        maxWidth: '100%',
-                        height: 'auto',
-                        objectFit: 'cover',
-                      }}
-                    />
                     <div
                       className={`flex w-[100%] ${isDesktopOrLaptop ? 'flex-col justify-start items-start' : 'flex-col justify-center items-center'}`}
                     >
@@ -277,13 +285,13 @@ const ShoppingCart = () => {
             <div
               className={`flex justify-between p-8 ${isDesktopOrLaptop ? 'w-[40vw]' : 'w-[80vw]'} `}
             >
-               <p
+              <p
                 className={`flex flex-col  text-[2rem] font-semi-bold text-middle-home text-gray-900`}
                 style={{ textAlign: `${alignment ? alignment : 'start'}` }}
               >
-                Total:   €{total}
+                Total: €{carts.total}
               </p>
-      
+
               {/* <p
                 className={`flex flex-col  text-[2rem] font-semi-bold text-middle-home text-gray-900`}
                 style={{ textAlign: `${alignment ? alignment : 'start'}` }}
@@ -298,15 +306,27 @@ const ShoppingCart = () => {
                 width="100%"
                 onClick={async () => {
                   try {
-                    const response = await fetch('http://localhost:3500/shoppingCart/create-checkout-session', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json'
-                      },
-                      // Se precisar enviar algum dado no corpo da requisição, descomente a linha abaixo
-                      // body: JSON.stringify({ /* dados aqui */ })
-                    });
-                    
+                    const purchase = {
+                      userId: carts._id,
+                      totalPrice: carts.totalPrice,
+                      discounts: carts.discounts,
+                      points: carts.points,
+                      items: carts.items.map(item => {
+                        const { _id,...restOfItem } = item;
+                        return restOfItem;
+                      }),
+                    }
+                    const response = await fetch(
+                      'http://localhost:3500/shoppingCart/create-checkout-session',
+                      {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ ... purchase })
+                      }
+                    );
+
                     if (!response.ok) {
                       throw new Error('Erro ao criar a sessão de checkout');
                     }
@@ -314,15 +334,18 @@ const ShoppingCart = () => {
                     const { url } = await response.json();
                     window.location.href = url;
                   } catch (error) {
-                    console.error('Erro ao redirecionar para o checkout:', error);
+                    console.error(
+                      'Erro ao redirecionar para o checkout:',
+                      error
+                    );
                   }
                 }}
               />
             </div>
           </li>
         </ul>
-    </div>
-{/*
+      </div>
+      {/*
       <section
         className={`cart-form-2 ${currentSectionNumber == '2' ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'} mb-8 shadow-md rounded-[50px] bg-[#FFFF] relative ${isDesktopOrLaptop ? 'min-w-[42vw]' : 'min-w-[60vw] mx-auto left-50 right-50 px-4'} mt-20 lg:mt-32`}
       >
