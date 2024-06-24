@@ -24,7 +24,7 @@ const Suppliers = () => {
     offset: 0,
     limit: 20,
   });
-  const [selectedSupplierServices, setSelectedSupplierServices] = useState(null);
+  const [selectedSupplierServices, setSelectedSupplierServices] = useState([]);
   const [loadingServices, setLoadingServices] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
@@ -84,10 +84,10 @@ const Suppliers = () => {
     const apiClient = new ApiClient();
     setSelectedSupplier(supplier);
     setLoadingServices(true);
-
+  
     try {
       const response = await apiClient.getAllServicesBySupplierId(supplier._id);
-      setSelectedSupplierServices(response.length ? response : 'Não existem serviços para esse fornecedor.');
+      setSelectedSupplierServices(response);
     } catch (error) {
       console.error('Erro ao carregar serviços do supplier:', error);
       setSelectedSupplierServices('Não existem serviços para esse fornecedor.');
@@ -331,10 +331,15 @@ const Suppliers = () => {
               <ul>
                 {Array.isArray(selectedSupplierServices) ? (
                   selectedSupplierServices.map((service, index) => (
-                    <li key={index}>{service.name_service}</li>
+                    <li key={index} className={`my-4`}>
+                      <p>{service.title}</p>
+                      <p>{service.description}</p>
+                      <p>{service.price}</p>
+                    </li>
                   ))
                 ) : (
                   <p>{selectedSupplierServices}</p>
+                  
                 )}
               </ul>
             )}

@@ -44,8 +44,12 @@ const Navbar = ({ inView }) => {
   };
 
   const handleLogout = () => {
+    document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     dispatch(logout());
     dispatch(clearUser());
+
+    window.location.reload();
   };
 
   const Search = styled('div')(({ theme }) => ({
@@ -86,12 +90,12 @@ const Navbar = ({ inView }) => {
 
   useEffect(() => {
     const apiInstance = new ApiClient();
-    apiInstance.refreshAccessToken().then((response) => {
-      if (!response) {
-        handleLogout();
-        return;
-      }
-    });
+    // apiInstance.refreshAccessToken().then((response) => {
+    //   if (!response) {
+    //     handleLogout();
+    //     return;
+    //   }
+    // });
 
     const handleRouteChange = (url) => {
       console.log('Rota alterada para:', url);
@@ -540,16 +544,6 @@ const Navbar = ({ inView }) => {
             )}
 
             <div style={{ position: 'relative', width: '18%', height: '44px' }}>
-              <div style={{ position: 'absolute', right: 0, top: 6 }}>
-                <GlobalButton
-                  image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/star-icon-white.svg`}
-                  path="/favorites"
-                  text="Ver favoritos"
-                  id="star-navbar"
-                />
-              </div>
-            </div>
-            <div style={{ position: 'relative', width: '18%', height: '44px' }}>
               {router.pathname !== '/shopping-cart' ? (
                 <Popover
                   content={cartPopoverContent}
@@ -702,8 +696,8 @@ const Navbar = ({ inView }) => {
             <GlobalButton
               size="large"
               type="custom"
-              path="/supplier"
-              text="Fornecedor"
+              path="/suppliers"
+              text="Fornecedores"
             />
           </li>
           <li className="py-4">

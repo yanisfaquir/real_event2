@@ -1,4 +1,6 @@
 import axios from 'axios';
+import Dialog from '@/components/Dialog';
+import ReactDOM from 'react-dom';
 
 const API_URL = 'http://localhost:3500'; // Substitua pelo URL correto do seu backend
 
@@ -62,6 +64,28 @@ axios.interceptors.response.use(
   }
 );
 
+function showResponseDialog(title, text, type) {
+  const div = document.createElement('div');
+  document.body.appendChild(div);
+
+  const handleClose = () => {
+    root.unmount();
+    document.body.removeChild(div);
+  };
+
+  const root = ReactDOM.createRoot(div);
+  root.render(
+    <Dialog
+      isOpen={true}
+      onClose={handleClose}
+      title={title}
+      text={text}
+      type={type}
+      buttonText="Fechar"
+    />
+  );
+}
+
 export default class ApiClient {
   constructor() {
     this.apiClient = axios.create({
@@ -117,10 +141,21 @@ export default class ApiClient {
   registerUser(userData) {
     return this.apiClient
       .post('/user/register', userData)
-      .then((response) => response.data)
+      .then((response) => {
+        console.log(response);
+        showResponseDialog(
+          'Registro Concluído',
+          'Usuário registrado com sucesso!',
+          'success'
+        );
+        return response.data;
+      })
       .catch((error) => {
-        console.error('Erro ao registrar usuário:', error);
-        throw error;
+        showResponseDialog(
+          error.response.data.message,
+          error.response.data.data,
+          'error'
+        );
       });
   }
 
@@ -128,10 +163,22 @@ export default class ApiClient {
   registerSupplier(supplierData) {
     return this.apiClient
       .post('/supplier/register', supplierData)
-      .then((response) => response.data)
+      .then((response) => {
+        console.log(response);
+        showResponseDialog(
+          'Registo Concluído',
+          'Fornecedor criado com sucesso!',
+          'success'
+        );
+        return response.data;
+      })
       .catch((error) => {
-        console.error('Erro ao registrar fornecedor:', error);
-        throw error;
+        console.error('Erro ao criar fornecedor:', error);
+        showResponseDialog(
+          error.response.data.message,
+          error.response.data.data,
+          'error'
+        );
       });
   }
 
@@ -139,7 +186,7 @@ export default class ApiClient {
   getUserById(id) {
     return this.apiClient
       .get(`/user/profile/${id}`)
-      .then((response) => response.data)
+      .then((response) => response)
       .catch((error) => {
         console.error('Erro ao buscar usuário:', error);
         throw error;
@@ -157,25 +204,58 @@ export default class ApiClient {
       });
   }
 
-  // Método para atualizar um usuário
   updateUser(id, userData) {
+    const accessToken = getCookie('accessToken');
+
     return this.apiClient
-      .patch(`/user/updateUser/${id}`, userData)
-      .then((response) => response.data)
+      .patch(`/user/updateUser/${id}`, userData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        showResponseDialog(
+          'Atualização Concluída',
+          'Utilizador atualizado com sucesso!',
+          'success'
+        );
+        return response.data;
+      })
       .catch((error) => {
-        console.error('Erro ao atualizar usuário:', error);
-        throw error;
+        console.error('Erro ao atualizar utilizador:', error);
+        showResponseDialog(
+          error.response.data.message,
+          error.response.data.data,
+          'error'
+        );
       });
   }
 
   // Método para atualizar um fornecedor
   updateSupplier(id, supplierData) {
     return this.apiClient
-      .patch(`/supplier/updateSupplier/${id}`, supplierData)
-      .then((response) => response.data)
+      .patch(`/supplier/updateSupplier/${id}`, supplierData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        showResponseDialog(
+          'Atualização Concluída',
+          'Fornecedor atualizado com sucesso!',
+          'success'
+        );
+        return response.data;
+      })
       .catch((error) => {
         console.error('Erro ao atualizar fornecedor:', error);
-        throw error;
+        showResponseDialog(
+          error.response.data.message,
+          error.response.data.data,
+          'error'
+        );
       });
   }
 
@@ -273,12 +353,29 @@ export default class ApiClient {
 
   // Método para criar um novo serviço
   createService(serviceData) {
+    const accessToken = getCookie('accessToken');
+    
     return this.apiClient
-      .post('/service/create', serviceData)
-      .then((response) => response.data)
+      .post('/service/create', serviceData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        showResponseDialog(
+          'Registo Concluído',
+          'Serviço cadastrado com sucesso!',
+          'success'
+        );
+        return response.data;
+      })
       .catch((error) => {
-        console.error('Erro ao criar serviço:', error);
-        throw error;
+        showResponseDialog(
+          error.response.data.message,
+          error.response.data.data,
+          'error'
+        );
       });
   }
 
@@ -550,13 +647,11 @@ export default class ApiClient {
 
   getAllServicesBySupplierId(supplierId) {
     return this.apiClient
-     .get(`/service/service/supplier/${supplierId}`)
-     .then((response) => response.data)
-     .catch((error) => {
+      .get(`/service/service/supplier/${supplierId}`)
+      .then((response) => response.data)
+      .catch((error) => {
         console.error('Erro ao buscar serviços do supplier:', error);
         throw error;
       });
   }
-  
-
 }

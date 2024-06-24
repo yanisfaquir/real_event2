@@ -1,347 +1,251 @@
 import React, { useState, useEffect, useContext } from 'react';
 import GlobalButton from '@/components/globalButton';
-import { FaChevronDown } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import Select from 'react-select';
 import { AccessibilityContext } from '@/contexts/acessibility';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import ApiClient from '../../apiClient';
 
 const SupplierRegister = () => {
-    const { alignment, highContrast } = useContext(AccessibilityContext);
-    const [serviceName, setServiceName] = useState('');
-    const [postalCode, setPostalCode] = useState('');
-    const [capacity, setCapacity] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
-    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-    
-    const [isOpenLocalidade, setIsOpenLocalidade] = useState(false);
-    const [isOpenTipoComida, setIsOpenTipoComida] = useState(false);
-    const [isOpenPreco, setIsOpenPreco] = useState(false);
-    const [selectedUniqueOptionDJ, setSelectedUniqueOptionDJ] = useState('');
-    const [selectedUniqueOptionsCatering, setSelectedUniqueOptionsCatering] = useState('');
-    const [selectedObjMerchandising, setSelectedObjMerchandising] = useState('');
-    const [selectedMetodoEntrega, setSelectedMetodoEntrega] = useState('');
-    const [selectedMultiOption1, setSelectedMultiOption1] = useState([]);
-    const [shortText, setShortText] = useState('');
-    const [longText, setLongText] = useState('');
-    const serviceType_ = useSelector((state) => state.event.serviceType);
-    const [serviceType, setServiceType] = useState(serviceType_);
+  const { alignment } = useContext(AccessibilityContext);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [clientCount, setClientCount] = useState('');
+  const [selectedAddress, setSelectedAddress] = useState('');
+  const [photos, setPhotos] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
-    const uniqueOptionsDJ = [
-        { value: 'Aveiro', label: 'Aveiro' },
-        { value: 'Beja', label: 'Beja' },
-        { value: 'Braga', label: 'Braga' },
-        { value: 'Bragança', label: 'Bragança' },
-        { value: 'Castelo Branco', label: 'Castelo Branco' },
-        { value: 'Coimbra', label: 'Coimbra' },
-        { value: 'Évora', label: 'Évora' },
-        { value: 'Faro', label: 'Faro' },
-        { value: 'Guarda', label: 'Guarda' },
-        { value: 'Leiria', label: 'Leiria' },
-        { value: 'Lisboa', label: 'Lisboa' },
-        { value: 'Portalegre', label: 'Portalegre' },
-        { value: 'Porto', label: 'Porto' },
-        { value: 'Santarém', label: 'Santarém' },
-        { value: 'Setúbal', label: 'Setúbal' },
-        { value: 'Viana do Castelo', label: 'Viana do Castelo' },
-        { value: 'Vila Real', label: 'Vila Real' },
-        { value: 'Viseu', label: 'Viseu' },
-    ];
+  const serviceType_ = useSelector((state) => state.event.serviceType);
+  const [serviceType, setServiceType] = useState(serviceType_);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
 
-    const multiOptionsDJ = [
-        { value: 'Mesa de som', label: 'Mesa de som' },
-        { value: 'Cabos', label: 'Cabos' },
-        { value: 'PC', label: 'PC' },
-        { value: 'Colunas', label: 'Colunas' },
-    ];
+  const addressOptions = [
+    { value: 'Aveiro', label: 'Aveiro' },
+    { value: 'Beja', label: 'Beja' },
+    { value: 'Braga', label: 'Braga' },
+    { value: 'Bragança', label: 'Bragança' },
+    { value: 'Castelo Branco', label: 'Castelo Branco' },
+    { value: 'Coimbra', label: 'Coimbra' },
+    { value: 'Évora', label: 'Évora' },
+    { value: 'Faro', label: 'Faro' },
+    { value: 'Guarda', label: 'Guarda' },
+    { value: 'Leiria', label: 'Leiria' },
+    { value: 'Lisboa', label: 'Lisboa' },
+    { value: 'Portalegre', label: 'Portalegre' },
+    { value: 'Porto', label: 'Porto' },
+    { value: 'Santarém', label: 'Santarém' },
+    { value: 'Setúbal', label: 'Setúbal' },
+    { value: 'Viana do Castelo', label: 'Viana do Castelo' },
+    { value: 'Vila Real', label: 'Vila Real' },
+    { value: 'Viseu', label: 'Viseu' },
+  ];
 
-    const uniqueOptionsCatering = [
-        { value: 'Italiana', label: 'Italiana' },
-        { value: 'Chinesa', label: 'Chinesa' },
-        { value: 'Japonesa', label: 'Japonesa' },
-        { value: 'Indiana', label: 'Indiana' },
-        { value: 'Tailândesa', label: 'Tailândesa' },
-    ];
+  const router = useRouter();
 
-    const objMerchandising = [
-        { value: 'Canetas', label: 'Canetas' },
-        { value: 'Lápis', label: 'Lápis' },
-        { value: 'Camisolas', label: 'Camisolas' },
-        { value: 'Canecas', label: 'Canecas' },
-    ];
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isButtonDisabled) return;
 
-    const metodoEntrega = [
-        { value: 'Em loja', label: 'Em loja' },
-        { value: 'Envio por correio', label: 'Envio por correio' },
-    ];
-
-    const multiOptionsCatering = [
-        { value: 'A', label: 'A' },
-        { value: 'b', label: 'b' },
-        { value: 'C', label: 'C' },
-    ];
-
-    const tipoComida = ['Italiana', 'Portuguesa', 'Mexicana', 'Tailandesa'];
-    const precoCatering = ['100€ - 500€', '500€ - 1000€', '1000€ - 5000€', 'Mais de 5000€ '];
-
-    const [selectedLocalidade, setSelectedLocalidade] = useState('');
-    const [selectedTipoComida, setSelectedTipoComida] = useState('');
-    const [selectedPreco, setSelectedPreco] = useState('');
-    // const [service, setService] = useState('');
-
-    const router = useRouter();
-
-    const handleToggleDropdownLocalidade = () => {
-        setIsOpenLocalidade(!isOpenLocalidade);
+    const serviceData = {
+      supplierId: user._id,
+      title,
+      description,
+      price,
+      num_customers: clientCount,
+      address: selectedAddress,
+      photos,
+      serviceType,
     };
 
-    const handleToggleDropdownTipoComida = () => {
-        setIsOpenTipoComida(!isOpenTipoComida);
-    };
+    const apiInstance = new ApiClient();
+    try {
+      const response = await apiInstance.createService(serviceData);
+      console.log('Serviço criado com sucesso:', response);
+    } catch (error) {
+      setErrorMessage('Erro ao criar serviço. Tente novamente.');
+    }
+  };
 
-    const handleToggleDropdownPreco = () => {
-        setIsOpenPreco(!isOpenPreco);
-    };
+  useEffect(() => {
+    if (router.query && router.query.service) {
+      setServiceType(router.query.service);
+    }
+  }, [router.query]);
 
-    const handleSelectLocalidade = (value) => {
-        setSelectedLocalidade(value);
-        handleToggleDropdownLocalidade();
-    };
+  useEffect(() => {
+    const allFieldsFilled =
+      title &&
+      description &&
+      price &&
+      clientCount &&
+      selectedAddress &&
+      photos.length > 0;
+    setIsButtonDisabled(!allFieldsFilled);
+  }, [title, description, price, clientCount, selectedAddress, photos]);
 
-    const handleSelectTipoComida = (value) => {
-        setSelectedTipoComida(value);
-        setIsOpenTipoComida(!isOpenTipoComida);
-    };
+  const handleImageUpload = (event) => {
+    const fileArray = Array.from(event.target.files);
+    if (!fileArray || !fileArray.length) {
+      return;
+    }
 
-    const handleSelectPreco = (value) => {
-        setSelectedPreco(value);
-        setIsOpenPreco(!isOpenPreco);
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (isButtonDisabled) return;
-        console.log({
-            serviceName,
-            postalCode,
-            capacity,
-            selectedUniqueOptionDJ,
-            uniqueOptionsCatering,
-            selectedMultiOption1,
-            shortText,
-            longText,
-            serviceType
-        });
-    };
-
-    useEffect(() => {
-        if (router.query && router.query.service) {
-            setServiceType(router.query.service);
+    const processedFiles = [];
+    fileArray.forEach((file) => {
+      if (/(\jpg|\jpeg|\png|\bmp)$/i.test(file.type)) {
+        if (file.size > 3145728) {
+          alert('O arquivo deve ter menos de 3MB.');
+          return;
         }
-    }, [router.query]);
 
-    useEffect(() => {
-        const allFieldsFilled = serviceName && postalCode && capacity;
-        setIsButtonDisabled(!allFieldsFilled);
-    }, [serviceName, postalCode, capacity]);
+        const reader = new FileReader();
 
-    return (
-        <div className="mt-20 container mx-auto px-4">
-            <section className="mb-10">
-                <p
-                    className={`flex flex-col pt-20 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
-                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
-                >
-                    INFORMAÇÕES - {serviceType}
-                </p>
-                <p
-                    className={`relative max-w-[90vw] px-5 mb-4 text-[1.2rem]`}
-                    style={{ textAlign: `${alignment ? alignment : 'start'}` }}
-                >
-                    Queremos saber mais sobre o teu serviço de forma a conseguirmos partilhar com os nossos utilizadores.
-                </p>
-            </section>
-               
-            {serviceType === 'Catering' && (
-                <form onSubmit={handleSubmit} className="mb-10 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="flex flex-col">
-                        <label className="mb-1">Nome do serviço:</label>
-                        <input
-                            type="text"
-                            value={serviceName}
-                            onChange={(e) => setServiceName(e.target.value)}
-                            className="p-2 border rounded"
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="mb-1">Código Postal:</label>
-                        <input
-                            type="text"
-                            value={postalCode}
-                            onChange={(e) => setPostalCode(e.target.value)}
-                            className="p-2 border rounded"
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="mb-1">Capacidade de pessoas:</label>
-                        <select
-                            value={capacity}
-                            onChange={(e) => setCapacity(e.target.value)}
-                            className="p-2 border rounded"
-                        >
-                            <option value="">Todos</option>
-                            <option value="10-50">10-50</option>
-                            <option value="51-100">51-100</option>
-                            <option value="101-200">101-200</option>
-                            <option value="200+">200+</option>
-                        </select>
-                    </div>
-                </form>
-            )}
+        reader.onloadend = function () {
+          const img = new window.Image();
+          img.src = reader.result;
 
-            {serviceType === 'Merchandising' && (
-                <form onSubmit={handleSubmit} className="mb-10 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="flex flex-col">
-                        <label className="mb-1">Nome do serviço:</label>
-                        <input
-                            type="text"
-                            value={serviceName}
-                            onChange={(e) => setServiceName(e.target.value)}
-                            className="p-2 border rounded"
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="mb-1">Código Postal:</label>
-                        <input
-                            type="text"
-                            value={postalCode}
-                            onChange={(e) => setPostalCode(e.target.value)}
-                            className="p-2 border rounded"
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="mb-1">Capacidade de pessoas:</label>
-                        <select
-                            value={capacity}
-                            onChange={(e) => setCapacity(e.target.value)}
-                            className="p-2 border rounded"
-                        >
-                            <option value="">Todos</option>
-                            <option value="10-50">10-50</option>
-                            <option value="51-100">51-100</option>
-                            <option value="101-200">101-200</option>
-                            <option value="200+">200+</option>
-                        </select>
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="mb-1">Escolha um tipo de comida:</label>
-                        <Select
-                            isOpen={isOpenTipoComida}
-                            onToggle={handleToggleDropdownTipoComida}
-                            value={selectedTipoComida}
-                            onChange={handleSelectTipoComida}
-                            options={tipoComida.map((comida) => ({
-                                value: comida,
-                                label: comida,
-                            }))}
-                            className="p-2 border rounded"
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="mb-1">Escolha um preço:</label>
-                        <Select
-                            isOpen={isOpenPreco}
-                            onToggle={handleToggleDropdownPreco}
-                            value={selectedPreco}
-                            onChange={handleSelectPreco}
-                            options={precoCatering.map((preco) => ({
-                                value: preco,
-                                label: preco,
-                            }))}
-                            className="p-2 border rounded"
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="mb-1">Método de entrega:</label>
-                        <Select
-                            value={selectedMetodoEntrega}
-                            onChange={(selectedOption) => setSelectedMetodoEntrega(selectedOption)}
-                            options={metodoEntrega}
-                            className="p-2 border rounded"
-                        />
-                    </div>
-                </form>
-            )}
+          img.onload = function () {
+            const scaleFactor = Math.min(1, 800 / img.width, 800 / img.height);
 
-            {serviceType === 'DJ' && (
-                <form onSubmit={handleSubmit} className="mb-10 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="flex flex-col">
-                        <label className="mb-1">Nome do serviço:</label>
-                        <input
-                            type="text"
-                            value={serviceName}
-                            onChange={(e) => setServiceName(e.target.value)}
-                            className="p-2 border rounded"
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="mb-1">Código Postal:</label>
-                        <input
-                            type="text"
-                            value={postalCode}
-                            onChange={(e) => setPostalCode(e.target.value)}
-                            className="p-2 border rounded"
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="mb-1">Capacidade de pessoas:</label>
-                        <select
-                            value={capacity}
-                            onChange={(e) => setCapacity(e.target.value)}
-                            className="p-2 border rounded"
-                        >
-                            <option value="">Todos</option>
-                            <option value="10-50">10-50</option>
-                            <option value="51-100">51-100</option>
-                            <option value="101-200">101-200</option>
-                            <option value="200+">200+</option>
-                        </select>
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="mb-1">Localidade:</label>
-                        <Select
-                            value={selectedUniqueOptionDJ}
-                            onChange={(selectedOption) => setSelectedUniqueOptionDJ(selectedOption)}
-                            options={uniqueOptionsDJ}
-                            className="p-2 border rounded"
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="mb-1">Equipamento:</label>
-                        <Select
-                            isMulti
-                            value={selectedMultiOption1}
-                            onChange={(selectedOptions) => setSelectedMultiOption1(selectedOptions)}
-                            options={multiOptionsDJ}
-                            className="p-2 border rounded"
-                        />
-                    </div>
-                </form>
-            )}
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width * scaleFactor;
+            canvas.height = img.height * scaleFactor;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-            {errorMessage && <p className="text-red-500 text-xs italic mb-4">{errorMessage}</p>}
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
 
-            <div className='flex justify-center mr-10 mb-10'>
-                <GlobalButton
-                    size="medium"
-                    type="primary"
-                    disabled={isButtonDisabled}
-                    // path="/supplierRegister3"
-                    text="Submeter"
-                />
-            </div>
+            processedFiles.push(compressedDataUrl);
+
+            setPhotos((prevPhotos) => [...prevPhotos, ...processedFiles]);
+          };
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        alert('Por favor, selecione um arquivo JPEG, JPG, BMP ou PNG.');
+      }
+    });
+  };
+
+  const removePhoto = (index) => {
+    setPhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="mt-20 container mx-auto px-4">
+      <section className="mb-10">
+        <p
+          className={`flex flex-col pt-20 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
+          style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+        >
+          INFORMAÇÕES - {serviceType}
+        </p>
+        <p
+          className={`relative max-w-[90vw] px-5 mb-4 text-[1.2rem]`}
+          style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+        >
+          Queremos saber mais sobre o teu serviço de forma a conseguirmos
+          partilhar com os nossos utilizadores.
+        </p>
+      </section>
+
+      <form
+        onSubmit={handleSubmit}
+        className="mb-10 grid grid-cols-1 md:grid-cols-3 gap-4"
+      >
+        <div className="flex flex-col">
+          <label className="mb-1">Nome do serviço:</label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="p-2 border rounded"
+          />
         </div>
-    );
+        <div className="flex flex-col">
+          <label className="mb-1">Descrição:</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="p-2 border rounded"
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-1">Preço:</label>
+          <input
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            className="p-2 border rounded"
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-1">Quantidade de Clientes:</label>
+          <input
+            type="number"
+            value={clientCount}
+            onChange={(e) => setClientCount(e.target.value)}
+            className="p-2 border rounded"
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-1">Localidade:</label>
+          <Select
+            value={addressOptions.find(option => option.value === selectedAddress)}
+            onChange={(selectedOption) => setSelectedAddress(selectedOption.value)}
+            options={addressOptions}
+            className="p-2 border rounded"
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-1">Fotos:</label>
+          {photos.map((photoUrl, index) => (
+            <div key={index} className="flex items-center mb-2">
+              <img
+                src={photoUrl}
+                alt={`Foto ${index + 1}`}
+                className="h-20 w-20 object-cover mr-2"
+              />
+              <button
+                type="button"
+                onClick={() => removePhoto(index)}
+                className="ml-2 p-2 border rounded text-red-500"
+              >
+                Remover
+              </button>
+            </div>
+          ))}
+          {photos.length < 5 && (
+            <input
+              type="file"
+              id="fileInput"
+              accept="image/*"
+              onChange={handleImageUpload}
+              multiple
+              className="mt-2 p-2 border rounded text-blue-500"
+            />
+          )}
+        </div>
+      </form>
+
+      {errorMessage && (
+        <p className="text-red-500 text-xs italic mb-4">{errorMessage}</p>
+      )}
+
+      <div className="flex justify-center mr-10 mb-10">
+        <GlobalButton
+          size="medium"
+          type="primary"
+          disabled={isButtonDisabled}
+          onClick={handleSubmit}
+          text="Submeter"
+        />
+      </div>
+    </div>
+  );
 };
 
 export default SupplierRegister;

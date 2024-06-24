@@ -240,14 +240,26 @@ const ServicesPage = () => {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {services.map((service) => (
-              <div key={service.id} className="p-4 border rounded">
-                <h3 className="text-xl font-bold">{service.name}</h3>
-                <p>{service.description}</p>
-                <p>Preço: R${service.price}</p>
-                <p>Clientes: {service.customers}</p>
-                <p>Tipo: {service.type}</p>
-                <p>Datas Disponíveis: {service.availableDates}</p>
-                <p>Dias da Semana Disponíveis: {service.availableWeekdays}</p>
+              <div key={service._id} className="w-full shadow-xl flex flex-col p-4 my-4 rounded-lg hover:scale-105 duration-300 bg-white">
+                <h2 className="text-xl font-bold mb-2">{service.description}</h2>
+                <p className="mb-2"><strong>Preço:</strong> {service.price}</p>
+                <p className="mb-2"><strong>Número de clientes:</strong> {service.num_customers}</p>
+                <div className="mb-2">
+                  <strong>Disponibilidade:</strong>
+                  <ul className="list-disc ml-4">
+                    <li><strong>Datas:</strong> {service.availability.dates.join(', ')}</li>
+                    <li><strong>Dias da semana:</strong> {service.availability.weekdays.join(', ')}</li>
+                    <li><strong>Horário de início:</strong> {service.availability.start_time}</li>
+                  </ul>
+                </div>
+                <div className="mb-2">
+                  <strong>Fotos:</strong>
+                  <div className="grid grid-cols-3 gap-1 mt-2">
+                    {service.photos.map((photo, index) => (
+                      <Image key={index} src={photo} alt={`Foto ${index}`} width={80} height={80} className="rounded-lg object-cover h-24 w-full" />
+                    ))}
+                  </div>
+                </div>
               </div>
             ))}
           </div>

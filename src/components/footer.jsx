@@ -25,7 +25,7 @@ function Footer() {
             </div>
           </div>
         </div>
-        <hr className={`my-6 ${highContrast ? 'border-white' : 'border-gray-200'} sm:mx-auto dark:border-gray-700 lg:my-0`} />
+        <hr className={`my-6 ${highContrast ? 'border-white' : 'border-gray-200'} sm:mx-auto dark:border-gray-700`} />
         <div className="sm:flex sm:items-center sm:justify-between">
           <span className={`text-sm ${highContrast ? 'text-white' : 'text-gray-500'} sm:text-center dark:text-gray-400`} style={{ fontSize: `${fontSize * 14}px` }}>
             © 2024 RealEvent™. All Rights Reserved.
