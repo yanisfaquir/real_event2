@@ -40,7 +40,7 @@ const StartEvent = () => {
   const [locationEvent, setEventLocation] = useState('');
   const [currentSection, setCurrentSection] = useState({
     number: 1,
-    text: 'Ir à Página Inicial',
+    text: 'Voltar ao Perfil',
   });
   const [selectedService, setSelectedService] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState('');
@@ -115,11 +115,11 @@ const StartEvent = () => {
   ]);
 
   return (
-    <div className="w-[90vw] mx-auto mt-20">
+    <div className="w-[90vw] mx-auto mt-20 md:h-[80vh] h-fullscreen">
       <div className="-mb-20 row p-4 relative">
         <div className="lg:block hidden">
           <Tooltip
-            anchorSelect={`#chevron-left-home-${currentSection.number}`}
+            anchorSelect={`#chevron-left-service-${currentSection.number}`}
             place="right"
             style={{ fontSize: '1.2em' }}
           >
@@ -128,7 +128,7 @@ const StartEvent = () => {
         </div>
         {currentSection.number === 1 ? (
           <Link
-            href="/startEvent2"
+            href="/profile"
             style={{
               cursor: 'pointer',
               zIndex: '9',
@@ -139,9 +139,9 @@ const StartEvent = () => {
           >
             <Image
               src={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/chevron-left-green.svg`}
-              path="/"
+              path="/profile"
               text={`${currentSection.text}`}
-              id={`chevron-left-home-${currentSection.number}`}
+              id={`chevron-left-service-${currentSection.number}`}
               alt="chevron-left"
               width={80}
               height={80}
@@ -204,10 +204,10 @@ const StartEvent = () => {
               />
           </div>
           <div className="lg:w-1/2 px-16">
-              <p className={`flex flex-col pt-20 px-5 text-[3rem] font-bold text-middle-home text-gray-900`}
+              <p className={`flex flex-col pt-20 px-5 text-[3rem] font-bold text-middle-home ${highContrast ? 'text-white' : 'text-gray-900'}`}
               style={{ textAlign: `${alignment ? alignment : 'start'}` }}
               >
-              Tipo de Serviço
+              Tipo de Serviço do Fornecedor
               </p>
               <p
               className="relative max-w-[90vw] mb-8 text-[1.2rem] ml-8 mt-3" 
