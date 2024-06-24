@@ -544,7 +544,7 @@ const Navbar = ({ inView }) => {
             )}
 
             <div style={{ position: 'relative', width: '18%', height: '44px' }}>
-              {router.pathname !== '/shopping-cart' ? (
+              {/* {router.pathname !== '/shopping-cart' ? (
                 <Popover
                   content={cartPopoverContent}
                   title={
@@ -575,7 +575,7 @@ const Navbar = ({ inView }) => {
                     />
                   </div>
                 </Popover>
-              ) : (
+              ) : ( */}
                 <div style={{ position: 'absolute', right: 0, top: 6 }}>
                   <GlobalButton
                     image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/bag-white.svg`}
@@ -598,7 +598,7 @@ const Navbar = ({ inView }) => {
                     }}
                   />
                 </div>
-              )}
+              {/* )} */}
             </div>
           </section>
         </div>
@@ -609,7 +609,7 @@ const Navbar = ({ inView }) => {
       >
         <ul className="flex justify-between items-center mt-2">
           <li className="-me-3 -mt-1">
-            {router.pathname !== '/shopping-cart' ? (
+            {/* {router.pathname !== '/shopping-cart' ? (
               <Popover
                 content={cartPopoverContent}
                 title={<strong className="text-[1.2rem]">Seu carrinho</strong>}
@@ -634,7 +634,7 @@ const Navbar = ({ inView }) => {
                   />
                 </div>
               </Popover>
-            ) : (
+            ) : ( */}
               <div style={{ position: 'relative', left: 0, top: 0 }}>
                 <GlobalButton
                   image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/bag-white.svg`}
@@ -646,7 +646,7 @@ const Navbar = ({ inView }) => {
                   id={router.pathname === '/shopping-cart' ? 'bag-navbar' : ''}
                 />
               </div>
-            )}
+            {/* )} */}
           </li>
           <li className="-mt-1 ms-1 w-1/2 py-2 flex justify-center items-center">
             <Link href="/">
@@ -704,8 +704,8 @@ const Navbar = ({ inView }) => {
             <GlobalButton
               size="large"
               type="custom"
-              path="/favorites"
-              text="Favoritos"
+              path="/services"
+              text="Serviços"
             />
           </li>
           <li className="py-4">

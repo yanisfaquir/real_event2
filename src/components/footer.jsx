@@ -12,7 +12,6 @@ function Footer() {
           <div className="mb-6 md:mb-0">
             <a href="https://flowbite.com/" className="flex items-center">
               <Image src="/assets/pictures/logomarca-preto.png" height="100" width="200" className="h-8 me-3" alt="FlowBite Logo" />
-              {/* <Image src="/assets/pictures/logomarca-preto.png" className="h-8 me-3" alt="FlowBite Logo" width="" height="" /> */}
             </a>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
@@ -26,7 +25,7 @@ function Footer() {
             </div>
           </div>
         </div>
-        <hr className={`my-6 ${highContrast ? 'border-white' : 'border-gray-200'} sm:mx-auto dark:border-gray-700 lg:my-0`} />
+        <hr className={`my-6 ${highContrast ? 'border-white' : 'border-gray-200'} sm:mx-auto dark:border-gray-700`} />
         <div className="sm:flex sm:items-center sm:justify-between">
           <span className={`text-sm ${highContrast ? 'text-white' : 'text-gray-500'} sm:text-center dark:text-gray-400`} style={{ fontSize: `${fontSize * 14}px` }}>
             © 2024 RealEvent™. All Rights Reserved.

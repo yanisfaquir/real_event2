@@ -3,15 +3,23 @@ import { useState } from 'react';
 import { CiStar } from 'react-icons/ci';
 import GlobalButton from '@/components/globalButton';
 import Image from 'next/image';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ApiClient from '../../apiClient';
+import { useRouter } from 'next/router';
 
 const UseServiceResults = () => {
-  const [openNPessoas, setOpenNPessoas] = useState(false);
-  const [selectedNPessoas, setSelectedNPessoas] = useState('');
+  const dispatch = useDispatch();
+  const router = useRouter();
 
-  const [openTipoEspaco, setOpenTipoEspaco] = useState(false);
-  const [selectedTipoEspaco, setSelectedTipoEspaco] = useState('');
+  const selectedService = useSelector((state) => state.serviceResult.selectedService);
+  const supplierId = useSelector((state) => state.serviceResult.supplierId);
+  const title = useSelector((state) => state.serviceResult.title);
+  const description = useSelector((state) => state.serviceResult.description);
+  const price = useSelector((state) => state.serviceResult.price);
+  const address = useSelector((state) => state.serviceResult.address);
+  const num_customers = useSelector((state) => state.serviceResult.num_customers);
+  const photo = useSelector((state) => state.serviceResult.photo);
+  const status = useSelector((state) => state.serviceResult.status);
 
   const [openPreco, setOpenPreco] = useState(false);
   const [selectedPreco, setSelectedPreco] = useState('');
@@ -123,7 +131,7 @@ const UseServiceResults = () => {
       >
         <ul className="flex flex-wrap justify-end text-sm font-medium text-center border-b dark:border-customBlue dark:text-black-400">
           {serviceType.map((servicoItem, index) => (
-            <li key={index} className="me-2">
+            <li key={index} className="me-2 " >
               <a
                 href="#"
                 className={`inline-block p-4 rounded-t-lg ${
