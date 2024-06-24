@@ -221,6 +221,8 @@ const Profile = () => {
                   alt="Utilizador"
                   className="cursor-pointer rounded-full w-40 h-40 object-cover mx-auto"
                   onClick={() => document.getElementById('fileInput').click()}
+                  width={80}
+                  height={80}
                 />
               ) : (
                 <>

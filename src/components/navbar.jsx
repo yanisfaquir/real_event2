@@ -540,16 +540,6 @@ const Navbar = ({ inView }) => {
             )}
 
             <div style={{ position: 'relative', width: '18%', height: '44px' }}>
-              <div style={{ position: 'absolute', right: 0, top: 6 }}>
-                <GlobalButton
-                  image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/star-icon-white.svg`}
-                  path="/favorites"
-                  text="Ver favoritos"
-                  id="star-navbar"
-                />
-              </div>
-            </div>
-            <div style={{ position: 'relative', width: '18%', height: '44px' }}>
               {router.pathname !== '/shopping-cart' ? (
                 <Popover
                   content={cartPopoverContent}

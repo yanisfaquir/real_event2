@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import services from '../components/services.json';
-import MicrophoneIcon from '@/components/microphoneIcon';
+
 import GlobalButton from '@/components/globalButton';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
@@ -148,21 +148,14 @@ const ShoppingCart = () => {
   };
 
   return (
-    <div
-      className={`flex justify-between w-full px-[5vw] ${isDesktopOrLaptop ? '' : 'flex-col'}`}
-    >
-      <section
-        className={`view-cart-elements cart-form-1 ${currentSectionNumber == '1' ? 'move-in visible h-auto block' : 'hidden move-out invisible h-0 overflow-hidden'} mb-8 shadow-md rounded-[50px] ${highContrast ? 'bg-black' : 'bg-[#F7F7F7]'} relative ${isDesktopOrLaptop ? 'min-w-[42vw]' : 'min-w-[60vw] mx-auto left-50 right-50 px-4'} mt-20 lg:mt-32`}
-      >
-        <h1
-          className={`font-bold text-[1.5rem] relative left-1/2 transform -translate-x-1/2 p-8`}
-          style={{
-            textAlign: `${alignment ? alignment : 'start'}`,
-          }}
-        >
-          MEU CARRINHO
-          <hr />
-        </h1>
+    <div className="flex flex-col mt-8 md:mt-16 p-6 md:pt-20 bg-cover bg-no-repeat mx-4 md:mx-20 rounded-lg md:rounded-[40px]">
+      <div className="w-full bg-[#ffffff] text-white rounded-t-[40px] py-12 px-4 flex flex-col justify-between shadow-lg">
+          <p
+            className={`flex flex-col pt-10 px-5 ml-8 text-[2rem] font-bold text-middle-home text-gray-900`}
+            style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+          >
+            Meu carrinho
+          </p>
 
         <ul className="flex flex-col justify-center items-center w-[100%]">
           {cartItems.map((item, index) => {
@@ -176,7 +169,7 @@ const ShoppingCart = () => {
                   minHeight: '120px',
                   borderRadius: '8px',
                 }}
-                className={`flex items-center align-center p-8 my-8 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2 ${isDesktopOrLaptop ? '' : 'flex-col'}`}
+                className={`flex items-center align-center p-4 my-4 ${highContrast ? 'border-white' : 'border-[#4A7D8B]'} shadow-md border-2 ${isDesktopOrLaptop ? '' : 'flex-col'}`}
               >
                 <div
                   className={`flex justify-between items-center w-[100%] ${isDesktopOrLaptop ? '' : 'flex-col'}`}
@@ -284,30 +277,42 @@ const ShoppingCart = () => {
             <div
               className={`flex justify-between p-8 ${isDesktopOrLaptop ? 'w-[40vw]' : 'w-[80vw]'} `}
             >
-              <h2 style={{ fontSize: '24px', fontWeight: 'bold' }}>Total</h2>
-              <h2
-                style={{
-                  fontSize: '24px',
-                  fontWeight: 'bold',
-                  color: '#000000',
-                }}
+               <p
+                className={`flex flex-col  text-[2rem] font-semi-bold text-middle-home text-gray-900`}
+                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
               >
-                €{total}
-              </h2>
+                Total:   €{total}
+              </p>
+      
+              {/* <p
+                className={`flex flex-col  text-[2rem] font-semi-bold text-middle-home text-gray-900`}
+                style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+              >
+                
+              </p> */}
+
+              <GlobalButton
+              size="medium"
+              type="primary"
+              text="CHECKOUT"
+              width="100%"
+              onClick={handleCartSectionClick}
+            />
             </div>
           </li>
         </ul>
-      </section>
+    </div>
 
       <section
-        className={`cart-form-2 ${currentSectionNumber == '2' ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'} mb-8 shadow-md rounded-[50px] bg-[#F7F7F7] relative ${isDesktopOrLaptop ? 'min-w-[42vw]' : 'min-w-[60vw] mx-auto left-50 right-50 px-4'} mt-20 lg:mt-32`}
+        className={`cart-form-2 ${currentSectionNumber == '2' ? 'move-in visible h-auto' : 'move-out invisible h-0 overflow-hidden'} mb-8 shadow-md rounded-[50px] bg-[#FFFF] relative ${isDesktopOrLaptop ? 'min-w-[42vw]' : 'min-w-[60vw] mx-auto left-50 right-50 px-4'} mt-20 lg:mt-32`}
       >
-        <h1
-          className={`font-bold text-[1.5rem] relative left-1/2 transform -translate-x-1/2 p-8`}
-        >
-          FORMAS DE PAGAMENTO
-          <hr />
-        </h1>
+          <p
+            className={`flex flex-col pt-10 px-5 ml-8 text-[2rem] font-bold text-middle-home text-gray-900`}
+            style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+          >
+            Meu carrinho
+          </p>
+
         <h2
           className={`font-bold text-[1rem] relative left-1/2 transform -translate-x-1/2 px-8 py-2`}
         >
@@ -450,135 +455,126 @@ const ShoppingCart = () => {
         FASE DE CONFIRMAR DADOS DO UTILIZADOR
       </section>
 
-      <section
-        className={`view-cart-elements mb-8 rounded-[50px] flex justify-center border-[#4A7D8B] shadow-md border-2 ${isDesktopOrLaptop ? 'fixed min-w-[42vw] right-[5vw]' : 'relative min-w-[60vw] mx-auto left-50 right-50 px-4'} mt-20 lg:mt-32`}
-      >
-        <div className="flex flex-col justify-between items-center h-full py-8">
-          <div className="flex flex-col">
-            <label
-              className="flex flex-col"
+      {/* <section
+        className={`view-cart-elements mb-8 rounded-[50px] flex justify-center border-[#4A7D8B] shadow-md border-2 ${isDesktopOrLaptop ? 'sticky top-20 min-w-[42vw] right-[5vw]' : 'relative min-w-[60vw] mx-auto left-50 right-50 px-4'} mt-20 lg:mt-32`}
+    >
+      <div className="flex flex-col justify-between items-center h-full py-8">
+        <div className="flex flex-col">
+          <p
+            className={`flex flex-col pt-10 px-5 text-[2rem] font-bold text-middle-home text-gray-900 mb-10`}
+            style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+          >
+            Código Promocional
+          </p>
+          <div className="flex justify-between items-center relative">
+            <input
+              type="text"
+              placeholder="Digite aqui"
+              value={promoCode}
+              onChange={(e) => setPromoCode(e.target.value)}
+              className={`flex-grow ${isDesktopOrLaptop ? 'w-3/5' : 'w-2/5'} rounded-s-md mt-1 ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
+              style={{
+                padding: '7px',
+                border: '1px solid #ccc',
+                paddingRight: '32px',
+                width: '100%',
+              }}
+            />
+
+            <button
+              onClick={handlePromoSubmit}
+              className={`${highContrast ? 'bg-[#fff000] text-black' : 'bg-[#4A7D8B] text-white'} -ms-1 mt-1 ${isDesktopOrLaptop ? 'w-2/5' : 'w-3/5'} rounded-2 p-2 hover:bg-[#7D9EA8] rounded-e-md`}
+            >
+              Submeter
+            </button>
+          </div>
+          <div
+            className={`${promoError || discount ? 'visible' : 'invisible'} flex items-center align-center`}
+            style={{
+              color: promoError ? 'red' : promoCode ? 'black' : 'inherit',
+              marginTop: '5px',
+              fontWeight: '100',
+              fontSize: '20px',
+            }}
+          >
+            {promoError ? (
+              promoError
+            ) : (
+              <span>
+                Cupom aplicado: <strong>{appliedPromoCode.toUpperCase()}</strong>
+              </span>
+            )}
+            {appliedPromoCode ? (
+              <div className="mt-2">
+                <GlobalButton
+                  image={'/assets/icons/x-icon-red.svg'}
+                  text="Remover cupom"
+                  id="remove-promo"
+                  width={4}
+                  height={4}
+                  onClick={handleRemoveDiscount}
+                />
+              </div>
+            ) : null}
+          </div>
+          <div className="flex justify-between mt-8 w-[100%]">
+            <p
+              className={`flex flex-col  text-[2rem] font-semi-bold text-middle-home text-gray-900`}
+              style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+            >
+              Desconto
+            </p>
+
+            <h2
               style={{
                 fontSize: '24px',
                 fontWeight: 'bold',
-                textAlign: `${alignment ? alignment : 'start'}`,
+                color: '#666a74',
               }}
             >
-              CÓDIGO PROMOCIONAL
-              <div className="flex justify-between items-center relative">
-                <input
-                  type="text"
-                  placeholder="Digite aqui"
-                  value={promoCode}
-                  onChange={(e) => setPromoCode(e.target.value)}
-                  className={`flex-grow ${isDesktopOrLaptop ? 'w-3/5' : 'w-2/5'} rounded-s-md mt-1 ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
-                  style={{
-                    padding: '7px',
-                    border: '1px solid #ccc',
-                    paddingRight: '32px',
-                    width: '100%',
-                  }}
-                />
-                <MicrophoneIcon
-                  handleSpeechRecognition={handleSpeechRecognition}
-                  isStreaming={isStreaming['micPromoCode']}
-                  id="micPromoCode"
-                  field="promoCode"
-                  right="150"
-                />
-                <button
-                  onClick={handlePromoSubmit}
-                  className={`${highContrast ? 'bg-[#fff000] text-black' : 'bg-[#4A7D8B] text-white'} -ms-1 mt-1 ${isDesktopOrLaptop ? 'w-2/5' : 'w-3/5'} rounded-2 p-2 hover:bg-[#7D9EA8] rounded-e-md`}
-                >
-                  Submeter
-                </button>
-              </div>
-              <div
-                className={`${promoError || discount ? 'visible' : 'invisible'} flex items-center align-center`}
-                style={{
-                  color: promoError ? 'red' : promoCode ? 'black' : 'inherit',
-                  marginTop: '5px',
-                  fontWeight: '100',
-                  fontSize: '20px',
-                }}
-              >
-                {promoError ? (
-                  promoError
-                ) : (
-                  <span>
-                    Cupom aplicado:{' '}
-                    <strong>{appliedPromoCode.toUpperCase()}</strong>
-                  </span>
-                )}
-                {appliedPromoCode ? (
-                  <div className="mt-2">
-                    <GlobalButton
-                      image={'/assets/icons/x-icon-red.svg'}
-                      text="Remover cupom"
-                      id="remove-promo"
-                      width={4}
-                      height={4}
-                      onClick={handleRemoveDiscount}
-                    />
-                  </div>
-                ) : null}
-              </div>
-            </label>
-            <div className="flex justify-between mt-8 w-[100%]">
-              <h2 style={{ fontSize: '24px', fontWeight: 'bold' }}>Desconto</h2>
-              <h2
-                style={{
-                  fontSize: '24px',
-                  fontWeight: 'bold',
-                  color: '#666a74',
-                }}
-              >
-                -€{discount ? total * discount : 0}
-              </h2>
-            </div>
-            <div className="flex justify-between mt-8 w-[100%]">
-              <h2 style={{ fontSize: '40px', fontWeight: 'bold' }}>
-                Total estimado
-              </h2>
-              <h2
-                style={{
-                  fontSize: '40px',
-                  fontWeight: 'bold',
-                }}
-              >
-                €{discount ? total - total * discount : total}
-              </h2>
-            </div>
+              €{discount ? total * discount : 0}
+            </h2>
           </div>
-          <div className="mt-40 w-[100%]">
-            {currentSection.number === 2 ? (
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <li
-                  className="list-none rounded-[50px]"
-                  style={{ boxShadow: '0 0 0 2px #4A7D8B' }}
-                >
-                  <div>
-                    <GlobalButton
-                      size="medium"
-                      type="secondary"
-                      text="Retornar"
-                      width="40%"
-                      onClick={handleReturnToCartClick}
-                    />
-                  </div>
-                </li>
+          <div className="flex justify-between mt-8 w-[100%]">
+            <p
+              className={`flex flex-col  text-[2rem] font-semi-bold text-middle-home text-gray-900`}
+              style={{ textAlign: `${alignment ? alignment : 'start'}` }}
+            >
+              Total à pagar
+            </p>
+            <h2
+              style={{
+                fontSize: '24px',
+                fontWeight: 'bold',
+                color: '#40616a',
+              }}
+            >
+              €{discount ? total - total * discount : total}
+            </h2>
+          </div>
+        </div>
+        <div className="mt-40 w-[100%]">
+          {currentSection.number === 2 ? (
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <li
+                className="list-none rounded-[50px]"
+                style={{ boxShadow: '0 0 0 2px #4A7D8B' }}
+              >
+                <div>
+                  <GlobalButton
+                    size="medium"
+                    type="secondary"
+                    text="Retornar"
+                    width="40%"
+                    onClick={handleReturnToCartClick}
+                  />
+                </div>
+              </li>
 
-                <GlobalButton
-                  size="medium"
-                  type="primary"
-                  text="Seguinte"
-                  width="40%"
-                  onClick={handleCartSectionClick}
-                />
-              </div>
-            ) : (
               <GlobalButton
                 size="medium"
                 type="primary"
+
                 text="CHECKOUT"
                 width="100%"
                 onClick={async () => {
@@ -603,10 +599,20 @@ const ShoppingCart = () => {
                   }
                 }}
               />
-            )}
-          </div>
+            </div>
+          ) : (
+            <GlobalButton
+              size="medium"
+              type="primary"
+              text="CHECKOUT"
+              width="100%"
+              onClick={handleCartSectionClick}
+            />
+          )}
         </div>
-      </section>
+      </div>
+      </section> */}
+
       <div>
         {dialogOpen && (
           <Dialog
