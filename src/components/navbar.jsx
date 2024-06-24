@@ -44,8 +44,12 @@ const Navbar = ({ inView }) => {
   };
 
   const handleLogout = () => {
+    document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     dispatch(logout());
     dispatch(clearUser());
+
+    window.location.reload();
   };
 
   const Search = styled('div')(({ theme }) => ({
@@ -86,12 +90,12 @@ const Navbar = ({ inView }) => {
 
   useEffect(() => {
     const apiInstance = new ApiClient();
-    apiInstance.refreshAccessToken().then((response) => {
-      if (!response) {
-        handleLogout();
-        return;
-      }
-    });
+    // apiInstance.refreshAccessToken().then((response) => {
+    //   if (!response) {
+    //     handleLogout();
+    //     return;
+    //   }
+    // });
 
     const handleRouteChange = (url) => {
       console.log('Rota alterada para:', url);
@@ -702,8 +706,8 @@ const Navbar = ({ inView }) => {
             <GlobalButton
               size="large"
               type="custom"
-              path="/supplier"
-              text="Fornecedor"
+              path="/suppliers"
+              text="Fornecedores"
             />
           </li>
           <li className="py-4">

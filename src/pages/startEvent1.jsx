@@ -12,16 +12,13 @@ import React, {
   import { useSelector, useDispatch } from 'react-redux';
   import {
     setLocation,
-    setMapImageUrl,
     setStartActionDate,
     setStartActionTime,
     setEndActionTime,
     setEndActionDate,
     setActionSameDay,
     setStartEnd,
-    setActionServiceType,
-    setActionEventType,
-  } from '../redux/actions/eventActions';
+  } from '../redux/reducers/eventReducer';
   import GlobalButton from '@/components/globalButton';
   import { Tooltip } from 'react-tooltip';
   import Link from 'next/link';
@@ -38,7 +35,7 @@ import React, {
     const dispatch = useDispatch();
     const router = useRouter();
     const location = useSelector((state) => state.event.location);
-    const mapImageUrl = useSelector((state) => state.event.mapImageUrl);
+    const startEvent = useSelector((state) => state.event);
   
     const [startDate, setStartDate] = useState(null);
   
@@ -79,6 +76,14 @@ import React, {
       dispatch(setEndActionTime(unixEndTimestamp));
       dispatch(setActionSameDay(sameDay));
     }, []);
+
+    useEffect(() => {
+      setEventLocation(startEvent.location);
+      setStartDate(new Date(startEvent.startDate * 1000));
+      setEndDate(startEvent.endDate ? new Date(startEvent.endDate * 1000): 0);
+      setStartTime(new Date(startEvent.startTime * 1000));
+      setEndTime(new Date(startEvent.endTime * 1000));
+    }, [startEvent]);
   
     const handleEventChange = (event) => {
       setSelectedEvent(event.target.value);
@@ -126,40 +131,6 @@ import React, {
       'Vila Real': 'Vila Real',
       Viseu: 'Viseu',
     };
-  
-    // const handleLocationSearch = async () => {
-    //   dispatch(setLocation(locationEvent));
-    //   try {
-    //     const response = await fetch(
-    //       `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationEvent)}`
-    //     );
-    //     const data = await response.json();
-    //     if (data.length > 0) {
-    //       setAltLocation(data[0].display_name);
-    //       const { lat, lon } = data[0];
-    //       setCoordenadas({ lat: parseFloat(lat), lng: parseFloat(lon) });
-    //       dispatch(
-    //         setMapImageUrl(
-    //           `https://www.openstreetmap.org/export/embed.html?bbox=${parseFloat(lon) - 0.01}%2C${parseFloat(lat) - 0.01}%2C${parseFloat(lon) + 0.01}%2C${parseFloat(lat) + 0.01}&layer=mapnik&marker=${parseFloat(lat)}%2C${parseFloat(lon)}`
-    //         )
-    //       );
-    //       setError(null);
-    //     } else {
-    //       setErrors((prevErrors) => ({
-    //         ...prevErrors,
-    //         localizacao: 'Localidade não encontrada',
-    //       }));
-  
-    //       dispatch(setMapImageUrl(null));
-    //       dispatch(setLocation(null));
-    //     }
-    //   } catch (error) {
-    //     setErrors((prevErrors) => ({
-    //       ...prevErrors,
-    //       coordenadas: 'Erro ao buscar coordenadas',
-    //     }));
-    //   }
-    // };
   
     const handleSpeechRecognition = (field, id) => {
       try {
@@ -309,7 +280,6 @@ import React, {
           const unixEndTimestamp = Math.floor(
             combinedEndDateTime.getTime() / 1000
           );
-  
           dispatch(setStartActionDate(unixStartTimestamp));
           !sameDay ? dispatch(setEndActionDate(unixEndTimestamp)) : '';
           dispatch(setStartActionTime(unixStartTimestamp));
@@ -319,7 +289,6 @@ import React, {
           );
   
           dispatch(setLocation(location));
-          dispatch(setMapImageUrl(mapImageUrl));
           break;
 
         default:
@@ -621,7 +590,7 @@ import React, {
                     Localidade:
                     <div className="flex row" style={{ position: 'relative' }}>
                       <select
-                        value={locationEvent}
+                        value={location ? location : setEventLocation(locationEvent)}
                         className={`cursor-pointer ${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
                         onChange={(e) => {
                           let value = e.target.value;
@@ -656,58 +625,6 @@ import React, {
                           </option>
                         ))}
                       </select>
-                      {/* <input
-                        type="text"
-                        value={locationEvent}
-                        className={`${highContrast ? 'bg-black text-[#FFF000] input-high-contrast' : 'bg-white text-black'}`}
-                        onChange={(e) => {
-                          let value = e.target.value;
-                          value = value.replace(/\s+/g, ' ');
-                          value = value.replace(/^\s+/, '');
-                          if (value == '') {
-                            setLocationTouched(true);
-                          } else {
-                            setErrors((prevErrors) => ({
-                              ...prevErrors,
-                              localizacao: null,
-                            }));
-                          }
-                          setEventLocation(value);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            handleLocationSearch();
-                          }
-                        }}
-                        placeholder="Digite aqui"
-                        onFocus={() => {
-                          if (locationEvent) setLocationTouched(false);
-                        }}
-                        onBlur={() => setLocationTouched(true)}
-                        required
-                        style={{
-                          padding: '10px',
-                          borderRadius: '5px',
-                          border: '1px solid #ccc',
-                          marginTop: '5px',
-                          paddingRight: '30px',
-                          width: '100%',
-                        }}
-                      />
-                      <MicrophoneIcon
-                        handleSpeechRecognition={handleSpeechRecognition}
-                        isStreaming={isStreaming['micLocation']}
-                        id="micLocation"
-                        field="location"
-                        right="68"
-                      />
-                      <GlobalButton
-                        image={`/assets/${highContrast ? 'high-contrast-icons' : 'icons'}/search-green.svg`}
-                        text="Localizar"
-                        type="button"
-                        id="search-location"
-                        onClick={handleLocationSearch}
-                      /> */}
                     </div>
                   </label>
                   <p
@@ -729,40 +646,6 @@ import React, {
                   >
                     Campo obrigatório
                   </p>
-                  {/* <div className="flex flex-col justify-center items-center">
-                    {errors?.localizacao ? (
-                      <p
-                        aria-live="polite"
-                        style={{
-                          color: 'ff0000',
-                          marginTop: '-24px',
-                          marginLeft: '-72px',
-                          textAlign: `${alignment ? alignment : 'start'}`,
-                        }}
-                        className={`max-w-[320px] text-red-600`}
-                      >
-                        {errors.localizacao}
-                      </p>
-                    ) : mapImageUrl && altLocation ? (
-                      <div alt={`Mapa mostrando ao centro ${altLocation}`}>
-                        <div
-                          style={{
-                            textAlign: `${alignment ? alignment : 'center'}`,
-                          }}
-                          className={`max-w-[400px]`}
-                        >
-                          {altLocation}{' '}
-                        </div>
-                        <iframe
-                          width="100%"
-                          height="120"
-                          src={mapImageUrl}
-                          style={{ border: 0 }}
-                          tabIndex={-1}
-                        ></iframe>
-                      </div>
-                    ) : null}
-                  </div> */}
                 </div>
               </div>
               <div className="p-4 w-full lg:w-1/3 min-h-[180px] lg:border-r border-b lg:border-b-0 border-gray-500 relative flex flex-col justify-center align-center">
