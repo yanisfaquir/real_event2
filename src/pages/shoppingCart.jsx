@@ -317,7 +317,8 @@ const ShoppingCart = () => {
                       }),
                     }
                     const response = await fetch(
-                      'http://localhost:3500/shoppingCart/create-checkout-session',
+                      'http://139.59.209.55:3500/shoppingCart/create-checkout-session',
+                  
                       {
                         method: 'POST',
                         headers: {
