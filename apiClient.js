@@ -2,7 +2,7 @@ import axios from 'axios';
 import Dialog from '@/components/Dialog';
 import ReactDOM from 'react-dom';
 
-const API_URL = 'http://139.59.209.55:3500/'; 
+const API_URL = 'http://139.59.209.55:3500'; 
 
 function getCookie(name) {
   var nameEQ = name + '=';
